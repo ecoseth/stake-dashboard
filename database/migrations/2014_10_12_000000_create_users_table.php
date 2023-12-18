@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('balance')->default('0.0');
             $table->string('real_balance')->default('0.0');
             $table->enum('status',array('pending','approved'))->default('pending');
-            $table->string('email')->unique();
             $table->timestamps();
         });
     }

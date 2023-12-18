@@ -24,8 +24,13 @@ class User extends Authenticatable
         'balance',
         'real_balance',
         'status',
-        'email',
+        'level',
     ];
+
+    public function levels()
+    {
+        return $this->hasMany(Level::class);
+    }
 
     /**
      * The attributes that should be hidden for serialization.
