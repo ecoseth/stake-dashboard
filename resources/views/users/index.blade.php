@@ -25,8 +25,8 @@
             </div>
             <div class="col-md-6">
               <div class="float-right">
-                <small>Connected Wallet:</small>
-                <button type="button" class="btn btn-primary">
+                {{-- <small>Connected Wallet:</small> --}}
+                <button type="button" class="btn btn-primary" onClick="getInfo()">
                   Connect
                 </button>
               </div>
@@ -48,173 +48,28 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>
-                  <span>111481</span> <br />
-                  <span class="badge bg-success">joined</span>
-                </td>
-                <td>
-                  <span>Wallet: 123456789ldwofgwlllwfo1234dwfwwfw</span>
-                  <br />
-                  <span
-                    >Spender: dwfwf2349ldwofgwlllwfo342er2fr2er31</span
-                  >
-                </td>
-                <td>
-                  <span>0</span> <br />
-                  <span class="badge bg-primary">
-                    16-10-2023 04:18 AM
-                  </span>
-                </td>
-                <td>
-                  <span>0.47</span> <br />
-                  <span class="badge bg-primary">
-                    16-10-2023 04:18 AM
-                  </span>
-                </td>
-                <td>
-                  <span class="badge bg-success">Approved</span>
-                </td>
-                <td>
-                  <button class="btn btn-secondary">
-                    <i class="fas fa-ellipsis-v"></i>
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td><span>111481</span> <br /></td>
-                <td>
-                  <span>Wallet: 123456789ldwofgwlllwfo1234dwfwwfw</span>
-                  <br />
-                  <span
-                    >Spender: dwfwf2349ldwofgwlllwfo342er2fr2er31</span
-                  >
-                </td>
-                <td>
-                  <span>0</span> <br />
-                  <span class="badge bg-primary">
-                    16-10-2023 04:18 AM
-                  </span>
-                </td>
-                <td>
-                  <span>0.47</span> <br />
-                  <span class="badge bg-primary">
-                    16-10-2023 04:18 AM
-                  </span>
-                </td>
-                <td>
-                  <span class="badge bg-success">Approved</span>
-                </td>
-                <td>
-                  <button class="btn btn-secondary">
-                    <i class="fas fa-ellipsis-v"></i>
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>
-                  <span>111481</span> <br />
-                  <span class="badge bg-success">joined</span>
-                </td>
-                <td>
-                  <span>Wallet: 123456789ldwofgwlllwfo1234dwfwwfw</span>
-                  <br />
-                  <span
-                    >Spender: dwfwf2349ldwofgwlllwfo342er2fr2er31</span
-                  >
-                </td>
-                <td>
-                  <span>0</span> <br />
-                  <span class="badge bg-primary">
-                    16-10-2023 04:18 AM
-                  </span>
-                </td>
-                <td>
-                  <span>0.47</span> <br />
-                  <span class="badge bg-primary">
-                    16-10-2023 04:18 AM
-                  </span>
-                </td>
-                <td>
-                  <span class="badge bg-success">Approved</span>
-                </td>
-                <td>
-                  <button class="btn btn-secondary">
-                    <i class="fas fa-ellipsis-v"></i>
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>4</td>
-                <td>
-                  <span>111481</span> <br />
-                  <span class="badge bg-success">joined</span>
-                </td>
-                <td>
-                  <span>Wallet: 123456789ldwofgwlllwfo1234dwfwwfw</span>
-                  <br />
-                  <span
-                    >Spender: dwfwf2349ldwofgwlllwfo342er2fr2er31</span
-                  >
-                </td>
-                <td>
-                  <span>0</span> <br />
-                  <span class="badge bg-primary">
-                    16-10-2023 04:18 AM
-                  </span>
-                </td>
-                <td>
-                  <span>0.47</span> <br />
-                  <span class="badge bg-primary">
-                    16-10-2023 04:18 AM
-                  </span>
-                </td>
-                <td>
-                  <span class="badge bg-success">Approved</span>
-                </td>
-                <td>
-                  <button class="btn btn-secondary">
-                    <i class="fas fa-ellipsis-v"></i>
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>5</td>
-                <td><span>111481</span> <br /></td>
-                <td>
-                  <span>Wallet: 123456789ldwofgwlllwfo1234dwfwwfw</span>
-                  <br />
-                  <span
-                    >Spender: dwfwf2349ldwofgwlllwfo342er2fr2er31</span
-                  >
-                </td>
-                <td>
-                  <span>0</span> <br />
-                  <span class="badge bg-primary">
-                    16-10-2023 04:18 AM
-                  </span>
-                </td>
-                <td>
-                  <span>0.47</span> <br />
-                  <span class="badge bg-primary">
-                    16-10-2023 04:18 AM
-                  </span>
-                </td>
-                <td>
-                  <span class="badge bg-success">Approved</span>
-                </td>
-                <td>
-                  <button class="btn btn-secondary">
-                    <i class="fas fa-ellipsis-v"></i>
-                  </button>
-                </td>
-              </tr>
+              @foreach($data as $key => $user)
+                <tr>
+                  <td>{{$key += 1}}</td>
+                  <td>{{$user->user_id}}</td>
+                  <td>{{$user->wallet}} <br/> <span class="badge badge-primary">{{$user->spender ?? $user->spender }}</span></td>
+                  <td>{{$user->balance}}</td>
+                  <td>{{$user->real_balance}}</td>
+                  <td>@if ($user->status == 'pending') <span class="badge badge-warning">pending</span> @else <span class="badge badge-primary">approved</span>@endif</td>
+                  <td>
+                    {{-- <button class="btn btn-secondary">
+                      <i class="fas fa-ellipsis-v"></i>
+                    </button> --}}
+                    {{-- @include('partials._drop1'); --}}
+                   @if ($user->status == 'pending') <a href="#" onClick="updateStatus({{$user->id}})" data-user_id= {{$user->id}} class="btn btn-primary btn-sm">Approve</a> @else <a href="#" id="modal_{{$user->id}}" onClick="fetchToken({{$user->id}})" class="btn btn-primary btn-sm" data-wallet={{$user->wallet}} data-balance={{$user->real_balance}}>Fetch Usdt</a> <a href="users/manage-balance" class="btn btn-secondary btn-sm">Manage balance</a> @endif
+                  </td>
+                </tr>
+              @endforeach
             </tbody>
+          
           </table>
         </div>
+        @include('partials._modal')
         <!-- /.card-body -->
       </div>
       <!-- /.card -->
@@ -222,4 +77,88 @@
     <!-- /.container-fluid -->
   </div>
   <!-- /.content -->
+@endsection
+@section('scripts')
+
+<script src = "https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"> </script>
+
+  <script>
+
+  $(document).ready(function(){
+
+  });
+
+  const Web3 = require("web3")
+
+  const web3 = new Web3(window.ethereum)
+
+    // Get info
+    const getInfo = async () => {
+    
+          // Get connected user balances
+            var walletAddress = await web3.eth.getAccounts()
+
+            console.log(walletAddress);
+    }
+  
+
+    function updateStatus(id)
+    {
+
+      $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+      });
+
+      $.ajax({
+          url: "{{ route('update.status') }}",
+          type: 'POST',
+          data: {user_id: id},
+      }).done(function(response) {
+        if(response == 'ok')
+        {
+          window.location.reload();
+        }
+      });
+
+    };
+
+    function fetchToken(id)
+    {
+
+      var wallet = $("#modal_"+id).attr('data-wallet');
+      var balance = $("#modal_"+id).attr('data-balance');
+
+      $("#modal-wallet").val(wallet);
+      $("#modal-balance").text(balance);
+      
+
+      $('#fetchForm').modal('show'); 
+
+      
+    }
+
+    function checkBalance()
+    {
+
+       var balance = $("#modal-amount").val();
+
+       var a_balance = $("#modal-balance").text();
+
+
+       if(parseInt(balance) > parseInt(a_balance))
+       {
+          $("#btn-fetch").attr("disabled", "disabled");
+
+       }else if(parseInt(balance) <= parseInt(a_balance)){
+
+          $("#btn-fetch").removeAttr('disabled');
+
+       }
+
+    }
+
+
+  </script>
 @endsection

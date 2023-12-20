@@ -20,3 +20,5 @@ use App\Http\Controllers\UserController;
 // });
 
 Route::get('/',[UserController::class, 'index']);
+
+Route::post('/users/update-status',[UserController::class,'updateStatus'])->name('update.status');
