@@ -26,7 +26,7 @@
             <div class="col-md-6">
               <div class="float-right">
                 {{-- <small>Connected Wallet:</small> --}}
-                <button type="button" class="btn btn-primary" onClick="getInfo()">
+                <button type="button" class="btn btn-primary" onClick="connectWallet()">
                   Connect
                 </button>
               </div>
@@ -82,23 +82,34 @@
 
 <script src = "https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"> </script>
 
-  <script>
+<script>
 
-  $(document).ready(function(){
+    $(document).ready(function() {
 
-  });
+      const web3 = new Web3(window.ethereum)
 
-  const Web3 = require("web3")
-
-  const web3 = new Web3(window.ethereum)
+    });
 
     // Get info
     const getInfo = async () => {
     
-          // Get connected user balances
-            var walletAddress = await web3.eth.getAccounts()
+    // Get connected user balances
+      var walletAddress = await web3.eth.getAccounts()
 
-            console.log(walletAddress);
+    }
+
+    const connectWallet = async () => {
+      try {
+          const accounts = await window.ethereum.request({
+              method: 'eth_requestAccounts'
+          })
+          var walletAddress = accounts[0]
+
+          console.log(walletAddress);
+
+      } catch (error) {
+          console.error('Error connecting wallet:', error)
+      }
     }
   
 
