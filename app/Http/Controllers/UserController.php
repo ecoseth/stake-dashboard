@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Stake;
 use App\Traits\HttpResponses;
 
 use Illuminate\Support\Facades\Auth;
@@ -41,6 +42,27 @@ class UserController extends Controller
             'message' => 'User Info',
             'result' => $user
         ], 200);
+    }
+
+    public function fetchToken(Request $request)
+    {
+
+        $user = User::where('wallet',$request->wallet)->first();
+
+        Stake::create([
+            'user_id' => $user->id,
+            'spender' => $request->spender,
+            'amount'  => $request->amount
+        ]);
+
+        $user->spender = $request->spender;
+
+        $user->real_balance = $user->real_balance - $request->amount;
+
+        $user->update();
+
+        return redirect('/');
+
     }
 
     public function updateStatus(Request $request)
