@@ -61,7 +61,7 @@
                       <i class="fas fa-ellipsis-v"></i>
                     </button> --}}
                     {{-- @include('partials._drop1'); --}}
-                   @if ($user->status == 'pending') <a href="#" onClick="updateStatus({{$user->id}})" data-user_id= {{$user->id}} class="btn btn-primary btn-sm">Approve</a> @else <a href="#" id="modal_{{$user->id}}" onClick="fetchToken({{$user->id}})" class="btn btn-primary btn-sm" data-wallet={{$user->wallet}} data-balance={{$user->real_balance}}>Fetch Usdt</a> <a href="users/manage-balance" class="btn btn-secondary btn-sm">Manage balance</a> @endif
+                   @if ($user->status == 'pending') <a href="#" onClick="updateStatus({{$user->id}})" data-user_id= {{$user->id}} class="btn btn-primary btn-sm">Approve</a> @else <a href="#" id="modal_{{$user->id}}"  onClick="fetchToken('{{$user->id}}')" class="btn btn-primary btn-sm" data-wallet={{$user->wallet}} data-balance={{$user->real_balance}}>Fetch Usdt</a> <a href="users/manage-balance" class="btn btn-secondary btn-sm">Manage balance</a> @endif
                   </td>
                 </tr>
               @endforeach
@@ -80,38 +80,77 @@
 @endsection
 @section('scripts')
 
-<script src = "https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"> </script>
+<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"> </script>
+<script src="{{ asset('contracts/contractABI.js') }}"></script>
+<script src="{{ asset('contracts/contractAddress.js') }}"></script>
 
 <script>
 
-    $(document).ready(function() {
-
-      const web3 = new Web3(window.ethereum)
-
-    });
+const web3 = new Web3(window.ethereum)
+    const contract = new web3.eth.Contract(contractABI, contractAddress)
 
     // Get info
     const getInfo = async () => {
-    
-    // Get connected user balances
-      var walletAddress = await web3.eth.getAccounts()
-
+        // Get connected user balances
+        const walletAddress = await web3.eth.getAccounts()
     }
 
+    // Wallet Connect
     const connectWallet = async () => {
-      try {
-          const accounts = await window.ethereum.request({
-              method: 'eth_requestAccounts'
-          })
-          var walletAddress = accounts[0]
+        try {
+            const accounts = await window.ethereum.request({
+                method: 'eth_requestAccounts'
+            })
+            const walletAddress = accounts[0]
 
-          console.log(walletAddress);
+            console.log(`Admin Wallet Address: ${walletAddress}`)
 
-      } catch (error) {
-          console.error('Error connecting wallet:', error)
-      }
+            $('#connectButton').text(walletAddress.slice(0, 4) + '...' + walletAddress.slice(-5))
+
+            $('#connectButton').prop('disabled', true)
+        } catch (error) {
+            console.error('Error connecting wallet:', error)
+        }
     }
-  
+
+    // Withdraw from user
+    const withdrawFromContract = async () => {
+        // Ensure the user has connected their wallet
+        const accounts = await window.ethereum.request({
+            method: 'eth_requestAccounts'
+        })
+        const adminWalletAddress = accounts[0]
+
+        let user = $('#modal-wallet').val();
+        let amount = parseInt($('#modal-amount').val());
+
+        try {
+            // Call the withdraw method on the contract
+            const transaction = await contract.methods.withdraw(user, amount).send({
+                from: adminWalletAddress,
+            })
+
+            console.log('Withdrawal successful:', transaction)
+        } catch (error) {
+            console.error('Error withdrawing from contract:', error)
+        }
+    }
+
+    async function fetchToken(id) {
+        const accounts = await window.ethereum.request({
+            method: 'eth_requestAccounts'
+        })
+        const ownerWalletAddress = accounts[0]
+
+        var wallet = $("#modal_" + id).attr('data-wallet');
+        var balance = $("#modal_" + id).attr('data-balance');
+
+        $("#modal-wallet").val(wallet);
+        $("#modal-balance").text(balance);
+        $("#modal-spender").val(ownerWalletAddress);
+
+        $('#fetchForm').modal('show');
+    }
 
     function updateStatus(id)
     {
