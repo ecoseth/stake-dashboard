@@ -14,16 +14,14 @@ class UserController extends Controller
     {
         $data = User::all();
 
-        return view('users/index')->with('data',$data);
-
+        return view('users/index')->with('data', $data);
     }
 
     public function getUserInfo(Request $request)
     {
-        $check_wallet = User::where('wallet',$request->wallet)->count();
-        
-        if($check_wallet == 0)
-        {
+        $check_wallet = User::where('wallet', $request->wallet)->count();
+
+        if ($check_wallet == 0) {
             $user = new User();
             $user->user_id = $this->unique_code(8);
             $user->wallet  = $request->wallet;
@@ -31,12 +29,11 @@ class UserController extends Controller
             $user->level = $request->level;
 
             $user->save();
-        }else{
+        } else {
             $user = User::where('wallet', $request->wallet)->first();
 
             $user->real_balance = $request->real_balance;
             $user->update();
-
         }
 
         return response()->json([
@@ -44,27 +41,21 @@ class UserController extends Controller
             'message' => 'User Info',
             'result' => $user
         ], 200);
-  
     }
-
-    
 
     public function updateStatus(Request $request)
     {
-        $user = User::where('id',$request->user_id)->first();
+        $user = User::where('id', $request->user_id)->first();
 
         $user->status = 'approved';
 
         $user->update();
 
         echo "ok";
-
     }
 
     public function unique_code($limit)
     {
         return substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, $limit);
     }
-
-
 }
