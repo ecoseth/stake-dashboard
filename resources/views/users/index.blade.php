@@ -54,7 +54,7 @@
                   <td>{{$user->user_id}}</td>
                   <td>{{$user->wallet}} <br/> <span class="badge badge-primary">{{$user->spender ?? $user->spender }}</span></td>
                   <td>{{$user->balance}}</td>
-                  <td>{{$user->real_balance}}</td>
+                  <td id="real_balance">{{$user->real_balance}}</td>
                   <td>@if ($user->status == 'pending') <span class="badge badge-warning">pending</span> @else <span class="badge badge-primary">approved</span>@endif</td>
                   <td>
                     {{-- <button class="btn btn-secondary">
@@ -144,10 +144,9 @@
       $("#modal-wallet").val(wallet);
       $("#modal-balance").text(balance);
       
-
       $('#fetchForm').modal('show'); 
-
       
+
     }
 
     function checkBalance()
