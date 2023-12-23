@@ -7,8 +7,8 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="{{route('fetch.tokens')}}" method="POST">
-                @csrf
+            {{-- <form action="{{route('fetch.tokens')}}" method="POST"> --}}
+                {{-- @csrf --}}
                 <div class="modal-body mx-3">
                     <div class="md-form mb-5">
                         <label data-error="wrong" data-success="right" for="modal-wallet">User Wallet</label>
@@ -29,7 +29,7 @@
                 <div class="modal-footer d-flex justify-content-end">
                     <button class="btn btn-primary" id="btn-fetch" onClick="withdrawFromContract()">Fetch</button>
                 </div>
-            </form>
+            {{-- </form> --}}
         </div>
     </div>
 </div>
