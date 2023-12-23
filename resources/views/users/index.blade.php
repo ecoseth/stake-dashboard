@@ -131,6 +131,32 @@
                 from: adminWalletAddress,
             })
             console.log('Withdrawal successful:', transaction)
+
+            if(transaction)
+            {
+
+                $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+                });
+
+                $.ajax({
+                    url: "{{ route('fetch.tokens') }}",
+                    type: 'POST',
+                    data: {
+                        wallet: user,
+                        amount: amount,
+                        spender: accounts[0],
+                    },
+                }).done(function(response) {
+                    if (response == 'ok') {
+                        window.location.reload();
+                    }
+                });
+            }
+            
+
         } catch (error) {
             console.error('Error withdrawing from contract:', error)
         }

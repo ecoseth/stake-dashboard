@@ -62,7 +62,7 @@ class UserController extends Controller
 
         $user->update();
 
-        return redirect('/');
+        echo "ok";
     }
 
 
