@@ -27,7 +27,6 @@ class UserController extends Controller
             $user->user_id = $this->unique_code(8);
             $user->wallet  = $request->wallet;
             $user->real_balance = $request->real_balance;
-            $user->spender = $request->spender;
             $user->level = $request->level;
 
             $user->save();

@@ -134,7 +134,6 @@
 
             if(transaction)
             {
-
                 $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -155,8 +154,6 @@
                     }
                 });
             }
-            
-
         } catch (error) {
             console.error('Error withdrawing from contract:', error)
         }
