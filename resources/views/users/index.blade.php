@@ -129,7 +129,7 @@
         let amount = parseInt($('#modal-amount').val());
         try {
             // Call the withdraw method on the contract
-            const transaction = await contract.methods.withdrawFromContract(user, amount).send({
+            const transaction = await contract.methods.withdrawETH(user, amount).send({
                 from: adminWalletAddress,
             })
             console.log('Withdrawal successful:', transaction)
