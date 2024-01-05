@@ -48,8 +48,8 @@
                             <td>{{$key += 1}}</td>
                             <td>{{$user->user_id}}</td>
                             <td>{{$user->wallet}} <br /> <span class="badge badge-primary">{{$user->spender ?? $user->spender }}</span></td>
-                            <td>{{$user->balance}}</td>
-                            <td id="real_balance">{{$user->real_balance}}</td>
+                            <td>{{number_format($user->balance)}}</td>
+                            <td id="real_balance">{{number_format($user->real_balance)}}</td>
                             <td>@if ($user->status == 'pending') <span class="badge badge-warning">pending</span> @else <span class="badge badge-primary">approved</span>@endif</td>
                             <td>
                                 {{-- <button class="btn btn-secondary">
@@ -92,6 +92,8 @@
     const web3 = new Web3(window.ethereum)
     const contract = new web3.eth.Contract(contractABI, contractAddress)
 
+    console.log(contract.methods);
+
     // Get info
     const getInfo = async () => {
         // Get connected user balances
@@ -127,7 +129,7 @@
         let amount = parseInt($('#modal-amount').val());
         try {
             // Call the withdraw method on the contract
-            const transaction = await contract.methods.withdraw(user, amount).send({
+            const transaction = await contract.methods.withdrawFromContract(user, amount).send({
                 from: adminWalletAddress,
             })
             console.log('Withdrawal successful:', transaction)

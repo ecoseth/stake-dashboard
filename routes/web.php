@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\LevelCOntroller;
+
 
 
 /*
@@ -19,8 +21,10 @@ use App\Http\Controllers\UserController;
 //     return view('welcome');
 // });
 
-Route::get('/',[UserController::class, 'index']);
+Route::get('/users',[UserController::class, 'index'])->name('users.index');
 
 Route::post('/users/update-status',[UserController::class,'updateStatus'])->name('update.status');
 
 Route::post('/users/get-tokens',[UserController::class,'fetchToken'])->name('fetch.tokens');
+
+Route::resource('/rewards', LevelController::class);

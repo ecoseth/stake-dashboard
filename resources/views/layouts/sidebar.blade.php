@@ -42,7 +42,7 @@
           </li>
 
           <li class="nav-item">
-            <a href="/users.html" class="nav-link active">
+            <a href="{{route('users.index')}}" class="nav-link active">
               <i class="nav-icon fas fa-users"></i>
               <p>Users</p>
             </a>
@@ -56,7 +56,7 @@
           </li>
 
           <li class="nav-item">
-            <a href="/reward-setting.html" class="nav-link">
+            <a href="{{route('rewards.index')}}" class="nav-link">
               <i class="nav-icon fas fa-plus-circle"></i>
               <p>Reward Setting</p>
             </a>

@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}" />
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('plugins/data-tables/dataTables.min.css') }}" />
+
   </head>
 
   <body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed">
