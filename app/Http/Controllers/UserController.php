@@ -13,7 +13,7 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $data = User::all();
+        $data = User::where('is_admin','0')->get();
 
         return view('users/index')->with('data', $data);
     }

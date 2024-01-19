@@ -25,6 +25,9 @@ class User extends Authenticatable
         'real_balance',
         'status',
         'level',
+        'email',
+        'password',
+        'is_admin'
     ];
 
     public function levels()

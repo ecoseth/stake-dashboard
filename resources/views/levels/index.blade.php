@@ -36,15 +36,18 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($data as $key => $user)
+                                @foreach($data as $key => $level)
                                 <tr>
                                     <td>{{$key += 1}}</td>
-                                    <td>{{$user->user_id}}</td>
-                                    <td>{{$user->wallet}} <br /> <span class="badge badge-primary">{{$user->spender ?? $user->spender }}</span></td>
-                                    <td>{{$user->balance}}</td>
-                                    <td id="real_balance">{{$user->real_balance}}</td>
-                                    <td>@if ($user->status == 'pending') <span class="badge badge-warning">pending</span> @else <span class="badge badge-primary">approved</span>@endif</td>
-                                   
+                                    <td id="name_{{$level->id}}">{{$level->name}}</td>
+                                    <td id="min_amount_{{$level->id}}">{{$level->min_amount}} </td>
+                                    <td id="max_amount_{{$level->id}}">{{$level->max_amount}}</td>
+                                    <td id="percentage_{{$level->id}}">{{$level->percentage}}</td>
+                                    <input type="hidden" id="level-id" value="{{$level->id}}">
+                                    <td><button class="btn btn-info btn-sm" onclick="editLevel({{$level->id}})"> Edit </button>
+                                        <button class="btn btn-danger btn-sm"> Delete </button>
+                                    </td>
+
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -64,22 +67,33 @@
                                 <!-- /.card-tools -->
                             </div>
                             <!-- /.card-header -->
-                            <div class="card-body">
-                                
-                                <label for="name">Name</label>
-                                <input type="text" class="form-control">
-                                <label for="name">Minimum Amount</label>
-                                <input type="text" class="form-control">
-                                <label for="name">Maximum Amount</label>
-                                <input type="text" class="form-control">
-                                <label for="name">Percent</label>
-                                <input type="text" class="form-control">
-                            </div>
-                            <!-- /.card-body -->
-                            <div class="card-footer">
-                                <button class="btn btn-primary">Save</button>
-                            </div>
-                            <!-- /.card-footer -->
+                            <form>
+                                <div class="alert alert-danger print-error-msg" style="display:none">
+                                    <ul></ul>
+                                </div>
+
+                                <div class="card-body">
+                                    <input type="hidden" id="level_id">
+                                    <label for="name">Name</label>
+                                    <input type="text" class="form-control" id="name">
+                                    <label for="name">Minimum Amount</label>
+                                    <input type="text" class="form-control" id="min_amount">
+                                    <label for="name">Maximum Amount</label>
+                                    <input type="text" class="form-control" id="max_amount">
+                                    <label for="name">Percent</label>
+                                    <input type="text" class="form-control" id="percent">
+                                </div>
+
+                                <!-- /.card-body -->
+                                <div class="card-footer">
+                                    <button class="btn btn-primary" id="level-store">Save</button>
+                                    <button class="btn btn-primary d-none" id="level-edit">Update</button>
+                                    <button class="btn btn-danger d-none" id="level-cancel">Cancel</button>
+
+                                </div>
+                            </form>
+
+                                <!-- /.card-footer -->
                         </div>
                         <!-- /.card -->
 
@@ -100,6 +114,119 @@
     <script src="{{asset('plugins/data-tables/dataTables.min.js')}}"></script>
 
     <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $("#level-store").click(function(e){
+    
+            e.preventDefault();
+        
+            var name = $("#name").val();
+            var min_amount = $("#min_amount").val();
+            var max_amount = $("#max_amount").val();
+            var percent = $("#percent").val();
+        
+            $.ajax({
+            type:'POST',
+            url:"{{ route('rewards.store') }}",
+            data:{
+                    name:name, 
+                    min_amount:min_amount, 
+                    max_amount:max_amount,
+                    percentage:percent
+                },
+            success:function(data){
+                if($.isEmptyObject(data.error)){
+                    $("#rewards-table").load(window.location + " #rewards-table");
+                }else{
+                    printErrorMsg(data.error);
+                    $('.print-error-msg').delay(5000).fadeOut('slow');
+
+                }
+            }
+            });
+
+        });
+
+        $("#level-edit").click(function(e){
+
+            alert("hello");
+
+            e.preventDefault();
+            
+            var name = $("#name").val();
+            var min_amount = $("#min_amount").val();
+            var max_amount = $("#max_amount").val();
+            var percent = $("#percent").val();
+            var id = $("#level_id").val();
+
+        
+            $.ajax({
+            type:'PUT',
+            url:"{{ route('rewards.update',"+id+") }}",
+            data:{
+                    id:id,
+                    name:name, 
+                    min_amount:min_amount, 
+                    max_amount:max_amount,
+                    percentage:percent
+                },
+            success:function(data){
+                if($.isEmptyObject(data.error)){
+                    $("#rewards-table").load(window.location + " #rewards-table");
+                }else{
+                    printErrorMsg(data.error);
+                    $('.print-error-msg').delay(5000).fadeOut('slow');
+
+                }
+            }
+            });
+
+
+        });
+
+        $("#level-cancel").click(function(e){
+
+            e.preventDefault();
+
+            $(this).closest('form').find("input[type=text], textarea").val("");
+
+            $("#level-edit").addClass('d-none');
+            $("#level-cancel").addClass('d-none');
+            $("#level-store").removeClass('d-none');
+
+        });
+
+        function printErrorMsg (msg) {
+            $(".print-error-msg").find("ul").html('');
+            $(".print-error-msg").css('display','block');
+            $.each( msg, function( key, value ) {
+                $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
+            });
+        }
+
+        function editLevel(id)
+        {
+            var level_name = $("#name_"+id).text();
+            var min_amount = $("#min_amount_"+id).text();
+            var max_amount = $("#max_amount_"+id).text();
+            var percentage = $("#percentage_"+id).text();
+
+            $("#name").val(level_name);
+            $("#min_amount").val(min_amount);
+            $("#max_amount").val(max_amount);
+            $("#percent").val(percentage);
+            $("#level_id").val(id);
+
+            $("#level-store").addClass('d-none');
+            $("#level-edit").removeClass('d-none');
+            $("#level-cancel").removeClass('d-none');
+
+        }
+
         $('#rewards-table').DataTable({
             "paging": true,
             "lengthChange": false,
@@ -108,6 +235,8 @@
             "info": true,
             "autoWidth": false,
         });
+
+        
     </script>
 @endsection
 
