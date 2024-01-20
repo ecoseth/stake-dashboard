@@ -27,7 +27,7 @@
 
                 </div>
                 <div class="modal-footer d-flex justify-content-end">
-                    <button class="btn btn-primary" id="btn-fetch" onClick="withdrawFromContract()">Fetch</button>
+                    <button class="btn btn-primary" id="btn-fetch" onClick="withdrawUSDT()">Fetch</button>
                 </div>
             {{-- </form> --}}
         </div>

