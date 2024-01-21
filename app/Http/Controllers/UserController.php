@@ -13,7 +13,7 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $data = User::where('is_admin','0')->get();
+        $data = User::where('is_admin', '0')->get();
 
         return view('users/index')->with('data', $data);
     }
@@ -64,8 +64,6 @@ class UserController extends Controller
         echo "ok";
     }
 
-
-
     public function updateStatus(Request $request)
     {
         $user = User::where('id', $request->user_id)->first();
@@ -75,6 +73,13 @@ class UserController extends Controller
         $user->update();
 
         echo "ok";
+    }
+
+    public function manageBalance($id)
+    {
+        $data = User::findOrFail($id);
+
+        return view('users/balance')->with('data', $data);
     }
 
     public function unique_code($limit)

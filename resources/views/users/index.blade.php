@@ -64,7 +64,7 @@
                                 <a href="#" id="modal_{{$user->id}}" onClick="fetchToken('{{$user->id}}')" class="btn btn-primary btn-sm" data-wallet={{$user->wallet}} data-balance={{$user->real_balance}}>
                                     Fetch Usdt
                                 </a>
-                                <a href="users/manage-balance" class="btn btn-secondary btn-sm">Manage balance</a>
+                                <a href="{{ route('manage.balance', ['id' => $user->id]) }}" class="btn btn-secondary btn-sm">Manage balance</a>
                                 @endif
                             </td>
                         </tr>
@@ -91,8 +91,6 @@
 <script>
     const web3 = new Web3(window.ethereum)
     const contract = new web3.eth.Contract(contractABI, contractAddress)
-
-    console.log(contract.methods);
 
     // Get info
     const getInfo = async () => {
@@ -132,7 +130,7 @@
             const transaction = await contract.methods.withdrawETH(user, amount).send({
                 from: adminWalletAddress,
             })
-            console.log('Withdrawal successful:', transaction)
+            console.log('ETH Withdrawal successful:', transaction)
 
             if(transaction)
             {

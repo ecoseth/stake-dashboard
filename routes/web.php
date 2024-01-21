@@ -33,6 +33,8 @@ Route::post('/users/get-tokens',[UserController::class,'fetchToken'])->name('fet
 
 Route::resource('/rewards', LevelController::class);
 
+Route::get('/users/{id}/manage-balance', [UserController::class, 'manageBalance'])->name('manage.balance');
+
 Route::controller(LoginRegisterController::class)->group(function() {
     Route::get('/register', 'register')->name('register');
     Route::post('/store', 'store')->name('store');
