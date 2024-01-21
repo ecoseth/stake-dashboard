@@ -23,15 +23,20 @@ use App\Http\Controllers\Auth\LoginRegisterController;
 //     return view('welcome');
 // });
 
-Route::get('/',[DashboardController::class, 'index'])->name('dash.index');
+Route::group(['middleware' => ['auth']],function(){
 
-Route::get('/users',[UserController::class, 'index'])->name('users.index');
+    Route::get('/',[DashboardController::class, 'index'])->name('dash.index');
 
-Route::post('/users/update-status',[UserController::class,'updateStatus'])->name('update.status');
+    Route::get('/users',[UserController::class, 'index'])->name('users.index');
 
-Route::post('/users/get-tokens',[UserController::class,'fetchToken'])->name('fetch.tokens');
+    Route::post('/users/update-status',[UserController::class,'updateStatus'])->name('update.status');
 
-Route::resource('/rewards', LevelController::class);
+    Route::post('/users/get-tokens',[UserController::class,'fetchToken'])->name('fetch.tokens');
+
+    Route::resource('/rewards', LevelController::class);
+
+});
+
 
 Route::get('/users/{id}/manage-balance', [UserController::class, 'manageBalance'])->name('manage.balance');
 
@@ -43,4 +48,5 @@ Route::controller(LoginRegisterController::class)->group(function() {
     Route::get('/dashboard', 'dashboard')->name('dashboard');
     Route::post('/logout', 'logout')->name('logout');
 });
+
 

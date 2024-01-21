@@ -45,7 +45,7 @@
                                     <td id="percentage_{{$level->id}}">{{$level->percentage}}</td>
                                     <input type="hidden" id="level-id" value="{{$level->id}}">
                                     <td><button class="btn btn-info btn-sm" onclick="editLevel({{$level->id}})"> Edit </button>
-                                        <button class="btn btn-danger btn-sm"> Delete </button>
+                                        <button class="btn btn-danger btn-sm" id="level_delete_{{$level->id}}" attr-level-id={{$level->id}} onclick="deleteLevel({{$level->id}})"> Delete </button>
                                     </td>
 
                                 </tr>
@@ -153,8 +153,6 @@
 
         $("#level-edit").click(function(e){
 
-            alert("hello");
-
             e.preventDefault();
             
             var name = $("#name").val();
@@ -187,6 +185,31 @@
 
 
         });
+
+        function deleteLevel(id)
+        {
+
+            var id = $("level_delete_"+id).data('attr-level-id');
+
+            $.ajax({
+            type:'DELETE',
+            url:"{{ route('rewards.destroy',"+id+") }}",
+            data:{id:id},
+           
+            success:function(data){
+                alert(data);
+                if($.isEmptyObject(data.error)){
+                    $("#rewards-table").load(window.location + " #rewards-table");
+                }else{
+                    printErrorMsg(data.error);
+                    $('.print-error-msg').delay(5000).fadeOut('slow');
+
+                }
+            }
+            });
+
+
+        }
 
         $("#level-cancel").click(function(e){
 
