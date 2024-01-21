@@ -47,11 +47,12 @@ class LevelController extends Controller
 
     }
 
-    public function update(Request $request)
+    public function update(Request $request, Level $level)
     {
 
         $validator = Validator::make($request->all(), [
-            'name' => ['required', Rule::unique('levels')->ignore($this->level)],
+            'name' => 'required',
+
             'min_amount' => 'required',
             'max_amount' => 'required',
             'percentage' => 'required'
@@ -72,6 +73,12 @@ class LevelController extends Controller
   
         return response()->json(['success' => 'Ok']);
 
+    }
+
+    public function destroy(Request $request,Level $level)
+    {
+        Level::where('id',$request->id)->delete();
+        return response()->json(['success' => 'Ok']);
     }
     
     
