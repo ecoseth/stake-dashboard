@@ -164,7 +164,7 @@
         
             $.ajax({
             type:'PUT',
-            url:"{{ route('rewards.update',"+id+") }}",
+            url:'rewards/'+id,
             data:{
                     id:id,
                     name:name, 
@@ -189,21 +189,17 @@
         function deleteLevel(id)
         {
 
-            var id = $("level_delete_"+id).data('attr-level-id');
-
             $.ajax({
             type:'DELETE',
-            url:"{{ route('rewards.destroy',"+id+") }}",
+            url:'rewards/'+id,
             data:{id:id},
            
             success:function(data){
-                alert(data);
                 if($.isEmptyObject(data.error)){
                     $("#rewards-table").load(window.location + " #rewards-table");
                 }else{
                     printErrorMsg(data.error);
                     $('.print-error-msg').delay(5000).fadeOut('slow');
-
                 }
             }
             });

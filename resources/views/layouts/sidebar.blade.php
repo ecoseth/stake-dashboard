@@ -35,14 +35,14 @@
           data-accordion="false"
         >
           <li class="nav-item">
-            <a href="/" class="nav-link">
+            <a href="{{route('dash.index')}}" class="nav-link {{Route::is('dash.*') ? 'active' : ''}}">
               <i class="nav-icon fas fa-th"></i>
               <p>Dashboard</p>
             </a>
           </li>
 
           <li class="nav-item">
-            <a href="{{route('users.index')}}" class="nav-link active">
+            <a href="{{route('users.index')}}" class="nav-link {{Route::is('users.*') ? 'active' : ''}}">
               <i class="nav-icon fas fa-users"></i>
               <p>Users</p>
             </a>
@@ -56,7 +56,7 @@
           </li>
 
           <li class="nav-item">
-            <a href="{{route('rewards.index')}}" class="nav-link">
+            <a href="{{route('rewards.index')}}" class="nav-link {{request()->route()->getName() == 'rewards.index' ? 'active' : ''}}">
               <i class="nav-icon fas fa-plus-circle"></i>
               <p>Reward Setting</p>
             </a>

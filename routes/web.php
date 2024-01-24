@@ -35,18 +35,21 @@ Route::group(['middleware' => ['auth']],function(){
 
     Route::resource('/rewards', LevelController::class);
 
+    Route::get('/users/{id}/manage-balance', [UserController::class, 'manageBalance'])->name('users.manage.balance');
+
 });
 
 
-Route::get('/users/{id}/manage-balance', [UserController::class, 'manageBalance'])->name('manage.balance');
 
 Route::controller(LoginRegisterController::class)->group(function() {
+
     Route::get('/register', 'register')->name('register');
     Route::post('/store', 'store')->name('store');
     Route::get('/login', 'login')->name('login');
     Route::post('/authenticate', 'authenticate')->name('authenticate');
     Route::get('/dashboard', 'dashboard')->name('dashboard');
     Route::post('/logout', 'logout')->name('logout');
+
 });
 
 
