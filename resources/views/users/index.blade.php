@@ -183,7 +183,7 @@
                 });
 
                 $.ajax({
-                    url: "{{ route('fetch.tokens') }}",
+                    url: "{{ route('.tokens'fetch) }}",
                     type: 'POST',
                     data: {
                         wallet: user,

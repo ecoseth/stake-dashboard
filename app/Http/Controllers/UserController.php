@@ -20,6 +20,7 @@ class UserController extends Controller
 
     public function getUserInfo(Request $request)
     {
+
         $check_wallet = User::where('wallet', $request->wallet)->count();
 
         if ($check_wallet == 0) {
