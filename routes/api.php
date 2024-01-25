@@ -24,4 +24,4 @@ use App\Http\Controllers\UserController;
 
 Route::post('/user-info',[UserController::class,'getUserInfo']);
 
-Route::post('/level',[LevelController::class,'levelData']);
+Route::get('/level',[LevelController::class,'levelData']);

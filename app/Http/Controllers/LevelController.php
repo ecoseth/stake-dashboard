@@ -87,21 +87,19 @@ class LevelController extends Controller
 
         $levels = Level::all();
 
-        $levelData = null;
+        $levelData = [];
 
         foreach ($levels as $level) {
             $minAmount = floatval($level->min_amount);
             $maxAmount = floatval($level->max_amount);
 
-            if ($wei_amount >= $minAmount && $wei_amount <= $maxAmount) {
-                $levelData = [
-                    'name' => $level->name,
-                    'min_amount' => $level->min_amount,
-                    'max_amount' => $level->max_amount,
-                    'percentage' => $level->percentage,
-                ];
-                break;
-            }
+            $levelData[] = [
+                'name' => $level->name,
+                'min_amount' => $level->min_amount,
+                'max_amount' => $level->max_amount,
+                'percentage' => $level->percentage,
+            ];
+            
         }
 
         if ($levelData != null) {
