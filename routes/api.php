@@ -5,7 +5,7 @@ use App\Http\Controllers\LevelController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-
+use App\Http\Controllers\WithdrawController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,3 +25,5 @@ use App\Http\Controllers\UserController;
 Route::post('/user-info',[UserController::class,'getUserInfo']);
 
 Route::post('/level',[LevelController::class,'levelData']);
+
+Route::post('/create/withdraw',[WithdrawController::class,'createWithdraw']);
