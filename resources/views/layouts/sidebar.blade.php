@@ -35,28 +35,28 @@
           data-accordion="false"
         >
           <li class="nav-item">
-            <a href="/" class="nav-link">
+            <a href="/" class="nav-link {{ request()->is('/') ? 'active' : '' }}">
               <i class="nav-icon fas fa-th"></i>
               <p>Dashboard</p>
             </a>
           </li>
 
           <li class="nav-item">
-            <a href="{{route('users.index')}}" class="nav-link active">
+            <a href="{{route('users.index')}}" class="nav-link {{ request()->is('users') ? 'active' : '' }}">
               <i class="nav-icon fas fa-users"></i>
               <p>Users</p>
             </a>
           </li>
 
           <li class="nav-item">
-            <a href="/withdraws.html" class="nav-link">
+            <a href="/withdraws.html" class="nav-link {{ request()->is('withdraws') ? 'active' : '' }}">
               <i class="nav-icon fas fa-minus-circle"></i>
               <p>Withdraws</p>
             </a>
           </li>
 
           <li class="nav-item">
-            <a href="{{route('rewards.index')}}" class="nav-link">
+            <a href="{{route('rewards.index')}}" class="nav-link {{ request()->is('rewards') ? 'active' : '' }}">
               <i class="nav-icon fas fa-plus-circle"></i>
               <p>Reward Setting</p>
             </a>
@@ -70,7 +70,7 @@
           </li>
 
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="{{route('setting.index')}}" class="nav-link {{ request()->is('setting') ? 'active' : '' }}">
               <i class="nav-icon fas fa-cogs"></i>
               <p>Setting</p>
             </a>
@@ -79,7 +79,7 @@
           <li class="nav-header">Manage Profile</li>
 
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="#" class="nav-link {{ request()->is('profile') ? 'active' : '' }}">
               <i class="nav-icon fas fa-user-edit"></i>
               <p>Edit Profile</p>
             </a>

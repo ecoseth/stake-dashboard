@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Stake;
+use Illuminate\Http\Request;
 use App\Traits\HttpResponses;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -80,6 +81,26 @@ class UserController extends Controller
         $data = User::findOrFail($id);
 
         return view('users/balance')->with('data', $data);
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors()->all()
+            ]);
+        }
+
+        User::where('id',$request->id)->update([
+            'email' => $request->email,
+        ]);
+
+        return response()->json(['success' => 'Ok']);
+
     }
 
     public function unique_code($limit)
