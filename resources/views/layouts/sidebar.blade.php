@@ -49,9 +49,10 @@
           </li>
 
           <li class="nav-item">
-            <a href="/withdraws.html" class="nav-link">
-              <i class="nav-icon fas fa-minus-circle"></i>
-              <p>Withdraws</p>
+            {{-- <a href="/withdraws.html" class="nav-link"> --}}
+                <a href="{{route('users.withdraws')}}" class="nav-link">
+                    <i class="nav-icon fas fa-minus-circle"></i>
+                <p>Withdraws</p>
             </a>
           </li>
 

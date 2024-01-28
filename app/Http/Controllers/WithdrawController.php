@@ -34,4 +34,31 @@ class WithdrawController extends Controller
         return response()->json(['message' => 'Withdraw data added successfully']);
 
     }
+
+    public function withdraws(){
+
+        $data = Withdraw::get();
+
+        return view('users.withdraws',compact('data'));
+    }
+
+    public function approveStatus(Request $request){
+        Log::info($request->all());
+
+        Withdraw::where('id',$request->withdraw_id)->update([
+            'status' => 'approved'
+        ]);
+
+        echo "ok";
+    }
+
+    public function rejectStatus(Request $request){
+        Log::info($request->all());
+
+        Withdraw::where('id',$request->withdraw_id)->update([
+            'status' => 'rejected'
+        ]);
+
+        echo "ok";
+    }
 }
