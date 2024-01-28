@@ -203,7 +203,6 @@
                 } else {
                     printErrorMsg(data.error);
                     $('.print-error-msg').delay(5000).fadeOut('slow');
-
                 }
             }
         });

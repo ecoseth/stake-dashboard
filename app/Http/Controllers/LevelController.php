@@ -47,7 +47,7 @@ class LevelController extends Controller
 
     }
 
-    public function update(Request $request, Level $level)
+    public function update(Request $request)
     {
 
         $validator = Validator::make($request->all(), [
@@ -75,7 +75,7 @@ class LevelController extends Controller
 
     }
 
-    public function destroy(Request $request,Level $level)
+    public function destroy(Level $level,Request $request)
     {
         Level::where('id',$request->id)->delete();
         return response()->json(['success' => 'Ok']);
