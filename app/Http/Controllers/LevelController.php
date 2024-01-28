@@ -111,8 +111,8 @@ class LevelController extends Controller
     //     }
     // }
 
-    public function levelData(Request $request) {
-        $wei_amount = $request->weiAmount;
+    public function levelData(Request $request) 
+    {
 
         $levels = Level::all();
 
@@ -128,14 +128,12 @@ class LevelController extends Controller
                 'max_amount' => $level->max_amount,
                 'percentage' => $level->percentage,
             ];
-
+            
         }
 
         if ($levelData != null) {
             return response()->json(['data' => $levelData], 200);
-        } else {
-            return response()->json(['error' => 'Wei Amount data is not within any level range'], 404);
-        }
+        } 
     }
 
 }
