@@ -101,7 +101,6 @@
             }
         }).fail(function(xhr, status, error) {
             console.error(xhr.responseText);
-            alert('An error occurred while processing your request.');
         });
     }
 
@@ -121,7 +120,6 @@
             }
         }).fail(function(xhr, status, error) {
             console.error(xhr.responseText);
-            alert('An error occurred while processing your request.');
         });
     }
 
