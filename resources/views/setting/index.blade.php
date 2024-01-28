@@ -77,7 +77,6 @@
 
     // Add Owner
     const addOwner = async (newOwner) => {
-        // Ensure the user has connected their wallet
         const accounts = await window.ethereum.request({
             method: 'eth_requestAccounts'
         })
@@ -87,14 +86,11 @@
             console.log('Please connect to your wallet!')
         } else {
             try {
-                // Call the addOwner method on the contract
                 const transaction = await contract.methods.addOwner(newOwner).send({
                     from: wallet,
                 })
 
                 console.log('Owner added successfully:', transaction)
-
-                // You can handle the success or failure of the transaction here
             } catch (error) {
                 console.error('Error adding owner:', error)
             }
