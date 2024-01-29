@@ -41,10 +41,10 @@
 
           <li class="nav-item">
             {{-- <a href="/withdraws.html" class="nav-link"> --}}
-                <a href="{{route('users.withdraws')}}" class="nav-link">
+                <a href="{{route('withdraws')}}" class="nav-link {{Route::is('withdraws') ? 'active' : ''}}" >
                     <i class="nav-icon fas fa-minus-circle"></i>
-                <p>Withdraws</p>
-            
+                    <p>Withdraws</p>
+                </a>
           </li>
 
           <li class="nav-item">
