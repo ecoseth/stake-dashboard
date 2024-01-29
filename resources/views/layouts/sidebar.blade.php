@@ -54,12 +54,12 @@
             </a>
           </li>
 
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-plus-circle"></i>
                         <p>Helper Setting</p>
                     </a>
-                </li>
+                </li> --}}
 
                 <li class="nav-item">
                     <a href="{{route('setting.index')}}" class="nav-link {{ request()->is('setting') ? 'active' : '' }}">
