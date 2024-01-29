@@ -33,6 +33,14 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('/users/get-tokens', [UserController::class, 'fetchToken'])->name('fetch.tokens');
 
+    Route::get('/edit-profile/{id}', [UserController::class, 'editProfile'])->name('profile.edit');
+
+    Route::put('edit-profile/{id}', [UserController::class, 'updateProfile'])->name('profile.update');
+
+    Route::get('/edit-password/{id}', [UserController::class, 'editPassword'])->name('password.edit');
+
+    Route::put('/edit-password/{id}', [UserController::class, 'updatePassword'])->name('password.update');
+
     Route::resource('/rewards', LevelController::class);
 
     Route::get('/users/{id}/manage-balance', [UserController::class, 'manageBalance'])->name('users.manage.balance');

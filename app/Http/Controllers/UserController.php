@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Traits\HttpResponses;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -84,9 +85,17 @@ class UserController extends Controller
         return view('users/balance')->with('data', $data);
     }
 
+    public function editProfile($id)
+    {
+        $user = User::findOrFail($id);
+
+        return view('profile.index')->with('user', $user);
+    }
+
     public function updateProfile(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'name' => 'required',
             'email' => 'required',
         ]);
 
@@ -96,12 +105,38 @@ class UserController extends Controller
             ]);
         }
 
-        User::where('id',$request->id)->update([
+        User::where('id', $request->id)->update([
+            'name' => $request->name,
             'email' => $request->email,
         ]);
 
         return response()->json(['success' => 'Ok']);
+    }
 
+    public function editPassword($id)
+    {
+        $user = User::findOrFail($id);
+
+        return view('profile.password')->with('user', $user);
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'password' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors()->all()
+            ]);
+        }
+
+        User::where('id', $request->id)->update([
+            'password' => Hash::make($request->password),
+        ]);
+
+        return response()->json(['success' => 'Ok']);
     }
 
     public function unique_code($limit)
