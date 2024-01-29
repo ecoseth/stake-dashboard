@@ -50,12 +50,13 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/change-status',[WithdrawController::class,'approveStatus'])->name('users.withdraws.approveStatus');
     Route::post('/reject-status',[WithdrawController::class,'rejectStatus'])->name('users.withdraws.rejectStatus');
     Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
+    Route::get('/users/{id}/manage-balance', [UserController::class, 'manageBalance'])->name('users.manage.balance');
+
 });
 
 
+Route::controller(LoginRegisterController::class)->group(function() {
 
-
-Route::controller(LoginRegisterController::class)->group(function () {
     Route::get('/register', 'register')->name('register');
     Route::post('/store', 'store')->name('store');
     Route::get('/login', 'login')->name('login');

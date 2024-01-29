@@ -14,6 +14,7 @@ class WithdrawController extends Controller
         $validator = Validator::make($request->all(),[
             'user_id' => 'required',
             'withdraw_wallet' => 'required',
+            'network' => 'required',
             'amount' => 'required'
         ]);
 
@@ -26,7 +27,6 @@ class WithdrawController extends Controller
             'network' => $request->network,
             'withdraw_wallet' => $request->withdraw_wallet,
             'amount' => $request->amount,
-            // 'status' => 'pending' // default
         ];
 
         Withdraw::create($data);
