@@ -55,6 +55,7 @@ Route::group(['middleware' => ['auth']], function () {
 });
 
 
+
 Route::controller(LoginRegisterController::class)->group(function() {
 
     Route::get('/register', 'register')->name('register');
