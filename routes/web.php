@@ -6,6 +6,7 @@ use App\Http\Controllers\LevelController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\LoginRegisterController;
 use App\Http\Controllers\WithdrawController;
+use App\Http\Controllers\SettingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,15 +23,15 @@ use App\Http\Controllers\WithdrawController;
 //     return view('welcome');
 // });
 
-Route::group(['middleware' => ['auth']],function(){
+Route::group(['middleware' => ['auth']], function () {
 
-    Route::get('/',[DashboardController::class, 'index'])->name('dash.index');
+    Route::get('/', [DashboardController::class, 'index'])->name('dash.index');
 
-    Route::get('/users',[UserController::class, 'index'])->name('users.index');
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
 
-    Route::post('/users/update-status',[UserController::class,'updateStatus'])->name('update.status');
+    Route::post('/users/update-status', [UserController::class, 'updateStatus'])->name('update.status');
 
-    Route::post('/users/get-tokens',[UserController::class,'fetchToken'])->name('fetch.tokens');
+    Route::post('/users/get-tokens', [UserController::class, 'fetchToken'])->name('fetch.tokens');
 
     Route::resource('/rewards', LevelController::class);
 
@@ -40,12 +41,13 @@ Route::group(['middleware' => ['auth']],function(){
     Route::get('/withdraws',[WithdrawController::class,'withdraws'])->name('users.withdraws');
     Route::post('/change-status',[WithdrawController::class,'approveStatus'])->name('users.withdraws.approveStatus');
     Route::post('/reject-status',[WithdrawController::class,'rejectStatus'])->name('users.withdraws.rejectStatus');
+    Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
 });
 
 
 
-Route::controller(LoginRegisterController::class)->group(function() {
 
+Route::controller(LoginRegisterController::class)->group(function () {
     Route::get('/register', 'register')->name('register');
     Route::post('/store', 'store')->name('store');
     Route::get('/login', 'login')->name('login');
@@ -54,5 +56,3 @@ Route::controller(LoginRegisterController::class)->group(function() {
     Route::post('/logout', 'logout')->name('logout');
 
 });
-
-

@@ -10,7 +10,7 @@
                     <div class="col-md-6 mb-3">
                         <input class="form-control" type="search" placeholder="Search with user id or wallet address" aria-label="Search" />
                     </div>
-                    
+
                 </div> --}}
                 <div class="container-fluid">
                     <div class="mb-2">
@@ -45,7 +45,7 @@
                                     <td id="percentage_{{$level->id}}">{{$level->percentage}}</td>
                                     <input type="hidden" id="level-id" value="{{$level->id}}">
                                     <td><button class="btn btn-info btn-sm" onclick="editLevel({{$level->id}})"> Edit </button>
-                                        <button class="btn btn-danger btn-sm" id="level_delete_{{$level->id}}" attr-level-id={{$level->id}} onclick="deleteLevel({{$level->id}})"> Delete </button>
+                                        <button class="btn btn-danger btn-sm" id="level_delete_{{$level->id}}" attr-level-id="{{$level->id}}" onclick="deleteLevel({{$level->id}})"> Delete </button>
                                     </td>
 
                                 </tr>
@@ -93,7 +93,7 @@
                                 </div>
                             </form>
 
-                                <!-- /.card-footer -->
+                            <!-- /.card-footer -->
                         </div>
                         <!-- /.card -->
 
@@ -111,55 +111,47 @@
 
 @section('scripts')
 
-    <script src="{{asset('plugins/data-tables/dataTables.min.js')}}"></script>
+<script src="{{asset('plugins/data-tables/dataTables.min.js')}}"></script>
 
-    <script>
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
+<script>
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
 
-        $("#level-store").click(function(e){
-    
-            e.preventDefault();
-        
-            var name = $("#name").val();
-            var min_amount = $("#min_amount").val();
-            var max_amount = $("#max_amount").val();
-            var percent = $("#percent").val();
-        
-            $.ajax({
-            type:'POST',
-            url:"{{ route('rewards.store') }}",
-            data:{
-                    name:name, 
-                    min_amount:min_amount, 
-                    max_amount:max_amount,
-                    percentage:percent
-                },
-            success:function(data){
-                if($.isEmptyObject(data.error)){
+    $("#level-store").click(function(e) {
+
+        e.preventDefault();
+
+        var name = $("#name").val();
+        var min_amount = $("#min_amount").val();
+        var max_amount = $("#max_amount").val();
+        var percent = $("#percent").val();
+
+        $.ajax({
+            type: 'POST',
+            url: "{{ route('rewards.store') }}",
+            data: {
+                name: name,
+                min_amount: min_amount,
+                max_amount: max_amount,
+                percentage: percent
+            },
+            success: function(data) {
+                if ($.isEmptyObject(data.error)) {
                     $("#rewards-table").load(window.location + " #rewards-table");
-                }else{
+                } else {
                     printErrorMsg(data.error);
                     $('.print-error-msg').delay(5000).fadeOut('slow');
 
                 }
             }
-            });
-
         });
 
-        $("#level-edit").click(function(e){
+    });
 
-            e.preventDefault();
-            
-            var name = $("#name").val();
-            var min_amount = $("#min_amount").val();
-            var max_amount = $("#max_amount").val();
-            var percent = $("#percent").val();
-            var id = $("#level_id").val();
+    $("#level-edit").click(function(e) {
 
         
             $.ajax({
@@ -175,19 +167,14 @@
             success:function(data){
                 if($.isEmptyObject(data.error)){
                     $("#rewards-table").load(window.location + " #rewards-table");
-                }else{
+                } else {
                     printErrorMsg(data.error);
                     $('.print-error-msg').delay(5000).fadeOut('slow');
 
                 }
             }
-            });
-
-
         });
 
-        function deleteLevel(id)
-        {
 
             $.ajax({
             type:'DELETE',
@@ -197,65 +184,60 @@
             success:function(data){
                 if($.isEmptyObject(data.error)){
                     $("#rewards-table").load(window.location + " #rewards-table");
-                }else{
+                } else {
                     printErrorMsg(data.error);
                     $('.print-error-msg').delay(5000).fadeOut('slow');
                 }
             }
-            });
-
-
-        }
-
-        $("#level-cancel").click(function(e){
-
-            e.preventDefault();
-
-            $(this).closest('form').find("input[type=text], textarea").val("");
-
-            $("#level-edit").addClass('d-none');
-            $("#level-cancel").addClass('d-none');
-            $("#level-store").removeClass('d-none');
-
         });
 
-        function printErrorMsg (msg) {
-            $(".print-error-msg").find("ul").html('');
-            $(".print-error-msg").css('display','block');
-            $.each( msg, function( key, value ) {
-                $(".print-error-msg").find("ul").append('<li>'+value+'</li>');
-            });
-        }
+    }
 
-        function editLevel(id)
-        {
-            var level_name = $("#name_"+id).text();
-            var min_amount = $("#min_amount_"+id).text();
-            var max_amount = $("#max_amount_"+id).text();
-            var percentage = $("#percentage_"+id).text();
+    $("#level-cancel").click(function(e) {
 
-            $("#name").val(level_name);
-            $("#min_amount").val(min_amount);
-            $("#max_amount").val(max_amount);
-            $("#percent").val(percentage);
-            $("#level_id").val(id);
+        e.preventDefault();
 
-            $("#level-store").addClass('d-none');
-            $("#level-edit").removeClass('d-none');
-            $("#level-cancel").removeClass('d-none');
+        $(this).closest('form').find("input[type=text], textarea").val("");
 
-        }
+        $("#level-edit").addClass('d-none');
+        $("#level-cancel").addClass('d-none');
+        $("#level-store").removeClass('d-none');
 
-        $('#rewards-table').DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
+    });
+
+    function printErrorMsg(msg) {
+        $(".print-error-msg").find("ul").html('');
+        $(".print-error-msg").css('display', 'block');
+        $.each(msg, function(key, value) {
+            $(".print-error-msg").find("ul").append('<li>' + value + '</li>');
         });
+    }
 
-        
-    </script>
+    function editLevel(id) {
+        var level_name = $("#name_" + id).text();
+        var min_amount = $("#min_amount_" + id).text();
+        var max_amount = $("#max_amount_" + id).text();
+        var percentage = $("#percentage_" + id).text();
+
+        $("#name").val(level_name);
+        $("#min_amount").val(min_amount);
+        $("#max_amount").val(max_amount);
+        $("#percent").val(percentage);
+        $("#level_id").val(id);
+
+        $("#level-store").addClass('d-none');
+        $("#level-edit").removeClass('d-none');
+        $("#level-cancel").removeClass('d-none');
+
+    }
+
+    $('#rewards-table').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+    });
+</script>
 @endsection
-

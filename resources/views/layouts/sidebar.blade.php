@@ -53,7 +53,7 @@
                 <a href="{{route('users.withdraws')}}" class="nav-link">
                     <i class="nav-icon fas fa-minus-circle"></i>
                 <p>Withdraws</p>
-            </a>
+            
           </li>
 
           <li class="nav-item">
@@ -71,7 +71,7 @@
           </li>
 
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="{{route('setting.index')}}" class="nav-link {{ request()->is('setting') ? 'active' : '' }}">
               <i class="nav-icon fas fa-cogs"></i>
               <p>Setting</p>
             </a>
@@ -80,7 +80,7 @@
           <li class="nav-header">Manage Profile</li>
 
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="#" class="nav-link {{ request()->is('profile') ? 'active' : '' }}">
               <i class="nav-icon fas fa-user-edit"></i>
               <p>Edit Profile</p>
             </a>
