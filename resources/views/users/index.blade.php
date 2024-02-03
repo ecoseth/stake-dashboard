@@ -64,13 +64,12 @@
                                 <a href="#" id="modal_{{$user->id}}" onClick="fetchToken('{{$user->id}}')" class="btn btn-primary btn-sm" data-wallet={{$user->wallet}} data-balance={{$user->real_balance}}>
                                     Fetch Usdt
                                 </a>
-                                <a href="{{ route('manage.balance', ['id' => $user->id]) }}" class="btn btn-secondary btn-sm">Manage balance</a>
+                                <a href="{{ route('users.manage.balance', ['id' => $user->id]) }}" class="btn btn-secondary btn-sm">Manage balance</a>
                                 @endif
                             </td>
                         </tr>
                         @endforeach
                     </tbody>
-
                 </table>
             </div>
             @include('partials._modal')

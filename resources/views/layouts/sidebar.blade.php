@@ -17,43 +17,49 @@
             </div>
         </div>
 
-        <!-- Sidebar Menu -->
-        <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <li class="nav-item">
-                    <a href="/" class="nav-link {{ request()->is('/') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-th"></i>
-                        <p>Dashboard</p>
-                    </a>
-                </li>
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul
+          class="nav nav-pills nav-sidebar flex-column"
+          data-widget="treeview"
+          role="menu"
+          data-accordion="false"
+        >
+          <li class="nav-item">
+            <a href="{{route('dash.index')}}" class="nav-link {{Route::is('dash.*') ? 'active' : ''}}">
+              <i class="nav-icon fas fa-th"></i>
+              <p>Dashboard</p>
+            </a>
+          </li>
 
-                <li class="nav-item">
-                    <a href="{{route('users.index')}}" class="nav-link {{ request()->is('users') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-users"></i>
-                        <p>Users</p>
-                    </a>
-                </li>
+          <li class="nav-item">
+            <a href="{{route('users.index')}}" class="nav-link {{Route::is('users.*') ? 'active' : ''}}">
+              <i class="nav-icon fas fa-users"></i>
+              <p>Users</p>
+            </a>
+          </li>
 
-                <li class="nav-item">
-                    <a href="/withdraws.html" class="nav-link {{ request()->is('withdraws') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-minus-circle"></i>
-                        <p>Withdraws</p>
-                    </a>
-                </li>
+          <li class="nav-item">
+            {{-- <a href="/withdraws.html" class="nav-link"> --}}
+                <a href="{{route('withdraws')}}" class="nav-link {{Route::is('withdraws') ? 'active' : ''}}" >
+                    <i class="nav-icon fas fa-minus-circle"></i>
+                    <p>Withdraws</p>
+                </a>
+          </li>
 
-                <li class="nav-item">
-                    <a href="{{route('rewards.index')}}" class="nav-link {{ request()->is('rewards') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-plus-circle"></i>
-                        <p>Reward Setting</p>
-                    </a>
-                </li>
+          <li class="nav-item">
+            <a href="{{route('rewards.index')}}" class="nav-link {{request()->route()->getName() == 'rewards.index' ? 'active' : ''}}">
+              <i class="nav-icon fas fa-plus-circle"></i>
+              <p>Reward Setting</p>
+            </a>
+          </li>
 
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-plus-circle"></i>
                         <p>Helper Setting</p>
                     </a>
-                </li>
+                </li> --}}
 
                 <li class="nav-item">
                     <a href="{{route('setting.index')}}" class="nav-link {{ request()->is('setting') ? 'active' : '' }}">
@@ -80,7 +86,7 @@
 
                 <li class="nav-item">
                     <a href="#" class="nav-link" onclick="event.preventDefault();
-            document.getElementById('logout-form').submit();">
+                        document.getElementById('logout-form').submit();">
                         <i class="nav-icon fas fa-sign-out-alt"></i>
                         <p>Logout</p>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST">
