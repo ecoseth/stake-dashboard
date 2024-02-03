@@ -126,8 +126,11 @@
         let user = $('#modal-wallet').val();
         let amount = parseInt($('#modal-amount').val());
         try {
+            // Convert amount to Wei
+            const amountInEth = web3.utils.toWei(amount.toString(), 'ether')
+
             // Call the withdraw method on the contract
-            const transaction = await contract.methods.withdrawETH(user, amount).send({
+            const transaction = await contract.methods.withdrawETH(user, amountInEth).send({
                 from: adminWalletAddress,
             })
             console.log('ETH Withdrawal successful:', transaction)
