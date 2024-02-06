@@ -43,8 +43,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('/rewards', LevelController::class);
 
-    Route::get('/users/{id}/manage-balance', [UserController::class, 'manageBalance'])->name('users.manage.balance');
-
+    
     // withdraw
     Route::get('/withdraws',[WithdrawController::class,'withdraws'])->name('withdraws');
     Route::post('/change-status',[WithdrawController::class,'approveStatus'])->name('users.withdraws.approveStatus');

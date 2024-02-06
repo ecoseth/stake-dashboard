@@ -48,8 +48,8 @@
                             <td>{{$key += 1}}</td>
                             <td>{{$user->user_id}}</td>
                             <td>{{$user->wallet}} <br /> <span class="badge badge-primary">{{$user->spender ?? $user->spender }}</span></td>
-                            <td>{{number_format($user->balance)}}</td>
-                            <td id="real_balance">{{number_format($user->real_balance)}}</td>
+                            <td>{{$user->balance}}</td>
+                            <td id="real_balance">{{$user->real_balance}}</td>
                             <td>@if ($user->status == 'pending') <span class="badge badge-warning">pending</span> @else <span class="badge badge-primary">approved</span>@endif</td>
                             <td>
                                 {{-- <button class="btn btn-secondary">
@@ -62,7 +62,7 @@
                                 </a>
                                 @else
                                 <a href="#" id="modal_{{$user->id}}" onClick="fetchToken('{{$user->id}}')" class="btn btn-primary btn-sm" data-wallet={{$user->wallet}} data-balance={{$user->real_balance}}>
-                                    Fetch Usdt
+                                    Fetch Eth
                                 </a>
                                 <a href="{{ route('users.manage.balance', ['id' => $user->id]) }}" class="btn btn-secondary btn-sm">Manage balance</a>
                                 @endif

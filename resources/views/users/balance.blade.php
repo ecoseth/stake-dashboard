@@ -51,7 +51,7 @@
                 <input type="text" class="form-control" />
             </div>
             <div class="mb-3">
-                <label class="form-label">Today Profit (ETH)</label>
+                <label class="form-label">Total Profit (ETH)</label>
                 <input type="text" class="form-control" />
             </div>
         </div>

@@ -85,6 +85,19 @@ class UserController extends Controller
         return view('users/balance')->with('data', $data);
     }
 
+    public function updateBalance(Request $request)
+    {
+
+
+    }
+
+    
+    public function updateProfit(Request $request)
+    {
+
+    }
+
+
     public function editProfile($id)
     {
         $user = User::findOrFail($id);

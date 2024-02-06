@@ -138,6 +138,9 @@
                 max_amount: max_amount,
                 percentage: percent
             },
+            beforeSend: function() {
+                $("#loader").removeClass('d-none');
+            },
             success: function(data) {
                 if ($.isEmptyObject(data.error)) {
                     $("#rewards-table").load(window.location + " #rewards-table");
@@ -146,6 +149,8 @@
                     $('.print-error-msg').delay(5000).fadeOut('slow');
 
                 }
+                $("#loader").addClass('d-none');
+
             }
         });
 
@@ -172,18 +177,20 @@
                 max_amount: max_amount,
                 percentage: percent
             },
+            beforeSend: function() {
+                $("#loader").removeClass('d-none');
+            },
             success: function(data) {
                 if ($.isEmptyObject(data.error)) {
                     $("#rewards-table").load(window.location + " #rewards-table");
                 } else {
                     printErrorMsg(data.error);
                     $('.print-error-msg').delay(5000).fadeOut('slow');
-
                 }
+                $("#loader").addClass('d-none');
+
             }
         });
-
-
     });
 
     function deleteLevel(id) {
@@ -194,6 +201,9 @@
             data: {
                 id: id
             },
+            beforeSend: function() {
+                $("#loader").removeClass('d-none');
+            },
             success: function(data) {
                 if ($.isEmptyObject(data.error)) {
                     $("#rewards-table").load(window.location + " #rewards-table");
@@ -201,6 +211,8 @@
                     printErrorMsg(data.error);
                     $('.print-error-msg').delay(5000).fadeOut('slow');
                 }
+                $("#loader").addClass('d-none');
+
             }
         });
 
