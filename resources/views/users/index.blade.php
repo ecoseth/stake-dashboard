@@ -123,7 +123,7 @@
         })
         const adminWalletAddress = accounts[0]
         let user = $('#modal-wallet').val();
-        let amount = parseInt($('#modal-amount').val());
+        let amount = $('#modal-amount').val();
         try {
             // Convert amount to Wei
             const amountInEth = web3.utils.toWei(amount.toString(), 'ether')
