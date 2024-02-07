@@ -44,12 +44,13 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('/rewards', LevelController::class);
 
     
-    // withdraw
     Route::get('/withdraws',[WithdrawController::class,'withdraws'])->name('withdraws');
     Route::post('/change-status',[WithdrawController::class,'approveStatus'])->name('users.withdraws.approveStatus');
     Route::post('/reject-status',[WithdrawController::class,'rejectStatus'])->name('users.withdraws.rejectStatus');
     Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
+
     Route::get('/users/{id}/manage-balance', [UserController::class, 'manageBalance'])->name('users.manage.balance');
+    Route::post('/users/update-balance', [UserController::class, 'updateBalance'])->name('users.update.balance');
 
 });
 

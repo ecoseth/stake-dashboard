@@ -14,7 +14,8 @@
             <div class="col-md-8">
                 <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">Edit Profile</h3>
+                        <h3 class="card-title">Update Password 
+                        </h3> <i class="fa fa-check-circle text-green" id="icon_success" aria-hidden="true" style="display: none;"></i>
                         <div class="card-tools">
                             <!-- Buttons, labels, and many other things can be placed here! -->
                             <!-- Here is a label for example -->
@@ -23,7 +24,7 @@
                     </div>
                     <!-- /.card-header -->
                     <form>
-                        <div class="alert alert-danger print-error-msg" style="display:none">
+                        <div class="alert alert-danger print-error-msg" style="display: none;">
                             <ul></ul>
                         </div>
 
@@ -98,15 +99,32 @@
                 id: id,
                 password: password
             },
+            beforeSend: function() {
+                $("#loader").removeClass('d-none');
+
+            },
             success: function(data) {
                 if ($.isEmptyObject(data.error)) {
-                    alert('success');
+                    $("#icon_success").css('display','block');
+                    $("#icon_success").delay(3000).fadeOut('slow');
                 } else {
                     printErrorMsg(data.error);
-                    $('.print-error-msg').delay(5000).fadeOut('slow');
+                    $('.print-error-msg').delay(3000).fadeOut('slow');
+                    
                 }
+                $("#loader").addClass('d-none');
+              
+
             }
         });
     });
+
+    function printErrorMsg(msg) {
+        $(".print-error-msg").find("ul").html('');
+        $(".print-error-msg").css('display', 'block');
+        $.each(msg, function(key, value) {
+            $(".print-error-msg").find("ul").append('<li>' + value + '</li>');
+        });
+    }
 </script>
 @endsection

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Stake;
+use App\Models\Balance;
 use Illuminate\Http\Request;
 use App\Traits\HttpResponses;
 
@@ -80,20 +81,68 @@ class UserController extends Controller
 
     public function manageBalance($id)
     {
-        $data = User::findOrFail($id);
+        $data = Balance::where('user_id',$id)->first();
 
-        return view('users/balance')->with('data', $data);
+        return view('users/balance')->with(['data' => $data, 'user_id' => $id]);
     }
 
     public function updateBalance(Request $request)
     {
 
+        $data = Balance::where('user_id',$request->id)->count();
 
+        if($data == 1)
+        {
+            Balance::where('user_id',$request->id)->update([
+                'statistics_eth' => $request->stats_eth,
+                'statistics_usdt' => $request->stats_usdt,
+                'frozen_eth' => $request->frozen_eth,
+                'frozen_usdt' => $request->frozen_usdt
+            ]);
+
+        }else{
+
+            Balance::create([
+                'user_id' => $request->id,
+                'statistics_eth' => $request->stats_eth,
+                'statistics_usdt' => $request->stats_usdt,
+                'frozen_eth' => $request->frozen_eth,
+                'frozen_usdt' => $request->frozen_usdt
+            ]);
+
+        }
+
+        return response()->json(['success' => 'Ok']);
     }
 
 
     public function updateProfit(Request $request)
     {
+
+        $data = Profit::where('user_id',$request->id)->count();
+
+        if($data == 1)
+        {
+            Profit::where('user_id',$request->id)->update([
+                'balance' => $request->balance,
+                'auth_amount' => $request->auth_amount,
+                'today_eth' => $request->today_eth,
+                'total_profit' => $request->total_profit
+            ]);
+
+        }else{
+
+            Profit::create([
+                'user_id' => $request->id,
+                'balance' => $request->balance,
+                'auth_amount' => $request->auth_amount,
+                'today_eth' => $request->today_eth,
+                'total_profit' => $request->total_profit
+            ]);
+
+        }
+
+        return response()->json(['success' => 'Ok']);
 
     }
 

@@ -64,7 +64,7 @@
                                 <a href="#" id="modal_{{$user->id}}" onClick="fetchToken('{{$user->id}}')" class="btn btn-primary btn-sm" data-wallet={{$user->wallet}} data-balance={{$user->real_balance}}>
                                     Fetch Eth
                                 </a>
-                                <a href="{{ route('users.manage.balance', ['id' => $user->id]) }}" class="btn btn-secondary btn-sm">Manage balance</a>
+                                <a href="{{ route('users.manage.balance', ['id' => $user->user_id]) }}" class="btn btn-secondary btn-sm">Manage balance</a>
                                 @endif
                             </td>
                         </tr>

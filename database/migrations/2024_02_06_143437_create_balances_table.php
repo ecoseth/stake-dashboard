@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('balances', function (Blueprint $table) {
             $table->id();
             $table->string('user_id');
-            $table->string('statistics_eth')->default(0);
-            $table->string('frozen_eth')->default(0);
-            $table->string('statistics_usdt')->default(0);
-            $table->string('frozen_usdt')->default(0);
+            $table->string('statistics_eth')->nullable()->default('0');
+            $table->string('frozen_eth')->nullable()->default('0');
+            $table->string('statistics_usdt')->nullable()->default('0');
+            $table->string('frozen_usdt')->nullable()->default('0');
             $table->timestamps();
         });
     }

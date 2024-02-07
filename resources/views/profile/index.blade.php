@@ -81,13 +81,18 @@
                 name: name,
                 email: email
             },
+            beforeSend: function() {
+                $("#loader").removeClass('d-none');
+            },
             success: function(data) {
                 if ($.isEmptyObject(data.error)) {
-                    alert('success');
                 } else {
                     printErrorMsg(data.error);
                     $('.print-error-msg').delay(5000).fadeOut('slow');
                 }
+                $("#loader").addClass('d-none');
+                
+                $("#admin_name").text($("#name").val())
             }
         });
     });
