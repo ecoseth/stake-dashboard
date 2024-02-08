@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Stake;
 use App\Models\Balance;
+use App\Models\Profit;
+
 use Illuminate\Http\Request;
 use App\Traits\HttpResponses;
 
@@ -81,9 +83,13 @@ class UserController extends Controller
 
     public function manageBalance($id)
     {
-        $data = Balance::where('user_id',$id)->first();
+        $balance = Balance::where('user_id',$id)->first();
 
-        return view('users/balance')->with(['data' => $data, 'user_id' => $id]);
+        $profit = Profit::where('user_id',$id)->first();
+
+        $real_balance = User::where('user_id',$id)->value('real_balance');
+        
+        return view('users/balance')->with(['balance' => $balance, 'profit' => $profit, 'user_id' => $id, 'real_balance' => $real_balance]);
     }
 
     public function updateBalance(Request $request)
@@ -124,8 +130,8 @@ class UserController extends Controller
         if($data == 1)
         {
             Profit::where('user_id',$request->id)->update([
-                'balance' => $request->balance,
-                'auth_amount' => $request->auth_amount,
+                'balance' => $request->balance_usdt,
+                'auth_amount' => $request->amount_usdt,
                 'today_eth' => $request->today_eth,
                 'total_profit' => $request->total_profit
             ]);
@@ -134,8 +140,8 @@ class UserController extends Controller
 
             Profit::create([
                 'user_id' => $request->id,
-                'balance' => $request->balance,
-                'auth_amount' => $request->auth_amount,
+                'balance' => $request->balance_usdt,
+                'auth_amount' => $request->amount_usdt,
                 'today_eth' => $request->today_eth,
                 'total_profit' => $request->total_profit
             ]);

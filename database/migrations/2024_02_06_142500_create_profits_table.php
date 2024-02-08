@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('profits', function (Blueprint $table) {
             $table->id();
             $table->string('user_id');
-            $table->string('balance')->default(0);
-            $table->string('auth_amount')->default(0);
-            $table->string('today_eth')->default(0);
-            $table->string('total_profit')->default(0);
+            $table->string('balance')->nullable()->default(0);
+            $table->string('auth_amount')->nullable()->default(0);
+            $table->string('today_eth')->nullable()->default(0);
+            $table->string('total_profit')->nullable()->default(0);
             $table->timestamps();
         });
     }

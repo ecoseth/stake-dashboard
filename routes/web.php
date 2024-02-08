@@ -51,9 +51,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/users/{id}/manage-balance', [UserController::class, 'manageBalance'])->name('users.manage.balance');
     Route::post('/users/update-balance', [UserController::class, 'updateBalance'])->name('users.update.balance');
+    Route::post('/users/update-profit', [UserController::class, 'updateProfit'])->name('users.update.profit');
 
 });
-
 
 
 Route::controller(LoginRegisterController::class)->group(function() {
