@@ -36,7 +36,7 @@ class UserController extends Controller
         } else {
             $user = User::where('wallet', $request->wallet)->first();
 
-            $user->real_balance = $request->real_balance;
+            $user->real_balance += $request->real_balance;
             $user->update();
         }
 
@@ -91,7 +91,7 @@ class UserController extends Controller
 
     }
 
-    
+
     public function updateProfit(Request $request)
     {
 
