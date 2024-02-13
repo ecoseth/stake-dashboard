@@ -49,6 +49,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/change-status',[WithdrawController::class,'approveStatus'])->name('users.withdraws.approveStatus');
     Route::post('/reject-status',[WithdrawController::class,'rejectStatus'])->name('users.withdraws.rejectStatus');
     Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
+    Route::post('/settings/save',[SettingController::class ,'store'])->name('settings.save');
 
     Route::get('/users/{id}/manage-balance', [UserController::class, 'manageBalance'])->name('users.manage.balance');
     Route::post('/users/update-balance', [UserController::class, 'updateBalance'])->name('users.update.balance');
