@@ -28,25 +28,44 @@
                         </div>
 
                         <div class="card-body">
-                            <div class="mb-3">
-                                <label>Fast Forest API Key</label>
-                                <input type="text" class="form-control">
-                            </div>
 
-                            <div class="mb-3">
-                                <label for="address">Receiver address</label>
-                                <input type="text" class="form-control" id="address">
-                            </div>
+                            <div class="row">
 
-                            <div class="mb-3">
-                                <label>Eth to USDT Rate</label>
-                                <input type="text" class="form-control">
-                            </div>
+                                <div class="col-md-3">
 
-                            <div>
-                                <label>Eth to USDT Rate</label>
-                                <input type="text" class="form-control">
+                                    <div class="mb-3">
+                                        <label>Eth to USDT Rate </label>
+                                        <input type="text" class="form-control">
+                                        <small>1 eth = <span id="usdt"></span></small>
+                                    </div>
+    
+                                </div>
+
+                                <div class="col-md-5">
+
+                                    <div class="mb-3">
+                                        <label for="address">Receiver address</label>
+                                        <input type="text" class="form-control" id="address">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2">
+
+                                    <div class="mb-3">
+                                        <label for="fees">Service Fees</label>
+                                        <input type="text" class="form-control" id="fees">
+                                    </div>
+                                </div>
                             </div>
+                           
+                                    {{-- <div class="mb-3">
+                                        <label for="address">Receiver address</label>
+                                        <input type="text" class="form-control" id="address">
+                                    </div> --}}
+
+
+
+                            {{-- </div> --}}
                         </div>
 
                         <!-- /.card-body -->

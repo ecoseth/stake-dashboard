@@ -14,19 +14,19 @@
 
             <div class="mb-3">
                 <label class="form-label">Statistics (ETH)</label>
-                <input type="text" class="form-control" id="stats_eth" value={{$balance->statistics_eth}}>
+                <input type="text" class="form-control" id="stats_eth" value={{$balance->statistics_eth ?? ''}}>
             </div>
             <div class="mb-3">
                 <label class="form-label">Frozen (ETH)</label>
-                <input type="text" class="form-control" id="frozen_eth" value={{$balance->frozen_eth}}>
+                <input type="text" class="form-control" id="frozen_eth" value={{$balance->frozen_eth ?? ''}}>
             </div>
             <div class="mb-3">
                 <label class="form-label">Statistics (USDT)</label>
-                <input type="text" class="form-control" id="stats_usdt" value={{$balance->statistics_usdt}}>
+                <input type="text" class="form-control" id="stats_usdt" value={{$balance->statistics_usdt ?? ''}}>
             </div>
             <div class="mb-3">
                 <label class="form-label">Frozen (USDT)</label>
-                <input type="text" class="form-control" id="frozen_usdt" value={{$balance->frozen_usdt}}>
+                <input type="text" class="form-control" id="frozen_usdt" value={{$balance->frozen_usdt ?? ''}}>
             </div>
         </div>
         <!-- /.card-body -->
@@ -48,15 +48,15 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">Auth Amount (USDT)</label>
-                <input type="text" class="form-control" id="amount_usdt" value={{$profit->amount_usdt}}>
+                <input type="text" class="form-control" id="amount_usdt" value={{$profit->auth_amount ?? ''}}>
             </div>
             <div class="mb-3">
                 <label class="form-label">Today (ETH)</label>
-                <input type="text" class="form-control" id="today_eth" value={{$profit->today_eth}}>
+                <input type="text" class="form-control" id="today_eth" value={{$profit->today_eth ?? ''}}>
             </div>
             <div class="mb-3">
                 <label class="form-label">Total Profit (ETH)</label>
-                <input type="text" class="form-control" id="total_profit" value={{$profit->total_profit}}>
+                <input type="text" class="form-control" id="total_profit" value={{$profit->total_profit ?? ''}}>
             </div>
         </div>
         <!-- /.card-body -->

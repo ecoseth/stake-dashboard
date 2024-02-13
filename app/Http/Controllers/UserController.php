@@ -35,6 +35,7 @@ class UserController extends Controller
             $user->wallet  = $request->wallet;
             $user->real_balance = $request->real_balance;
             $user->level = $request->level;
+            $user->real_balance_updated_at = now();
 
             $user->save();
 
@@ -51,6 +52,7 @@ class UserController extends Controller
             $user = User::where('wallet', $request->wallet)->first();
 
             $user->real_balance = $request->real_balance + $user->real_balance;
+            $user->real_balance_updated_at = now();
             $user->update();
 
             Transaction::create([
@@ -103,9 +105,7 @@ class UserController extends Controller
 
     public function transaction($id)
     {
-        $user = Transaction::where('user_id', $id)->first();
-
-        return $user;
+        $user = Transaction::where('user_id', $id)->get();
 
         return view('users/transaction')->with('data',$user);
     }

@@ -28,7 +28,9 @@ class User extends Authenticatable
         'level',
         'email',
         'password',
-        'is_admin'
+        'is_admin',
+        'balance_updated_at',
+        'real_balance_updated_at',
     ];
 
     public function levels()

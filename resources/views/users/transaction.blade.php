@@ -20,26 +20,23 @@
                 <table class="table table-striped text-nowrap">
                     <thead>
                         <tr>
-                            <th style="width: 10px">#</th>
                             <th>Transaction ID</th>
                             <th>User Wallet</th>
                             <th>Amount</th>
                             <th>Status</th>
-                            <th style="width: 40px">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($data as $key => $user)
-                        <tr>
-                            <td>{{$user->id}}</td>
-                            <td>{{$user->user_id}}</td>
-                            <td>{{$user->wallet}}</td>
-                            <td>{{$user->amount}}</td>
-                            <td>@if ($user->status == 'deposit') <span class="badge badge-info">deposit</span> @else <span class="badge badge-primary">approved</span>@endif</td>
-                            <td>
-                               
-                            </td>
-                        </tr>
+                            <tr>
+                                <td>{{$user->id}}</td>
+                                <td>{{$user->wallet}}</td>
+                                <td>{{$user->amount}}</td>
+                                <td>@if ($user->status == 'deposit') <span class="badge badge-info">deposit</span> @else <span class="badge badge-primary">approved</span>@endif</td>
+                                <td>
+                                
+                                </td>
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>
@@ -51,6 +48,4 @@
     <!-- /.container-fluid -->
 </div>
 <!-- /.content -->
-@endsection
-
 @endsection

@@ -45,9 +45,9 @@
                         <tr>
                             <td>{{$key += 1}}</td>
                             <td><a href="user/{{$user->id}}/transactions">{{$user->user_id}}</a></td>
-                            <td>{{$user->wallet}} <br /> <span class="badge badge-primary">{{$user->spender ?? $user->spender }}</span></td>
+                            <td>{{$user->wallet}} <br> <span class="badge badge-primary">{{$user->spender ?? $user->spender }}</span></td>
                             <td>{{$user->balance}}</td>
-                            <td id="real_balance">{{$user->real_balance}}</td>
+                            <td id="real_balance">{{$user->real_balance}} <br><span class="badge badge-secondary">{{$user->real_balance_updated_at}}</span></td>
                             <td>@if ($user->status == 'pending') <span class="badge badge-warning">pending</span> @else <span class="badge badge-primary">approved</span>@endif</td>
                             <td>
                                 {{-- <button class="btn btn-secondary">
