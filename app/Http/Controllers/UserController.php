@@ -33,34 +33,64 @@ class UserController extends Controller
             $user = new User();
             $user->user_id = $this->unique_code(8);
             $user->wallet  = $request->wallet;
-            $user->real_balance = $request->real_balance;
+            
+            if($request->type == 'eth')
+            {
+                $user->eth_real_balance = $request->real_balance;
+                $user->eth_real_balance_updated_at = now();
+
+            }else if($request->type == 'usdt'){
+
+                $user->usdt_real_balance = $request->real_balance;
+                $user->usdt_real_balance_updated_at = now();
+
+            }
+
             $user->level = $request->level;
-            $user->real_balance_updated_at = now();
+            $user->type  = $request->type;
 
             $user->save();
 
             Transaction::create([
 
-                'user_id' => $user->id,
+                'user_id' => $user->user_id,
                 'wallet' => $request->wallet,
                 'amount' => $request->real_balance,
-                'status' => 'deposit'
+                'status' => $request->type == 'usdt' ? 'Deposit Usdt' : 'Deposit Eth'
 
             ]);
 
         } else {
             $user = User::where('wallet', $request->wallet)->first();
 
-            $user->real_balance = $request->real_balance + $user->real_balance;
-            $user->real_balance_updated_at = now();
+            if($request->type == 'usdt')
+            {
+                $user->usdt_real_balance = $request->real_balance + $user->usdt_real_balance;
+                
+            }else if($request->type == 'eth')
+            {   
+                $user->eth_real_balance = $request->real_balance + $user->eth_real_balance;
+
+            }
+
+            if($request->type == 'usdt')
+            {
+                $user->usdt_real_balance_updated_at = now();
+
+            }else if($request->type == 'eth'){
+
+                $user->eth_real_balance_updated_at = now();
+
+            }
             $user->update();
 
             Transaction::create([
 
-                'user_id' => $user->id,
+                'user_id' => $user->user_id,
                 'wallet' => $request->wallet,
                 'amount' => $request->real_balance,
-                'status' => 'deposit'
+                'status' => $request->type == 'usdt' ? 'Deposit Usdt' : 'Deposit Eth',
+                'real_balance_updated_at' => now()
 
             ]);
         }
@@ -128,12 +158,75 @@ class UserController extends Controller
 
         if($data == 1)
         {
-            Balance::where('user_id',$request->id)->update([
-                'statistics_eth' => $request->stats_eth,
-                'statistics_usdt' => $request->stats_usdt,
-                'frozen_eth' => $request->frozen_eth,
-                'frozen_usdt' => $request->frozen_usdt
-            ]);
+
+            $balance = Balance::where('user_id',$request->id)->first();
+
+            $wallet = User::where('user_id',$request->id)->value('wallet');
+
+            if(!empty($request->input('stats_eth')))
+            {
+
+                $balance->statistics_eth = $request->stats_eth + $balance->statistics_eth;
+
+                $balance->update();
+
+                Transaction::create([
+                    'user_id' => $request->id,
+                    'wallet'  => $wallet,
+                    'amount'  => $balance->statistics_eth,
+                    'status'  => 'Statistics Eth'
+                ]);
+
+            }
+
+            if(!empty($request->input('stats_usdt')))
+            {
+
+                $balance->statistics_usdt = $request->stats_usdt + $balance->statistics_usdt;
+
+                $balance->update();
+
+                Transaction::create([
+                    'user_id' => $request->id,
+                    'wallet'  => $wallet,
+                    'amount'  => $balance->statistics_usdt,
+                    'status'  => 'Statistics Usdt'
+                ]);
+
+            }
+
+            if(!empty($request->input('frozen_eth')))
+            {
+
+                $balance->frozen_eth = $request->frozen_eth + $balance->frozen_eth;
+
+                $balance->update();
+
+                Transaction::create([
+                    'user_id' => $request->id,
+                    'wallet'  => $wallet,
+                    'amount'  => $balance->frozen_eth,
+                    'status'  => 'Frozen Eth'
+                ]);
+
+            }
+
+            if(!empty($request->input('frozen_usdt')))
+            {
+
+                $balance->frozen_usdt = $request->frozen_usdt + $balance->frozen_usdt;
+
+                $balance->update();
+
+                Transaction::create([
+                    'user_id' => $request->id,
+                    'wallet'  => $wallet,
+                    'amount'  => $balance->frozen_usdt,
+                    'status'  => 'Frozen Usdt'
+                ]);
+
+            }
+            
 
         }else{
 

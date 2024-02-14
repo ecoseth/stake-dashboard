@@ -13,6 +13,7 @@ class Stake extends Model
         'user_id',
         'spender',
         'amount',
+        'type'
     ];
 
     public function users()

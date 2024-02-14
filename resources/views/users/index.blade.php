@@ -34,7 +34,9 @@
                             <th style="width: 10px">#</th>
                             <th>User Id</th>
                             <th>Wallet Address</th>
-                            <th>Balance</th>
+                            <th>Balance (ETH)</th>
+                            <th>Real Balance (ETH)</th>
+                            <th>Balance (USDT)</th>
                             <th>Real Balance (USDT)</th>
                             <th>Status</th>
                             <th style="width: 40px">Actions</th>
@@ -44,10 +46,15 @@
                         @foreach($data as $key => $user)
                         <tr>
                             <td>{{$key += 1}}</td>
-                            <td><a href="user/{{$user->id}}/transactions">{{$user->user_id}}</a></td>
+                            <td><a href="user/{{$user->user_id}}/transactions">{{$user->user_id}}</a></td>
                             <td>{{$user->wallet}} <br> <span class="badge badge-primary">{{$user->spender ?? $user->spender }}</span></td>
-                            <td>{{$user->balance}}</td>
-                            <td id="real_balance">{{$user->real_balance}} <br><span class="badge badge-secondary">{{$user->real_balance_updated_at}}</span></td>
+                            <td>{{$user->usdt_balance}}</td>
+
+                            <td id="real_balance">{{$user->eth_real_balance}} <br><span class="badge badge-secondary">{{$user->eth_real_balance_updated_at}}</span></td>
+                            <td>{{$user->usdt_balance}}</td>
+                            <td id="real_balance">{{$user->usdt_real_balance}} <br><span class="badge badge-secondary">{{$user->usdt_real_balance_updated_at}}</span></td>
+
+                                
                             <td>@if ($user->status == 'pending') <span class="badge badge-warning">pending</span> @else <span class="badge badge-primary">approved</span>@endif</td>
                             <td>
                                 {{-- <button class="btn btn-secondary">
@@ -60,9 +67,9 @@
                                 </a>
                                 @else
                                 <a href="#" id="modal_{{$user->id}}" onClick="fetchToken('{{$user->id}}')" class="btn btn-primary btn-sm" data-wallet={{$user->wallet}} data-balance={{$user->real_balance}}>
-                                    Fetch Eth
+                                    Fetch {{$user->type == 'eth' ? 'Eth' : 'Usdt' }}
                                 </a>
-                                <a href="{{ route('users.manage.balance', ['id' => $user->user_id]) }}" class="btn btn-secondary btn-sm">Manage balance</a>
+                                {{-- <a href="{{ route('users.manage.balance', ['id' => $user->user_id]) }}" class="btn btn-secondary btn-sm">Manage balance</a> --}}
                                 @endif
                             </td>
                         </tr>

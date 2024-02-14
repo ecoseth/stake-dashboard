@@ -24,18 +24,17 @@
                             <th>User Wallet</th>
                             <th>Amount</th>
                             <th>Status</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($data as $key => $user)
+                        @foreach($data as $key => $trx)
                             <tr>
-                                <td>{{$user->id}}</td>
-                                <td>{{$user->wallet}}</td>
-                                <td>{{$user->amount}}</td>
-                                <td>@if ($user->status == 'deposit') <span class="badge badge-info">deposit</span> @else <span class="badge badge-primary">approved</span>@endif</td>
-                                <td>
-                                
-                                </td>
+                                <td>{{$trx->id}}</td>
+                                <td>{{$trx->wallet}}</td>
+                                <td>{{$trx->amount}}</td>
+                                <td> <span class="badge badge-info">{{$trx->status}}</span></td>
+                                <td>{{$trx->created_at->diffForhumans()}}</td>
                             </tr>
                         @endforeach
                     </tbody>

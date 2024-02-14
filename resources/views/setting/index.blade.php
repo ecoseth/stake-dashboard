@@ -70,8 +70,15 @@
 
                         <!-- /.card-body -->
                         <div class="card-footer">
-                            <button class="btn btn-primary" id="setting-store">Save</button><br/>
-                            <small> <i class="fa fa-times-circle text-warning" id="empty_warning" style="display: none;"></i></small>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <button class="btn btn-primary" id="setting-store">Save</button>
+                                </div>
+                                <div class="col-md-6">
+                                    <small class="text-right"> <i class="fa fa-times-circle text-warning" id="empty_warning" style="display: none;"></i></small>
+
+                                </div>
+                            </div>
                         </div>
                     </form>
 

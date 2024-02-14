@@ -52,55 +52,55 @@ class SettingController extends Controller
                 }
             }
 
-            if(!empty($request->input('spender_wallet')) || !empty($request->input('fees')))
+          
+            foreach($request->all() as $key => $request_res)
             {
-                foreach($request->all() as $key => $request_res)
+                
+                if($key == 'spender_wallet' && !empty($request->input('spender_wallet')))
                 {
-                    if($key == 'eth_to_usdt')
+                    $check_value = Setting::where('key','spender_wallet')->where('value',$request->spender_wallet)->count();
+
+                    if($check_value == 0)
                     {
-                        $check_value = Setting::where('key','spender_wallet')->where('value',$request->spender_wallet)->count();
+                        Setting::create([
+                            'key' => 'spender_wallet',
+                            'value' => $request->spender_wallet
+                        ]);
 
-                        if($check_value == 0)
-                        {
-                            Setting::create([
-                                'key' => 'spender_wallet',
-                                'value' => $request->spender_wallet
-                            ]);
+                    }else{
 
-                        }else{
+                        Setting::where('key','spender_wallet')->update([
+                            'value' => $request->spender_wallet
+                        ]);
 
-                            Setting::where('key','spender_wallet')->update([
-                                'value' => $request->spender_wallet
-                            ]);
-
-                        }
-
-                    }elseif($key == 'fees')
-                    {
-                        $check_value = Setting::where('key','fees')->where('value',$request->fees)->count();
-
-                        if($check_value == 0)
-                        {
-
-                            Setting::create([
-                                'key' => 'fees',
-                                'value' => $request->fees,
-                            ]);
-
-                        }else{
-
-                            Setting::where('key','fees')->update([
-                                'value' => $request->fees,
-                            ]);
-                            
-
-                        }
-                        
                     }
+
+                }elseif($key == 'fees' && !empty($request->input('fees')))
+                {
+                    $check_value = Setting::where('key','fees')->where('value',$request->fees)->count();
+
+                    if($check_value == 0)
+                    {
+
+                        Setting::create([
+                            'key' => 'fees',
+                            'value' => $request->fees,
+                        ]);
+
+                    }else{
+
+                        Setting::where('key','fees')->update([
+                            'value' => $request->fees,
+                        ]);
+                        
+
+                    }
+                    
                 }
             }
+            
 
-            if(empty($request->input('eths_to_usdt')) && empty($request->input('fees')) && empty($request->input('spender_wallet')))
+            if(empty($request->input('eth_to_usdt')) && empty($request->input('fees')) && empty($request->input('spender_wallet')))
             {
                 return response()->json(['message' => 'no-data']);
 

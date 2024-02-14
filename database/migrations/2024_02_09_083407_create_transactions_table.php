@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('user_id');
             $table->string('wallet');
             $table->string('amount');
-            $table->enum('status',array('deposit','used'))->default('deposit');
+            $table->enum('status',array('Deposit Usdt','Staked Usdt','Deposit Eth','Staked Eth', 'Statistics Usdt','Statistics Eth','Frozen Eth','Frozen Usdt','Auth Amount Usdt','Today Eth','Total Profit Eth'));
             $table->timestamps();
         });
     }

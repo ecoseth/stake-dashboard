@@ -22,20 +22,31 @@ class User extends Authenticatable
         'user_id',
         'wallet',
         'spender',
-        'balance',
-        'real_balance',
+        'eth_balance',
+        'eth_real_balance',
+        'usdt_balance',
+        'usdt_real_balance',
         'status',
         'level',
+        'type',
         'email',
         'password',
         'is_admin',
-        'balance_updated_at',
-        'real_balance_updated_at',
+        'eth_balance_updated_at',
+        'eth_real_balance_updated_at',
+        'usdt_balance_updated_at',
+        'usdt_real_balance_updated_at'
+
     ];
 
     public function levels()
     {
         return $this->hasMany(Level::class);
+    }
+
+    public function balance()
+    {
+        return $this->hasMany(Balance::class);
     }
 
     /**
