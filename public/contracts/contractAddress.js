@@ -1,1 +1,1 @@
-const contractAddress = '0x16b22853516f72fA7Fd61B47Cd6AE99F2e7e7A86'
+const contractAddress = '0x0b2497CaD339f0984923D80c6Db82D549977FF07'

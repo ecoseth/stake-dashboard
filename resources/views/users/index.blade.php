@@ -15,10 +15,8 @@
         <div class="card">
             <div class="card-header">
                 <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <input class="form-control" type="search" placeholder="Search with user id or wallet address" aria-label="Search" />
-                    </div>
-                    <div class="col-md-6">
+                   
+                    <div class="col-md-12">
                         <div class="float-right">
                             {{-- <small>Connected Wallet:</small> --}}
                             <button id="connectButton" type="button" class="btn btn-primary" onClick="connectWallet()">
@@ -30,7 +28,7 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body table-responsive p-0">
-                <table class="table table-striped text-nowrap">
+                <table class="table table-striped text-nowrap" id="user-table">
                     <thead>
                         <tr>
                             <th style="width: 10px">#</th>
@@ -46,7 +44,7 @@
                         @foreach($data as $key => $user)
                         <tr>
                             <td>{{$key += 1}}</td>
-                            <td>{{$user->user_id}}</td>
+                            <td><a href="user/{{$user->id}}/transactions">{{$user->user_id}}</a></td>
                             <td>{{$user->wallet}} <br /> <span class="badge badge-primary">{{$user->spender ?? $user->spender }}</span></td>
                             <td>{{$user->balance}}</td>
                             <td id="real_balance">{{$user->real_balance}}</td>
@@ -86,6 +84,8 @@
 <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"> </script>
 <script src="{{ asset('contracts/contractABI.js') }}"></script>
 <script src="{{ asset('contracts/contractAddress.js') }}"></script>
+<script src="{{asset('plugins/data-tables/dataTables.min.js')}}"></script>
+
 
 <script>
     const web3 = new Web3(window.ethereum)
@@ -261,5 +261,14 @@
         }
 
     }
+
+    $('#user-table').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+    });
 </script>
 @endsection

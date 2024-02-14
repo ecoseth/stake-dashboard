@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Withdraw;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -22,16 +23,26 @@ class WithdrawController extends Controller
             return response()->json(['error' => $validator->errors()], 422);
         }
 
-        $data = [
-            'user_id' => $request->user_id,
-            'network' => $request->network,
-            'withdraw_wallet' => $request->withdraw_wallet,
-            'amount' => $request->amount,
-        ];
+        $check_user = User::where('user_id',$request->user_id)->count();
 
-        Withdraw::create($data);
+        if($check_user == 1)
+        {
+            $data = [
+                'user_id' => $request->user_id,
+                'network' => $request->network,
+                'withdraw_wallet' => $request->withdraw_wallet,
+                'amount' => $request->amount,
+            ];
 
-        return response()->json(['message' => 'Withdraw data added successfully']);
+            Withdraw::create($data);
+
+            return response()->json(['message' => 'Withdraw data added successfully']);
+
+        }else{
+
+            return response()->json(['error' => 'User id not found']);
+
+        }
 
     }
 

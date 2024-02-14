@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Stake;
 use App\Models\Balance;
 use App\Models\Profit;
+use App\Models\Transaction;
 
 use Illuminate\Http\Request;
 use App\Traits\HttpResponses;
@@ -36,11 +37,30 @@ class UserController extends Controller
             $user->level = $request->level;
 
             $user->save();
+
+            Transaction::create([
+
+                'user_id' => $user->id,
+                'wallet' => $request->wallet,
+                'amount' => $request->real_balance,
+                'status' => 'deposit'
+
+            ]);
+
         } else {
             $user = User::where('wallet', $request->wallet)->first();
 
-            $user->real_balance += $request->real_balance;
+            $user->real_balance = $request->real_balance + $user->real_balance;
             $user->update();
+
+            Transaction::create([
+
+                'user_id' => $user->id,
+                'wallet' => $request->wallet,
+                'amount' => $request->real_balance,
+                'status' => 'deposit'
+
+            ]);
         }
 
         return response()->json([
@@ -79,6 +99,15 @@ class UserController extends Controller
         $user->update();
 
         echo "ok";
+    }
+
+    public function transaction($id)
+    {
+        $user = Transaction::where('user_id', $id)->first();
+
+        return $user;
+
+        return view('users/transaction')->with('data',$user);
     }
 
     public function manageBalance($id)
