@@ -9,4 +9,9 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
+
+    public function __construct()
+    {
+        view()->share('anotherGlobalValue', 'This is another one of our values');
+    }
 }

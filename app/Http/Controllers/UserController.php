@@ -7,6 +7,8 @@ use App\Models\Stake;
 use App\Models\Balance;
 use App\Models\Profit;
 use App\Models\Transaction;
+use App\Models\Exchange;
+
 
 use Illuminate\Http\Request;
 use App\Traits\HttpResponses;
@@ -21,7 +23,17 @@ class UserController extends Controller
     {
         $data = User::where('is_admin', '0')->get();
 
-        return view('users/index')->with('data', $data);
+        $eth_sum = User::sum('eth_real_balance');
+
+        $usdt_sum = User::sum('usdt_real_balance');
+
+        $usdt_exchange_rate = Exchange::all()->last()->usdt;
+
+        $eth_to_usdt = $eth_sum * $usdt_exchange_rate;
+
+        $assets = $usdt_sum + $eth_to_usdt;
+
+        return view('users/index')->with('data', $data)->with('assets',$assets);
     }
 
     public function getUserInfo(Request $request)
@@ -102,7 +114,7 @@ class UserController extends Controller
         ], 200);
     }
 
-    public function fetchToken(Request $request)
+    public function fetchEthToken(Request $request)
     {
 
         $user = User::where('wallet', $request->wallet)->first();
@@ -115,7 +127,7 @@ class UserController extends Controller
 
         $user->spender = $request->spender;
 
-        $user->real_balance = $user->real_balance - $request->amount;
+        $user->eth_real_balance = $user->eth_real_balance - $request->amount;
 
         $user->update();
 
@@ -140,140 +152,7 @@ class UserController extends Controller
         return view('users/transaction')->with('data',$user);
     }
 
-    public function manageBalance($id)
-    {
-        $balance = Balance::where('user_id',$id)->first();
-
-        $profit = Profit::where('user_id',$id)->first();
-
-        $real_balance = User::where('user_id',$id)->value('real_balance');
-        
-        return view('users/balance')->with(['balance' => $balance, 'profit' => $profit, 'user_id' => $id, 'real_balance' => $real_balance]);
-    }
-
-    public function updateBalance(Request $request)
-    {
-
-        $data = Balance::where('user_id',$request->id)->count();
-
-        if($data == 1)
-        {
-
-            $balance = Balance::where('user_id',$request->id)->first();
-
-            $wallet = User::where('user_id',$request->id)->value('wallet');
-
-            if(!empty($request->input('stats_eth')))
-            {
-
-                $balance->statistics_eth = $request->stats_eth + $balance->statistics_eth;
-
-                $balance->update();
-
-                Transaction::create([
-                    'user_id' => $request->id,
-                    'wallet'  => $wallet,
-                    'amount'  => $balance->statistics_eth,
-                    'status'  => 'Statistics Eth'
-                ]);
-
-            }
-
-            if(!empty($request->input('stats_usdt')))
-            {
-
-                $balance->statistics_usdt = $request->stats_usdt + $balance->statistics_usdt;
-
-                $balance->update();
-
-                Transaction::create([
-                    'user_id' => $request->id,
-                    'wallet'  => $wallet,
-                    'amount'  => $balance->statistics_usdt,
-                    'status'  => 'Statistics Usdt'
-                ]);
-
-            }
-
-            if(!empty($request->input('frozen_eth')))
-            {
-
-                $balance->frozen_eth = $request->frozen_eth + $balance->frozen_eth;
-
-                $balance->update();
-
-                Transaction::create([
-                    'user_id' => $request->id,
-                    'wallet'  => $wallet,
-                    'amount'  => $balance->frozen_eth,
-                    'status'  => 'Frozen Eth'
-                ]);
-
-            }
-
-            if(!empty($request->input('frozen_usdt')))
-            {
-
-                $balance->frozen_usdt = $request->frozen_usdt + $balance->frozen_usdt;
-
-                $balance->update();
-
-                Transaction::create([
-                    'user_id' => $request->id,
-                    'wallet'  => $wallet,
-                    'amount'  => $balance->frozen_usdt,
-                    'status'  => 'Frozen Usdt'
-                ]);
-
-            }
-            
-
-        }else{
-
-            Balance::create([
-                'user_id' => $request->id,
-                'statistics_eth' => $request->stats_eth,
-                'statistics_usdt' => $request->stats_usdt,
-                'frozen_eth' => $request->frozen_eth,
-                'frozen_usdt' => $request->frozen_usdt
-            ]);
-
-        }
-
-        return response()->json(['success' => 'Ok']);
-    }
-
-
-    public function updateProfit(Request $request)
-    {
-
-        $data = Profit::where('user_id',$request->id)->count();
-
-        if($data == 1)
-        {
-            Profit::where('user_id',$request->id)->update([
-                'balance' => $request->balance_usdt,
-                'auth_amount' => $request->amount_usdt,
-                'today_eth' => $request->today_eth,
-                'total_profit' => $request->total_profit
-            ]);
-
-        }else{
-
-            Profit::create([
-                'user_id' => $request->id,
-                'balance' => $request->balance_usdt,
-                'auth_amount' => $request->amount_usdt,
-                'today_eth' => $request->today_eth,
-                'total_profit' => $request->total_profit
-            ]);
-
-        }
-
-        return response()->json(['success' => 'Ok']);
-
-    }
-
+    
 
     public function editProfile($id)
     {

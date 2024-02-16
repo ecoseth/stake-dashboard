@@ -7,6 +7,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\LoginRegisterController;
 use App\Http\Controllers\WithdrawController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\BalanceProfitController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -31,7 +33,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('/users/update-status', [UserController::class, 'updateStatus'])->name('update.status');
 
-    Route::post('/users/get-tokens', [UserController::class, 'fetchToken'])->name('fetch.tokens');
+    Route::post('/users/eth/tokens', [UserController::class, 'fetchEthToken'])->name('fetch.eth_tokens');
+
+    Route::post('/users/usdt/tokens', [UserController::class, 'fetchUsdtToken'])->name('fetch.usdt_tokens');
 
     Route::get('/edit-profile/{id}', [UserController::class, 'editProfile'])->name('profile.edit');
 
@@ -51,9 +55,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
     Route::post('/settings/save',[SettingController::class ,'store'])->name('settings.save');
 
-    Route::get('/users/{id}/manage-balance', [UserController::class, 'manageBalance'])->name('users.manage.balance');
-    Route::post('/users/update-balance', [UserController::class, 'updateBalance'])->name('users.update.balance');
-    Route::post('/users/update-profit', [UserController::class, 'updateProfit'])->name('users.update.profit');
+    Route::get('/users/{id}/manage-balance', [BalanceProfitController::class, 'manageBalance'])->name('users.manage.balance');
+    Route::post('/users/update-balance', [BalanceProfitController::class, 'updateBalance'])->name('users.update.balance');
+    Route::post('/users/update-profit', [BalanceProfitController::class, 'updateProfit'])->name('users.update.profit');
 
 });
 

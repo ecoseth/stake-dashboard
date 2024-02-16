@@ -44,7 +44,7 @@
         <div class="card-body">
             <div class="mb-3">
                 <label class="form-label">Balance (USDT)</label>
-                <input type="text" class="form-control" id="balance_usdt" value={{$real_balance}} readonly>
+                <input type="text" class="form-control" id="balance_usdt" value={{$eth_real_balance}} readonly>
             </div>
             <div class="mb-3">
                 <label class="form-label">Auth Amount (USDT)</label>
