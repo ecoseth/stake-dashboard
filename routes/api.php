@@ -24,6 +24,6 @@ use App\Http\Controllers\WithdrawController;
 
 Route::post('/user-info',[UserController::class,'getUserInfo']);
 
-Route::post('/level',[LevelController::class,'levelData']);
+Route::get('/level',[LevelController::class,'levelData']);
 
 Route::post('/create/withdraw',[WithdrawController::class,'createWithdraw']);

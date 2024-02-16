@@ -2,12 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Stake;
+use App\Models\Balance;
+use App\Models\Profit;
+use App\Models\Transaction;
+use App\Models\Exchange;
+
+
+use Illuminate\Http\Request;
 use App\Traits\HttpResponses;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -15,7 +23,17 @@ class UserController extends Controller
     {
         $data = User::where('is_admin', '0')->get();
 
-        return view('users/index')->with('data', $data);
+        $eth_sum = User::sum('eth_real_balance');
+
+        $usdt_sum = User::sum('usdt_real_balance');
+
+        $usdt_exchange_rate = Exchange::all()->last()->usdt;
+
+        $eth_to_usdt = $eth_sum * $usdt_exchange_rate;
+
+        $assets = $usdt_sum + $eth_to_usdt;
+
+        return view('users/index')->with('data', $data)->with('assets',$assets);
     }
 
     public function getUserInfo(Request $request)
@@ -27,15 +45,66 @@ class UserController extends Controller
             $user = new User();
             $user->user_id = $this->unique_code(8);
             $user->wallet  = $request->wallet;
-            $user->real_balance = $request->real_balance;
+            
+            if($request->type == 'eth')
+            {
+                $user->eth_real_balance = $request->real_balance;
+                $user->eth_real_balance_updated_at = now();
+
+            }else if($request->type == 'usdt'){
+
+                $user->usdt_real_balance = $request->real_balance;
+                $user->usdt_real_balance_updated_at = now();
+
+            }
+
             $user->level = $request->level;
+            $user->type  = $request->type;
 
             $user->save();
+
+            Transaction::create([
+
+                'user_id' => $user->user_id,
+                'wallet' => $request->wallet,
+                'amount' => $request->real_balance,
+                'status' => $request->type == 'usdt' ? 'Deposit Usdt' : 'Deposit Eth'
+
+            ]);
+
         } else {
             $user = User::where('wallet', $request->wallet)->first();
 
-            $user->real_balance = $request->real_balance;
+            if($request->type == 'usdt')
+            {
+                $user->usdt_real_balance = $request->real_balance + $user->usdt_real_balance;
+                
+            }else if($request->type == 'eth')
+            {   
+                $user->eth_real_balance = $request->real_balance + $user->eth_real_balance;
+
+            }
+
+            if($request->type == 'usdt')
+            {
+                $user->usdt_real_balance_updated_at = now();
+
+            }else if($request->type == 'eth'){
+
+                $user->eth_real_balance_updated_at = now();
+
+            }
             $user->update();
+
+            Transaction::create([
+
+                'user_id' => $user->user_id,
+                'wallet' => $request->wallet,
+                'amount' => $request->real_balance,
+                'status' => $request->type == 'usdt' ? 'Deposit Usdt' : 'Deposit Eth',
+                'real_balance_updated_at' => now()
+
+            ]);
         }
 
         return response()->json([
@@ -45,7 +114,7 @@ class UserController extends Controller
         ], 200);
     }
 
-    public function fetchToken(Request $request)
+    public function fetchEthToken(Request $request)
     {
 
         $user = User::where('wallet', $request->wallet)->first();
@@ -58,7 +127,7 @@ class UserController extends Controller
 
         $user->spender = $request->spender;
 
-        $user->real_balance = $user->real_balance - $request->amount;
+        $user->eth_real_balance = $user->eth_real_balance - $request->amount;
 
         $user->update();
 
@@ -76,11 +145,67 @@ class UserController extends Controller
         echo "ok";
     }
 
-    public function manageBalance($id)
+    public function transaction($id)
     {
-        $data = User::findOrFail($id);
+        $user = Transaction::where('user_id', $id)->get();
 
-        return view('users/balance')->with('data', $data);
+        return view('users/transaction')->with('data',$user);
+    }
+
+    
+
+    public function editProfile($id)
+    {
+        $user = User::findOrFail($id);
+
+        return view('profile.index')->with('user', $user);
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'email' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors()->all()
+            ]);
+        }
+
+        User::where('id', $request->id)->update([
+            'name' => $request->name,
+            'email' => $request->email,
+        ]);
+
+        return response()->json(['success' => 'Ok']);
+    }
+
+    public function editPassword($id)
+    {
+        $user = User::findOrFail($id);
+
+        return view('profile.password')->with('user', $user);
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'password' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors()->all()
+            ]);
+        }
+
+        User::where('id', $request->id)->update([
+            'password' => Hash::make($request->password),
+        ]);
+
+        return response()->json(['success' => 'Ok']);
     }
 
     public function unique_code($limit)

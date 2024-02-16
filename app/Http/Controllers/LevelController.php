@@ -81,38 +81,8 @@ class LevelController extends Controller
         return response()->json(['success' => 'Ok']);
     }
 
-    // level api
-    // public function levelData(Request $request) {
-    //     $wei_amount = $request->weiAmount;
-
-    //     $levels = Level::all();
-
-    //     $levelData = null;
-
-    //     foreach ($levels as $level) {
-    //         $minAmount = floatval($level->min_amount);
-    //         $maxAmount = floatval($level->max_amount);
-
-    //         if ($wei_amount >= $minAmount && $wei_amount <= $maxAmount) {
-    //             $levelData = [
-    //                 'name' => $level->name,
-    //                 'min_amount' => $level->min_amount,
-    //                 'max_amount' => $level->max_amount,
-    //                 'percentage' => $level->percentage,
-    //             ];
-    //             break;
-    //         }
-    //     }
-
-    //     if ($levelData != null) {
-    //         return response()->json(['data' => $levelData], 200);
-    //     } else {
-    //         return response()->json(['error' => 'Wei Amount data is not within any level range'], 404);
-    //     }
-    // }
-
-    public function levelData(Request $request) {
-        $wei_amount = $request->weiAmount;
+    public function levelData(Request $request) 
+    {
 
         $levels = Level::all();
 
@@ -128,14 +98,12 @@ class LevelController extends Controller
                 'max_amount' => $level->max_amount,
                 'percentage' => $level->percentage,
             ];
-
+            
         }
 
         if ($levelData != null) {
             return response()->json(['data' => $levelData], 200);
-        } else {
-            return response()->json(['error' => 'Wei Amount data is not within any level range'], 404);
-        }
+        } 
     }
 
 }

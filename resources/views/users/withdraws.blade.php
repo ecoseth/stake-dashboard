@@ -40,7 +40,7 @@
                             <td>{{$withdraw->withdraw_wallet}} <br />
                                 {{-- <span class="badge badge-primary">{{$user->spender ?? $user->spender }}</span> --}}
                             </td>
-                            <td></td>
+                            <td>{{$withdraw->network}}</td>
                             <td>{{$withdraw->amount}}</td>
                             <td>
                                 @if($withdraw->status == 'pending')
@@ -77,7 +77,6 @@
 @section('scripts')
 
 <script>
-
 
     $.ajaxSetup({
         headers: {

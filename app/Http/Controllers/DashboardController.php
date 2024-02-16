@@ -12,7 +12,7 @@ class DashboardController extends Controller
     {
         if(Auth::check())
         {
-            return view('layouts.dashboard');
+            return view('layouts.dashboard')->with('loader',true);
         }
         
         return redirect()->route('login')

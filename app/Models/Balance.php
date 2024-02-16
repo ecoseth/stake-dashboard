@@ -5,19 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Stake extends Model
+class Balance extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'user_id',
-        'spender',
-        'amount',
-        'type'
+        'statistics_eth',
+        'frozen_eth',
+        'statistics_usdt',
+        'frozen_usdt',
     ];
-
-    public function users()
-    {
-        return $this->hasMany(User::class);
-    }
 }

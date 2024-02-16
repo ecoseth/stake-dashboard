@@ -5,19 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Stake extends Model
+class Exchange extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'user_id',
-        'spender',
-        'amount',
-        'type'
-    ];
+    protected $table = 'Exchange';
 
-    public function users()
-    {
-        return $this->hasMany(User::class);
-    }
+    protected $fillable = [
+        'usdt',
+        'open_time',
+        'close_time',
+    ];
 }
