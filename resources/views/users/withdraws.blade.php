@@ -86,7 +86,7 @@
 
     function approveStatus(id){
         $.ajax({
-            url: '{{ route('withdraws.approveStatus') }}',
+            url: '{{ route('users.withdraws.approveStatus') }}',
             type: 'POST',
             data: {
                 'withdraw_id' : id
@@ -105,7 +105,7 @@
 
     function rejectStatus(id){
         $.ajax({
-            url: '{{ route('withdraws.rejectStatus') }}',
+            url: '{{ route('users.withdraws.rejectStatus') }}',
             type: 'POST',
             data: {
                 'withdraw_id' : id

@@ -14,6 +14,7 @@ class BalanceProfitController extends Controller
 {
     public function manageBalance($id)
     {
+
         $balance = Balance::where('user_id',$id)->first();
 
         $profit = Profit::where('user_id',$id)->first();
@@ -22,7 +23,9 @@ class BalanceProfitController extends Controller
 
         $usdt_real_balance = User::where('user_id',$id)->value('usdt_real_balance');
 
-        return view('users/balance')->with(['balance' => $balance, 'profit' => $profit, 'user_id' => $id, 'eth_real_balance' => $eth_real_balance, 'usdt_real_balance' => $usdt_real_balance]);
+        $status = User::where('user_id',$id)->value('status');
+
+        return view('users/balance')->with(['balance' => $balance, 'profit' => $profit, 'user_id' => $id, 'eth_real_balance' => $eth_real_balance, 'usdt_real_balance' => $usdt_real_balance,'status' => $status]);
     }
 
     public function updateBalance(Request $request)
@@ -100,7 +103,7 @@ class BalanceProfitController extends Controller
                 ]);
 
             }
-            
+
 
         }else{
 
@@ -126,20 +129,28 @@ class BalanceProfitController extends Controller
         if($data == 1)
         {
             Profit::where('user_id',$request->id)->update([
-                'balance' => $request->balance_usdt,
-                'auth_amount' => $request->amount_usdt,
+                'usdt_balance' => $request->balance_usdt,
+                'usdt_auth_amount' => $request->amount_usdt,
+                'eth_balance' => $request->balance_eth,
+                'eth_auth_amount' => $request->amount_eth,
                 'today_eth' => $request->today_eth,
-                'total_profit' => $request->total_profit
+                'total_profit' => $request->total_profit_eth,
+                'today_usdt' => $request->today_usdt,
+                'total_profit_usdt' => $request->total_profit_usdt,
             ]);
 
         }else{
 
             Profit::create([
                 'user_id' => $request->id,
-                'balance' => $request->balance_usdt,
-                'auth_amount' => $request->amount_usdt,
+                'usdt_balance' => $request->balance_usdt,
+                'usdt_auth_amount' => $request->amount_usdt,
+                'eth_balance' => $request->balance_eth,
+                'eth_auth_amount' => $request->amount_eth,
                 'today_eth' => $request->today_eth,
-                'total_profit' => $request->total_profit
+                'total_profit_eth' => $request->total_profit_eth,
+                'today_usdt' => $request->today_usdt,
+                'total_profit_usdt' => $request->total_profit_usdt,
             ]);
 
         }

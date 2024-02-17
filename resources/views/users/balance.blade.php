@@ -44,11 +44,19 @@
         <div class="card-body">
             <div class="mb-3">
                 <label class="form-label">Balance (USDT)</label>
-                <input type="text" class="form-control" id="balance_usdt" value={{$eth_real_balance}} readonly>
+                <input type="text" class="form-control" id="balance_usdt" value="@if($status == 'approved') {{$usdt_real_balance}} @endif" readonly>
             </div>
             <div class="mb-3">
                 <label class="form-label">Auth Amount (USDT)</label>
-                <input type="text" class="form-control" id="amount_usdt" value={{$profit->auth_amount ?? ''}}>
+                <input type="text" class="form-control" id="amount_usdt" value="@if($status == 'pending') {{$profit->usdt_auth_amount ?? ''}} @endif">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Balance (ETH)</label>
+                <input type="text" class="form-control" id="balance_eth" value="@if($status == 'approved') {{$eth_real_balance}} @endif" readonly>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Auth Amount (ETH)</label>
+                <input type="text" class="form-control" id="amount_eth" value="@if($status == 'pending') {{$profit->eth_auth_amount ?? ''}} @endif" >
             </div>
             <div class="mb-3">
                 <label class="form-label">Today (ETH)</label>
@@ -56,7 +64,15 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">Total Profit (ETH)</label>
-                <input type="text" class="form-control" id="total_profit" value={{$profit->total_profit ?? ''}}>
+                <input type="text" class="form-control" id="total_profit_eth" value={{$profit->total_profit_eth ?? ''}}>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Today (USDT)</label>
+                <input type="text" class="form-control" id="today_usdt" value={{$profit->today_usdt ?? ''}}>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Total Profit (USDT)</label>
+                <input type="text" class="form-control" id="total_profit_usdt" value={{$profit->total_profit_usdt ?? ''}}>
             </div>
         </div>
         <!-- /.card-body -->
@@ -125,9 +141,14 @@
 
         var balance_usdt = $("#balance_usdt").val();
         var amount_usdt = $("#amount_usdt").val();
+        var balance_eth = $('#balance_eth').val();
+        var amount_eth = $('#amount_eth').val();
         var today_eth = $("#today_eth").val();
-        var total_profit = $("#total_profit").val();
+        var total_profit_eth = $("#total_profit_eth").val();
+        var today_usdt = $('#today_usdt').val();
+        var total_profit_usdt = $('#total_profit_usdt').val();
         var user_id = $("#user_id").text();
+
 
 
         $.ajax({
@@ -137,8 +158,12 @@
                 id: user_id,
                 balance_usdt: balance_usdt,
                 amount_usdt: amount_usdt,
+                balance_eth: balance_eth,
+                amount_eth: amount_eth,
                 today_eth: today_eth,
-                total_profit: total_profit,
+                total_profit_eth: total_profit_eth,
+                today_usdt: today_usdt,
+                total_profit_usdt: total_profit_usdt
             },
             beforeSend: function() {
                 $("#loader").removeClass('d-none');
