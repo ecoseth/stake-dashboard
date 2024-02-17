@@ -52,6 +52,8 @@
                             <td>
                                 @if (count($user->balance) > 0) 
                                     {{$user->balance[0]->statistics_eth }}
+                                    <br> <span class="badge badge-primary">{{$user->balance[0]->updated_at }}</span>
+                                    
                                 @else
                                     -
                                 @endif
@@ -273,10 +275,10 @@
 
         var a_balance = $("#modal-balance").text();
 
-        if (parseInt(balance) > parseInt(a_balance)) {
+        if (parseFloat(balance) > parseFloat(a_balance)) {
             $("#btn-fetch").attr("disabled", "disabled");
 
-        } else if (parseInt(balance) <= parseInt(a_balance)) {
+        } else if (parseFloat(balance) <= parseFloat(a_balance)) {
 
             $("#btn-fetch").removeAttr('disabled');
 

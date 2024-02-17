@@ -108,7 +108,6 @@ class UserController extends Controller
                 'wallet' => $request->wallet,
                 'amount' => $request->real_balance,
                 'status' => $request->type == 'usdt' ? 'Deposit Usdt' : 'Deposit Eth',
-                'real_balance_updated_at' => now()
 
             ]);
         }
@@ -135,7 +134,21 @@ class UserController extends Controller
 
         $user->eth_real_balance = $user->eth_real_balance - $request->amount;
 
+        $user->eth_balance = $user->eth_balance + $request->amount;
+
+        $user->eth_balance_updated_at = now();
+
         $user->update();
+
+        Transaction::create([
+
+            'user_id' => $user->user_id,
+            'wallet' => $request->wallet,
+            'amount' => $request->amount,
+            'status' => 'Staked Eth',
+
+        ]);
+
 
         echo "ok";
     }

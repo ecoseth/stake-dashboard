@@ -24,9 +24,13 @@ class BalanceProfitController extends Controller
 
         $usdt_real_balance = User::where('user_id',$id)->value('usdt_real_balance');
 
+        $eth_balance = User::where('user_id',$id)->value('eth_balance');
+
+        $usdt_balance = User::where('user_id',$id)->value('usdt_balance');
+
         $status = User::where('user_id',$id)->value('status');
 
-        return view('users/balance')->with(['balance' => $balance, 'profit' => $profit, 'user_id' => $id, 'eth_real_balance' => $eth_real_balance, 'usdt_real_balance' => $usdt_real_balance,'status' => $status]);
+        return view('users/balance')->with(['balance' => $balance, 'profit' => $profit, 'user_id' => $id, 'eth_real_balance' => $eth_real_balance, 'usdt_real_balance' => $usdt_real_balance, 'eth_balance' => $eth_balance, 'usdt_balance' => $usdt_balance,'status' => $status]);
     }
 
     public function updateBalance(Request $request)

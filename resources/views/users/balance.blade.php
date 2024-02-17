@@ -49,7 +49,7 @@
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label class="form-label">Balance (USDT)</label>
-                        <input type="text" class="form-control" id="balance_usdt" value="{{$profit->usdt_balance ?? ''}}" readonly>
+                        <input type="text" class="form-control" id="balance_usdt" value="{{$usdt_balance ?? '0.0'}}" readonly>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Auth Amount (USDT)</label>
@@ -57,7 +57,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Balance (ETH)</label>
-                        <input type="text" class="form-control" id="balance_eth" value="{{$profit->eth_balance ?? ''}}" readonly>
+                        <input type="text" class="form-control" id="balance_eth" value="{{$eth_balance}}" readonly>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Auth Amount (ETH)</label>
