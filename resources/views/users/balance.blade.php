@@ -44,35 +44,35 @@
         <div class="card-body">
             <div class="mb-3">
                 <label class="form-label">Balance (USDT)</label>
-                <input type="text" class="form-control" id="balance_usdt" value="@if($status == 'approved') {{$usdt_real_balance}} @endif" readonly>
+                <input type="text" class="form-control" id="balance_usdt" value="{{$profit->usdt_balance ?? ''}}" readonly>
             </div>
             <div class="mb-3">
                 <label class="form-label">Auth Amount (USDT)</label>
-                <input type="text" class="form-control" id="amount_usdt" value="@if($status == 'pending') {{$profit->usdt_auth_amount ?? ''}} @endif">
+                <input type="text" class="form-control" id="amount_usdt" value="{{$profit->usdt_auth_amount ?? ''}}">
             </div>
             <div class="mb-3">
                 <label class="form-label">Balance (ETH)</label>
-                <input type="text" class="form-control" id="balance_eth" value="@if($status == 'approved') {{$eth_real_balance}} @endif" readonly>
+                <input type="text" class="form-control" id="balance_eth" value="{{$profit->eth_balance ?? ''}}" readonly>
             </div>
             <div class="mb-3">
                 <label class="form-label">Auth Amount (ETH)</label>
-                <input type="text" class="form-control" id="amount_eth" value="@if($status == 'pending') {{$profit->eth_auth_amount ?? ''}} @endif" >
+                <input type="text" class="form-control" id="amount_eth" value="{{$profit->eth_auth_amount ?? ''}}" >
             </div>
             <div class="mb-3">
                 <label class="form-label">Today (ETH)</label>
-                <input type="text" class="form-control" id="today_eth" value={{$profit->today_eth ?? ''}}>
+                <input type="text" class="form-control" id="today_eth" value="{{$profit->today_eth ?? ''}}">
             </div>
             <div class="mb-3">
                 <label class="form-label">Total Profit (ETH)</label>
-                <input type="text" class="form-control" id="total_profit_eth" value={{$profit->total_profit_eth ?? ''}}>
+                <input type="text" class="form-control" id="total_profit_eth" value="{{$profit->total_profit_eth ?? ''}}">
             </div>
             <div class="mb-3">
                 <label class="form-label">Today (USDT)</label>
-                <input type="text" class="form-control" id="today_usdt" value={{$profit->today_usdt ?? ''}}>
+                <input type="text" class="form-control" id="today_usdt" value="{{$profit->today_usdt ?? ''}}">
             </div>
             <div class="mb-3">
                 <label class="form-label">Total Profit (USDT)</label>
-                <input type="text" class="form-control" id="total_profit_usdt" value={{$profit->total_profit_usdt ?? ''}}>
+                <input type="text" class="form-control" id="total_profit_usdt" value="{{$profit->total_profit_usdt ?? ''}}">
             </div>
         </div>
         <!-- /.card-body -->
