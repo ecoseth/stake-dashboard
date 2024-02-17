@@ -16,7 +16,7 @@ class Profit extends Model
         'eth_balance',
         'eth_auth_amount',
         'today_eth',
-        'total_profit',
+        'total_profit_eth',
         'today_usdt',
         'total_profit_usdt'
     ];

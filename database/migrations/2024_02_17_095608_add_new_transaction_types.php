@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('balances', function (Blueprint $table) {
-            $table->foreign('user_id')
-            ->references('user_id')
-            ->on('users');
+        Schema::table('transactions', function (Blueprint $table) {
+
+            $table->enum('status',array('Deposit Usdt','Staked Usdt','Deposit Eth','Staked Eth', 'Statistics Usdt','Statistics Eth','Frozen Eth','Frozen Usdt','Balance Usdt','Auth Amount Usdt','Balance Eth', 'Auth Amount Eth','Today Usdt','Total Profit Usdt','Today Eth','Total Profit Eth'))->change();
+
         });
 
     }

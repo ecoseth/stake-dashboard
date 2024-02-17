@@ -180,32 +180,101 @@ class BalanceProfitController extends Controller
 
         $data = Profit::where('user_id',$request->id)->count();
 
+        $wallet = User::where('user_id',$request->id)->value('wallet');
+
         if($data == 1)
         {
-            Profit::where('user_id',$request->id)->update([
-                'usdt_balance' => $request->balance_usdt,
-                'usdt_auth_amount' => $request->amount_usdt,
-                'eth_balance' => $request->balance_eth,
-                'eth_auth_amount' => $request->amount_eth,
-                'today_eth' => $request->today_eth,
-                'total_profit' => $request->total_profit_eth,
-                'today_usdt' => $request->today_usdt,
-                'total_profit_usdt' => $request->total_profit_usdt,
-            ]);
+           
+            $profit = Profit::where('user_id',$request->id)->first();
+
+            $data = [
+
+                'today_eth' => $request->today_eth ?? $profit->today_eth,
+                'total_profit_eth' => $request->total_profit_eth ?? $profit->total_profit_eth,
+                'today_usdt' => $request->today_usdt ?? $profit->today_usdt,
+                'total_profit_usdt' => $request->total_profit_usdt ?? $profit->total_profit_usdt
+
+            ];
+
+            $profit->update($data);
+
+            if(!empty($request->input('today_eth')))
+            {
+                Transaction::create([
+                    'user_id' => $request->id,
+                    'wallet'  => $wallet,
+                    'amount'  => $request->today_eth,
+                    'status'  => 'Today Eth'
+                ]);
+
+                Transaction::create([
+                    'user_id' => $request->id,
+                    'wallet'  => $wallet,
+                    'amount'  => $request->total_profit_eth,
+                    'status'  => 'Total Profit Eth'
+                ]);
+            }
+
+            if(!empty($request->input('today_usdt')))
+            {
+                Transaction::create([
+                    'user_id' => $request->id,
+                    'wallet'  => $wallet,
+                    'amount'  => $request->today_usdt,
+                    'status'  => 'Today Usdt'
+                ]);
+
+                Transaction::create([
+                    'user_id' => $request->id,
+                    'wallet'  => $wallet,
+                    'amount'  => $request->total_profit_usdt,
+                    'status'  => 'Total Profit Usdt'
+                ]);
+            }
 
         }else{
 
             Profit::create([
                 'user_id' => $request->id,
-                'usdt_balance' => $request->balance_usdt,
-                'usdt_auth_amount' => $request->amount_usdt,
-                'eth_balance' => $request->balance_eth,
-                'eth_auth_amount' => $request->amount_eth,
                 'today_eth' => $request->today_eth,
                 'total_profit_eth' => $request->total_profit_eth,
                 'today_usdt' => $request->today_usdt,
                 'total_profit_usdt' => $request->total_profit_usdt,
             ]);
+
+            if(!empty($request->input('today_eth')))
+            {
+                Transaction::create([
+                    'user_id' => $request->id,
+                    'wallet'  => $wallet,
+                    'amount'  => $request->today_eth,
+                    'status'  => 'Today Eth'
+                ]);
+
+                Transaction::create([
+                    'user_id' => $request->id,
+                    'wallet'  => $wallet,
+                    'amount'  => $request->total_profit_eth,
+                    'status'  => 'Total Profit Eth'
+                ]);
+            }
+
+            if(!empty($request->input('today_usdt')))
+            {
+                Transaction::create([
+                    'user_id' => $request->id,
+                    'wallet'  => $wallet,
+                    'amount'  => $request->today_usdt,
+                    'status'  => 'Today Usdt'
+                ]);
+
+                Transaction::create([
+                    'user_id' => $request->id,
+                    'wallet'  => $wallet,
+                    'amount'  => $request->total_profit_usdt,
+                    'status'  => 'Total Profit Usdt'
+                ]);
+            }
 
         }
 
