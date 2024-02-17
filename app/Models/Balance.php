@@ -16,4 +16,10 @@ class Balance extends Model
         'statistics_usdt',
         'frozen_usdt',
     ];
+
+    public function users()
+    {
+        return $this->belongsTo('App\Models\User');
+    }
+
 }

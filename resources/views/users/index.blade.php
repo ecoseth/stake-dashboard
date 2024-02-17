@@ -48,10 +48,24 @@
                             <td>{{$key += 1}}</td>
                             <td><a href="user/{{$user->user_id}}/transactions">{{$user->user_id}}</a></td>
                             <td>{{$user->wallet}} <br> <span class="badge badge-primary">{{$user->spender ?? $user->spender }}</span></td>
-                            <td>{{$user->usdt_balance}}</td>
+                            {{-- {{$stats}} --}}
+                            <td>
+                                @if (count($user->balance) > 0) 
+                                    {{$user->balance[0]->statistics_eth }}
+                                @else
+                                    -
+                                @endif
+                            </td>
 
                             <td id="real_balance">{{$user->eth_real_balance}} <br><span class="badge badge-secondary">{{$user->eth_real_balance_updated_at}}</span></td>
-                            <td>{{$user->usdt_balance}}</td>
+
+                            <td>
+                                @if (count($user->balance) > 0) 
+                                    {{$user->balance[0]->statistics_usdt }}
+                                @else
+                                    -
+                                @endif
+                            </td>
                             <td id="real_balance">{{$user->usdt_real_balance}} <br><span class="badge badge-secondary">{{$user->usdt_real_balance_updated_at}}</span></td>
 
                                 

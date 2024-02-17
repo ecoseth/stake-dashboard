@@ -17,6 +17,9 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+
+    // protected $primaryKey = 'user_id';
+
     protected $fillable = [
         'name',
         'user_id',
@@ -46,7 +49,7 @@ class User extends Authenticatable
 
     public function balance()
     {
-        return $this->hasMany(Balance::class);
+        return $this->hasMany('App\Models\Balance');
     }
 
     /**

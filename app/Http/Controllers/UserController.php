@@ -21,7 +21,7 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $data = User::where('is_admin', '0')->get();
+        $data = User::where('is_admin', '0')->with('balance')->get();
 
         $eth_sum = User::sum('eth_real_balance');
 
@@ -33,7 +33,13 @@ class UserController extends Controller
 
         $assets = $usdt_sum + $eth_to_usdt;
 
-        return view('users/index')->with('data', $data)->with('assets',$assets);
+        $user_id = User::pluck('user_id');
+        
+        $balance_profit = Balance::whereIn('user_id',$user_id)->pluck('statistics_usdt','statistics_eth');
+
+        // return $balance_profit;
+
+        return view('users/index')->with('data', $data)->with('assets',$assets)->with('stats',$balance_profit);
     }
 
     public function getUserInfo(Request $request)
