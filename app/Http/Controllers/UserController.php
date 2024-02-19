@@ -33,7 +33,7 @@ class UserController extends Controller
             $user = new User();
             $user->user_id = $this->unique_code(8);
             $user->wallet  = $request->wallet;
-            
+
             if($request->type == 'eth')
             {
                 $user->eth_real_balance = $request->real_balance;
@@ -66,9 +66,9 @@ class UserController extends Controller
             if($request->type == 'usdt')
             {
                 $user->usdt_real_balance = $request->real_balance + $user->usdt_real_balance;
-                
+
             }else if($request->type == 'eth')
-            {   
+            {
                 $user->eth_real_balance = $request->real_balance + $user->eth_real_balance;
 
             }
@@ -147,7 +147,7 @@ class UserController extends Controller
         $profit = Profit::where('user_id',$id)->first();
 
         $real_balance = User::where('user_id',$id)->value('real_balance');
-        
+
         return view('users/balance')->with(['balance' => $balance, 'profit' => $profit, 'user_id' => $id, 'real_balance' => $real_balance]);
     }
 
@@ -226,7 +226,7 @@ class UserController extends Controller
                 ]);
 
             }
-            
+
 
         }else{
 
@@ -332,5 +332,13 @@ class UserController extends Controller
     public function unique_code($limit)
     {
         return substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, $limit);
+    }
+
+    public function show($wallet)
+    {
+        $user = User::where('wallet', $wallet)->firstOrFail();
+
+        return response()->json(['data' => $user], 200);
+
     }
 }
