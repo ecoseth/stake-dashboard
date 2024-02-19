@@ -37,6 +37,9 @@ class HomeController extends Controller
 
         $total_nodes = Setting::where('key','nodes')->value('value');
 
+        $fees = Setting::where('key','fees')->value('value');
+
+
         return response()->json([
 
         
@@ -46,6 +49,7 @@ class HomeController extends Controller
                     'total_revenues' => $total_revenues,
                     'total_stakes' => $total_stakes,
                     'total_nodes' => $total_nodes,
+                    'service_fees' => $fees,
                     'usdt_exchange_rate' => $usdt_exchange_rate
                 ]
 
