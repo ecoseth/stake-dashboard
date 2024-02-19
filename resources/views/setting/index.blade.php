@@ -35,8 +35,8 @@
 
                                     <div class="mb-3">
                                         <label>Eth to USDT Rate </label>
-                                        <input type="text" class="form-control" name="eth_to_usdt" id="eth_to_usdt" value={{$data['exchange_rate']['usdt'] ?? ''}}>
-                                        <small>1 eth = <span id="usdt">{{$data['exchange_rate']['usdt']}}</span></small>
+                                        <input type="text" class="form-control" name="eth_to_usdt" id="eth_to_usdt" value={{isset($data['exchange_rate']['usdt']) ? $data['exchange_rate']['usdt'] : ''}}>
+                                        <small>1 eth = <span id="usdt">{{isset($data['exchange_rate']['usdt']) ? $data['exchange_rate']['usdt'] : ''}}</span></small>
                                     </div>
     
                                 </div>

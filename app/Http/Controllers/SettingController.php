@@ -47,6 +47,11 @@ class SettingController extends Controller
                             'usdt' => $request->eth_to_usdt,
                             'open_time' => now(),
                         ]);
+                    }else{
+                        Exchange::create([
+                            'usdt' => $request->eth_to_usdt,
+                            'open_time' => now(),
+                        ]);
                     }
 
                 }
