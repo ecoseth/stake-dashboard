@@ -11,9 +11,13 @@ class Profit extends Model
 
     protected $fillable = [
         'user_id',
-        'balance',
-        'auth_amount',
+        'usdt_balance',
+        'usdt_auth_amount',
+        'eth_balance',
+        'eth_auth_amount',
         'today_eth',
-        'total_profit',
+        'total_profit_eth',
+        'today_usdt',
+        'total_profit_usdt'
     ];
 }

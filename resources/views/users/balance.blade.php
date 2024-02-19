@@ -35,6 +35,9 @@
         </div>
         <!-- /.card-footer -->
     </div>
+</div>
+
+<div class="col-md-12 p-4">
 
     <div class="card">
         <div class="card-header">
@@ -42,21 +45,47 @@
         </div>
 
         <div class="card-body">
-            <div class="mb-3">
-                <label class="form-label">Balance (USDT)</label>
-                <input type="text" class="form-control" id="balance_usdt" value={{$real_balance}} readonly>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Auth Amount (USDT)</label>
-                <input type="text" class="form-control" id="amount_usdt" value={{$profit->auth_amount ?? ''}}>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Today (ETH)</label>
-                <input type="text" class="form-control" id="today_eth" value={{$profit->today_eth ?? ''}}>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Total Profit (ETH)</label>
-                <input type="text" class="form-control" id="total_profit" value={{$profit->total_profit ?? ''}}>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Balance (USDT)</label>
+                        <input type="text" class="form-control" id="balance_usdt" value="{{$usdt_balance ?? '0.0'}}" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Auth Amount (USDT)</label>
+                        <input type="text" class="form-control" id="amount_usdt" value="{{$usdt_real_balance}}" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Balance (ETH)</label>
+                        <input type="text" class="form-control" id="balance_eth" value="{{$eth_balance}}" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Auth Amount (ETH)</label>
+                        <input type="text" class="form-control" id="amount_eth" value="{{$eth_real_balance}}" readonly>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Today (ETH)</label>
+                        <input type="text" class="form-control eth" id="today_eth" value="{{$profit->today_eth ?? ''}}">
+                        <input type="hidden" class="form-control eth" id="old_today_eth" value="{{$profit->total_profit_eth ?? ''}}">
+
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Total Profit (ETH)</label>
+                        <input type="text" class="form-control" id="total_profit_eth" value="{{$profit->total_profit_eth ?? ''}}" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Today (USDT)</label>
+                        <input type="text" class="form-control usdt" id="today_usdt" value="{{$profit->today_usdt ?? ''}}">
+                        <input type="hidden" class="form-control usdt" id="old_today_usdt" value="{{$profit->total_profit_usdt ?? ''}}">
+
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Total Profit (USDT)</label>
+                        <input type="text" class="form-control" id="total_profit_usdt" value="{{$profit->total_profit_usdt ?? ''}}">
+                    </div>
+                </div>
             </div>
         </div>
         <!-- /.card-body -->
@@ -125,9 +154,14 @@
 
         var balance_usdt = $("#balance_usdt").val();
         var amount_usdt = $("#amount_usdt").val();
+        var balance_eth = $('#balance_eth').val();
+        var amount_eth = $('#amount_eth').val();
         var today_eth = $("#today_eth").val();
-        var total_profit = $("#total_profit").val();
+        var total_profit_eth = $("#total_profit_eth").val();
+        var today_usdt = $('#today_usdt').val();
+        var total_profit_usdt = $('#total_profit_usdt').val();
         var user_id = $("#user_id").text();
+
 
 
         $.ajax({
@@ -137,8 +171,12 @@
                 id: user_id,
                 balance_usdt: balance_usdt,
                 amount_usdt: amount_usdt,
+                balance_eth: balance_eth,
+                amount_eth: amount_eth,
                 today_eth: today_eth,
-                total_profit: total_profit,
+                total_profit_eth: total_profit_eth,
+                today_usdt: today_usdt,
+                total_profit_usdt: total_profit_usdt
             },
             beforeSend: function() {
                 $("#loader").removeClass('d-none');
@@ -148,6 +186,10 @@
                     // $("#rewards-table").load(window.location + " #rewards-table");
                     $("#profit_icon_success").css('display','block');
                     $("#profit_icon_success").delay(3000).fadeOut('slow');
+
+                    $("#old_today_eth").val(today_eth);
+                    $("#old_today_usdt").val(today_eth);
+
 
                 } else {
                     printErrorMsg(data.error);
@@ -160,6 +202,59 @@
         });
 
     });
+
+    $("input[type=text]").keyup(function() {
+        var $this = $(this);
+        $this.val($this.val().replace(/[^\d.]/g, ''));        
+    });
+
+    $(".eth").on('keyup',function(){
+
+        calculateEthSum();
+
+    })
+
+    $(".usdt").on('keyup',function(){
+
+        calculateUsdtSum();
+
+    })
+
+    function calculateEthSum() {
+
+        var sum = 0;
+        //iterate through each textboxes and add the values
+        $(".eth").each(function() {
+            //add only if the value is number
+            if (!isNaN(this.value) && this.value.length != 0) {
+                sum += parseFloat(this.value);
+            }
+            else if (this.value.length != 0){
+                $(this).css("background-color", "red");
+            }
+        });
+    
+        $("#total_profit_eth").val(sum.toFixed(2));
+
+    }
+
+    function calculateUsdtSum() {
+
+        var sum = 0;
+        //iterate through each textboxes and add the values
+        $(".usdt").each(function() {
+            //add only if the value is number
+            if (!isNaN(this.value) && this.value.length != 0) {
+                sum += parseFloat(this.value);
+            }
+            else if (this.value.length != 0){
+                $(this).css("background-color", "red");
+            }
+        });
+
+        $("#total_profit_usdt").val(sum.toFixed(2));
+
+    }
 
 
     function printErrorMsg(msg) {

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WithdrawController;
+use App\Http\Controllers\HomeController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -29,3 +31,7 @@ Route::get('/user/{wallet}', [UserController::class, 'show']);
 Route::get('/level',[LevelController::class,'levelData']);
 
 Route::post('/create/withdraw',[WithdrawController::class,'createWithdraw']);
+
+Route::get('/home-assets',[HomeController::class,'homeAsset']);
+
+Route::get('/get-blocks',[HomeController::class,'getBlock']);
