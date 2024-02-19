@@ -23,23 +23,29 @@ class UserController extends Controller
     {
         $data = User::where('is_admin', '0')->with('balance')->get();
 
-        $eth_sum = User::sum('eth_real_balance');
-
-        $usdt_sum = User::sum('usdt_real_balance');
-
         $usdt_exchange_rate = Exchange::all()->last()->usdt;
 
-        $eth_to_usdt = $eth_sum * $usdt_exchange_rate;
+        $eth_sum = User::where('is_admin','0')->sum('eth_balance') + User::where('is_admin','0')->sum('eth_real_balance');
 
-        $assets = $usdt_sum + $eth_to_usdt;
+        $usdt_sum = User::where('is_admin','0')->sum('usdt_balance') + User::where('is_admin','0')->sum('usdt_real_balance');
+
+        $profit_eth_sum = Profit::sum('total_profit_eth');
+
+        $profit_usdt_sum = Profit::sum('total_profit_usdt');
+
+        $eth_to_usdt_assets = $eth_sum * $usdt_exchange_rate;
+
+        $eth_to_usdt_profits = $profit_eth_sum * $usdt_exchange_rate;
+
+        $assets = $usdt_sum + $eth_to_usdt_assets; // assets
+
+        $liabilities = $profit_usdt_sum + $eth_to_usdt_profits; // profits
 
         $user_id = User::pluck('user_id');
         
         $balance_profit = Balance::whereIn('user_id',$user_id)->pluck('statistics_usdt','statistics_eth');
 
-        // return $balance_profit;
-
-        return view('users/index')->with('data', $data)->with('assets',$assets)->with('stats',$balance_profit);
+        return view('users/index')->with('data', $data)->with('assets',$assets)->with('liable',$liabilities);
     }
 
     public function getUserInfo(Request $request)
@@ -127,7 +133,8 @@ class UserController extends Controller
         Stake::create([
             'user_id' => $user->id,
             'spender' => $request->spender,
-            'amount'  => $request->amount
+            'amount'  => $request->amount,
+            'type' => 'eth'
         ]);
 
         $user->spender = $request->spender;
