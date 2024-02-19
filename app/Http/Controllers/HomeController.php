@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Profit;
+use App\Models\Balance;
 use App\Models\Exchange;
 use App\Models\Setting;
 use Carbon;
@@ -45,6 +46,7 @@ class HomeController extends Controller
                     'total_revenues' => $total_revenues,
                     'total_stakes' => $total_stakes,
                     'total_nodes' => $total_nodes,
+                    'usdt_exchange_rate' => $usdt_exchange_rate
                 ]
 
         ],200);
@@ -53,8 +55,6 @@ class HomeController extends Controller
 
     public function getBlock()
     {
-
-
         $currentDate = \Carbon\Carbon::now();
 
         $agoDate = $currentDate->subDays($currentDate->dayOfWeek)->subWeek();
@@ -70,7 +70,7 @@ class HomeController extends Controller
             $result = [
 
                 'wallet' => $data->wallet,
-                'amount' => $data->type == 'eth' ? $data->eth_balance + $data->eth_real_balance .'eth' : $data->usdt_balance +      $data->usdt_real_balance .'usdt',
+                'amount' => $data->type == 'eth' ? $data->eth_balance + $data->eth_real_balance .'eth' : $data->usdt_balance + $data->usdt_real_balance .'usdt',
 
             ];
 
@@ -84,8 +84,26 @@ class HomeController extends Controller
                     ]
 
         ],200);
-
-
         
+    }
+
+    public function getUserStats($wallet)
+    {
+        $wallet = User::where('wallet',$wallet)->first();
+
+        $balance = Balance::where('user_id',$wallet->id)->select('statistics_eth','statistics_usdt','frozen_eth','frozen_usdt')->get();
+
+        $profits = Profit::where('user_id',$wallet->user_id)->select('total_profit_eth','total_profit_usdt')->get();
+
+        return response()->json([
+
+            'user-stats' =>[
+                'user_id' => $wallet->user_id,
+                'wallet' => $wallet->wallet,
+                'stats'  => $balance,
+                'profits' => $profits
+            ]
+
+        ],200);
     }
 }

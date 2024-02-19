@@ -83,7 +83,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Total Profit (USDT)</label>
-                        <input type="text" class="form-control" id="total_profit_usdt" value="{{$profit->total_profit_usdt ?? ''}}">
+                        <input type="text" class="form-control" id="total_profit_usdt" value="{{$profit->total_profit_usdt ?? ''}}" readonly>
                     </div>
                 </div>
             </div>
