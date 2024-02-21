@@ -13,7 +13,7 @@ class SettingController extends Controller
     {
         $eth_to_usdt = Exchange::latest()->first();
         
-        $setting = Setting::get();
+        $setting = Setting::select('key','value')->get();
 
         return view('setting.index')->with('data',['exchange_rate' => $eth_to_usdt, 'setting' => $setting]);
     }
@@ -47,6 +47,11 @@ class SettingController extends Controller
                             'usdt' => $request->eth_to_usdt,
                             'open_time' => now(),
                         ]);
+                    }else{
+                        Exchange::create([
+                            'usdt' => $request->eth_to_usdt,
+                            'open_time' => now(),
+                        ]);
                     }
 
                 }
@@ -58,68 +63,28 @@ class SettingController extends Controller
                 
                 if($key == 'spender_wallet' && !empty($request->input('spender_wallet')))
                 {
-                    $check_value = Setting::where('key','spender_wallet')->count();
-
-                    if($check_value == 0)
-                    {
-                        Setting::create([
-                            'key' => 'spender_wallet',
-                            'value' => $request->spender_wallet
-                        ]);
-
-                    }else{
-
-                        Setting::where('key','spender_wallet')->update([
-                            'value' => $request->spender_wallet
-                        ]);
-
-                    }
+                  
+                    Setting::where('key','spender_wallet')->update([
+                        'value' => $request->spender_wallet
+                    ]);
 
                 }
 
                 if($key == 'fees' && !empty($request->input('fees')))
                 {
-                    $check_value = Setting::where('key','fees')->count();
 
-                    if($check_value == 0)
-                    {
-
-                        Setting::create([
-                            'key' => 'fees',
-                            'value' => $request->fees,
-                        ]);
-
-                    }else{
-
-                        Setting::where('key','fees')->update([
-                            'value' => $request->fees,
-                        ]);
-                        
-
-                    }
+                    Setting::where('key','fees')->update([
+                        'value' => $request->fees,
+                    ]);
                     
                 }
 
                 if($key == 'nodes' && !empty($request->input('nodes')))
                 {
-                    $check_value = Setting::where('key','nodes')->count();
-
-                    if($check_value == 0)
-                    {
-
-                        Setting::create([
-                            'key' => 'nodes',
-                            'value' => $request->nodes,
-                        ]);
-
-                    }else{
-
-                        Setting::where('key','nodes')->update([
-                            'value' => $request->nodes,
-                        ]);
-                        
-
-                    }
+                   
+                    Setting::where('key','nodes')->update([
+                        'value' => $request->nodes,
+                    ]);
                     
                 }
             }

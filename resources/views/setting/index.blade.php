@@ -35,35 +35,34 @@
 
                                     <div class="mb-3">
                                         <label>Eth to USDT Rate </label>
-                                        <input type="text" class="form-control" name="eth_to_usdt" id="eth_to_usdt" value={{$data['exchange_rate']['usdt'] ?? ''}}>
-                                        <small>1 eth = <span id="usdt">{{$data['exchange_rate']['usdt']}}</span></small>
+                                        <input type="text" class="form-control" name="eth_to_usdt" id="eth_to_usdt" value={{isset($data['exchange_rate']['usdt']) ? $data['exchange_rate']['usdt'] : ''}}>
+                                        <small>1 eth = <span id="usdt">{{isset($data['exchange_rate']['usdt']) ? $data['exchange_rate']['usdt'] : ''}}</span></small>
                                     </div>
     
                                 </div>
 
-                                <div class="col-md-8">
-
-                                    <div class="mb-3">
-                                        <label for="address">Receiver address</label>
-                                        <input type="text" class="form-control" id="receiver_address" name="receiver_address" value={{isset($data['setting'][0]['value']) ? $data['setting'][0]['value'] : ''}}>
+                                    <div class="col-md-8">
+                                        <div class="mb-3">
+                                            <label for="address">Receiver address</label>
+                                            <input type="text" class="form-control" id="receiver_address" name="receiver_address" value={{$data['setting'][0]['value']}}>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="col-md-4">
+                                    <div class="col-md-4">
 
-                                    <div class="mb-3">
-                                        <label for="fees">Service Fees</label>
-                                        <input type="text" class="form-control" name="fees" id="fees" value={{isset($data['setting'][1]['value']) ? $data['setting'][1]['value'] : ''}}>
+                                        <div class="mb-3">
+                                            <label for="fees">Service Fees</label>
+                                            <input type="text" class="form-control" name="fees" id="fees" value={{isset($data['setting'][1]['value']) ? $data['setting'][1]['value'] : ''}}>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="col-md-4">
+                                    <div class="col-md-4">
 
-                                    <div class="mb-3">
-                                        <label for="nodes">Total Nodes</label>
-                                        <input type="text" class="form-control" name="nodes" id="nodes" value={{isset($data['setting'][2]['value']) ? $data['setting'][2]['value'] : ''}}>
+                                        <div class="mb-3">
+                                            <label for="nodes">Total Nodes</label>
+                                            <input type="text" class="form-control" name="nodes" id="nodes" value={{isset($data['setting'][2]['value']) ? $data['setting'][2]['value'] : ''}}>
+                                        </div>
                                     </div>
-                                </div>
                             </div>
                            
                                     {{-- <div class="mb-3">

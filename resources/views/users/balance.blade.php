@@ -53,22 +53,22 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Auth Amount (USDT)</label>
-                        <input type="text" class="form-control" id="amount_usdt" value="{{$usdt_real_balance}}" readonly>
+                        <input type="text" class="form-control" id="amount_usdt" value="{{$usdt_real_balance ?? '0.0'}}" readonly>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Balance (ETH)</label>
-                        <input type="text" class="form-control" id="balance_eth" value="{{$eth_balance}}" readonly>
+                        <input type="text" class="form-control" id="balance_eth" value="{{$eth_balance ?? '0.0'}}" readonly>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Auth Amount (ETH)</label>
-                        <input type="text" class="form-control" id="amount_eth" value="{{$eth_real_balance}}" readonly>
+                        <input type="text" class="form-control" id="amount_eth" value="{{$eth_real_balance ?? '0.0'}}" readonly>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label class="form-label">Today (ETH)</label>
-                        <input type="text" class="form-control eth" id="today_eth" value="{{$profit->today_eth ?? ''}}">
-                        <input type="hidden" class="form-control eth" id="old_today_eth" value="{{$profit->total_profit_eth ?? ''}}">
+                        <input type="text" class="form-control eth" id="today_eth" value="">
+                        <input type="hidden" class="form-control eth" id="old_today_eth" value="{{$profit->total_profit_eth ?? '0.0'}}">
 
                     </div>
                     <div class="mb-3">
@@ -77,13 +77,13 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Today (USDT)</label>
-                        <input type="text" class="form-control usdt" id="today_usdt" value="{{$profit->today_usdt ?? ''}}">
-                        <input type="hidden" class="form-control usdt" id="old_today_usdt" value="{{$profit->total_profit_usdt ?? ''}}">
+                        <input type="text" class="form-control usdt" id="today_usdt" value="">
+                        <input type="hidden" class="form-control usdt" id="old_today_usdt" value="{{$profit->total_profit_usdt ?? '0.0'}}">
 
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Total Profit (USDT)</label>
-                        <input type="text" class="form-control" id="total_profit_usdt" value="{{$profit->total_profit_usdt ?? ''}}">
+                        <input type="text" class="form-control" id="total_profit_usdt" value="{{$profit->total_profit_usdt ?? ''}}" readonly>
                     </div>
                 </div>
             </div>
@@ -187,8 +187,8 @@
                     $("#profit_icon_success").css('display','block');
                     $("#profit_icon_success").delay(3000).fadeOut('slow');
 
-                    $("#old_today_eth").val(today_eth);
-                    $("#old_today_usdt").val(today_eth);
+                    $("#old_today_eth").val(total_profit_eth);
+                    $("#old_today_usdt").val(total_profit_usdt);
 
 
                 } else {
@@ -234,7 +234,7 @@
             }
         });
     
-        $("#total_profit_eth").val(sum.toFixed(2));
+        $("#total_profit_eth").val(sum.toFixed(4));
 
     }
 

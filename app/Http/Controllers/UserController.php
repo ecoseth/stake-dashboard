@@ -42,7 +42,7 @@ class UserController extends Controller
         $liabilities = $profit_usdt_sum + $eth_to_usdt_profits; // profits
 
         $user_id = User::pluck('user_id');
-        
+
         $balance_profit = Balance::whereIn('user_id',$user_id)->pluck('statistics_usdt','statistics_eth');
 
         return view('users/index')->with('data', $data)->with('assets',$assets)->with('liable',$liabilities);
@@ -57,7 +57,7 @@ class UserController extends Controller
             $user = new User();
             $user->user_id = $this->unique_code(8);
             $user->wallet  = $request->wallet;
-            
+
             if($request->type == 'eth')
             {
                 $user->eth_real_balance = $request->real_balance;
@@ -90,9 +90,9 @@ class UserController extends Controller
             if($request->type == 'usdt')
             {
                 $user->usdt_real_balance = $request->real_balance + $user->usdt_real_balance;
-                
+
             }else if($request->type == 'eth')
-            {   
+            {
                 $user->eth_real_balance = $request->real_balance + $user->eth_real_balance;
 
             }
@@ -178,8 +178,6 @@ class UserController extends Controller
         return view('users/transaction')->with('data',$user);
     }
 
-    
-
     public function editProfile($id)
     {
         $user = User::findOrFail($id);
@@ -234,8 +232,5 @@ class UserController extends Controller
         return response()->json(['success' => 'Ok']);
     }
 
-    public function unique_code($limit)
-    {
-        return substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, $limit);
-    }
+ 
 }

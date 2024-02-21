@@ -22,7 +22,7 @@
             <div class="card-body p-0">
 
                 <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-md-8 p-2">
 
                         <table class="table table-striped text-nowrap" id="rewards-table">
                             <thead>
