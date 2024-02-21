@@ -141,7 +141,7 @@ class BalanceProfitController extends Controller
                 Transaction::create([
                     'user_id' => $request->id,
                     'wallet'  => $wallet,
-                    'amount'  => $balance->statistics_usdt,
+                    'amount'  => $data->statistics_usdt,
                     'status'  => 'Statistics Usdt'
                 ]);
 
@@ -153,7 +153,7 @@ class BalanceProfitController extends Controller
                 Transaction::create([
                     'user_id' => $request->id,
                     'wallet'  => $wallet,
-                    'amount'  => $balance->frozen_eth,
+                    'amount'  => $data->frozen_eth,
                     'status'  => 'Frozen Eth'
                 ]);
 
@@ -165,7 +165,7 @@ class BalanceProfitController extends Controller
                 Transaction::create([
                     'user_id' => $request->id,
                     'wallet'  => $wallet,
-                    'amount'  => $balance->frozen_usdt,
+                    'amount'  => $data->frozen_usdt,
                     'status'  => 'Frozen Usdt'
                 ]);
 

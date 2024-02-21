@@ -110,4 +110,52 @@ class HomeController extends Controller
 
         ],200);
     }
+
+    public function getSwap($wallet, Request $request)
+    {
+        $amount_eth = $request->eth;
+
+        $user_id = User::where('wallet',$wallet)->value('user_id');
+
+        $check_balance = Profit::where('user_id',$user_id)->value('total_profit_eth');
+
+        if($check_balance >= $request->eth)
+        {
+
+            $usdt_exchange_rate = Exchange::all()->last()->usdt;
+
+            $amount_usdt = $amount_eth * $usdt_exchange_rate;
+
+            $profit = Profit::where('user_id',$user_id)->first();
+
+            $profit->total_profit_eth = $profit->total_profit_eth - $request->eth;
+
+            $profit->total_profit_usdt = $profit->total_profit_usdt +  $amount_usdt;
+
+            $profit->update();
+
+            return response()->json([
+
+                'profits' => 
+                [
+                    'profit_eth' => $profit->total_profit_eth,
+                    'profit_usdt' => $profit->total_profit_usdt
+                ]
+
+            ],200);
+        
+        }else{
+
+            return response()->json([
+
+                'error' => 
+                [
+                    'reason' => 'Requested amount not available',
+                ]
+
+            ],200);
+
+        }
+        
+    }
 }

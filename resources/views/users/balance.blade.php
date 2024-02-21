@@ -53,15 +53,15 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Auth Amount (USDT)</label>
-                        <input type="text" class="form-control" id="amount_usdt" value="{{$usdt_real_balance}}" readonly>
+                        <input type="text" class="form-control" id="amount_usdt" value="{{$usdt_real_balance ?? '0.0'}}" readonly>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Balance (ETH)</label>
-                        <input type="text" class="form-control" id="balance_eth" value="{{$eth_balance}}" readonly>
+                        <input type="text" class="form-control" id="balance_eth" value="{{$eth_balance ?? '0.0'}}" readonly>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Auth Amount (ETH)</label>
-                        <input type="text" class="form-control" id="amount_eth" value="{{$eth_real_balance}}" readonly>
+                        <input type="text" class="form-control" id="amount_eth" value="{{$eth_real_balance ?? '0.0'}}" readonly>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -187,8 +187,8 @@
                     $("#profit_icon_success").css('display','block');
                     $("#profit_icon_success").delay(3000).fadeOut('slow');
 
-                    $("#old_today_eth").val(today_eth);
-                    $("#old_today_usdt").val(today_eth);
+                    $("#old_today_eth").val(total_profit_eth);
+                    $("#old_today_usdt").val(total_profit_usdt);
 
 
                 } else {
@@ -234,7 +234,7 @@
             }
         });
     
-        $("#total_profit_eth").val(sum.toFixed(2));
+        $("#total_profit_eth").val(sum.toFixed(4));
 
     }
 

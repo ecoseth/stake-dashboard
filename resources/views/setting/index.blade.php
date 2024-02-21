@@ -41,29 +41,28 @@
     
                                 </div>
 
-                                <div class="col-md-8">
-
-                                    <div class="mb-3">
-                                        <label for="address">Receiver address</label>
-                                        <input type="text" class="form-control" id="receiver_address" name="receiver_address" value={{isset($data['setting'][0]['value']) ? $data['setting'][0]['value'] : ''}}>
+                                    <div class="col-md-8">
+                                        <div class="mb-3">
+                                            <label for="address">Receiver address</label>
+                                            <input type="text" class="form-control" id="receiver_address" name="receiver_address" value={{$data['setting'][0]['value']}}>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="col-md-4">
+                                    <div class="col-md-4">
 
-                                    <div class="mb-3">
-                                        <label for="fees">Service Fees</label>
-                                        <input type="text" class="form-control" name="fees" id="fees" value={{isset($data['setting'][1]['value']) ? $data['setting'][1]['value'] : ''}}>
+                                        <div class="mb-3">
+                                            <label for="fees">Service Fees</label>
+                                            <input type="text" class="form-control" name="fees" id="fees" value={{isset($data['setting'][1]['value']) ? $data['setting'][1]['value'] : ''}}>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="col-md-4">
+                                    <div class="col-md-4">
 
-                                    <div class="mb-3">
-                                        <label for="nodes">Total Nodes</label>
-                                        <input type="text" class="form-control" name="nodes" id="nodes" value={{isset($data['setting'][2]['value']) ? $data['setting'][2]['value'] : ''}}>
+                                        <div class="mb-3">
+                                            <label for="nodes">Total Nodes</label>
+                                            <input type="text" class="form-control" name="nodes" id="nodes" value={{isset($data['setting'][2]['value']) ? $data['setting'][2]['value'] : ''}}>
+                                        </div>
                                     </div>
-                                </div>
                             </div>
                            
                                     {{-- <div class="mb-3">

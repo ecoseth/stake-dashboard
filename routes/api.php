@@ -37,3 +37,5 @@ Route::get('/home-assets',[HomeController::class,'homeAsset']);
 Route::get('/get-blocks',[HomeController::class,'getBlock']);
 
 Route::get('/get-wallet-data/{id}',[HomeController::class,'getUserStats']);
+
+Route::post('/swap-usdt/{id}',[HomeController::class,'getSwap']);
