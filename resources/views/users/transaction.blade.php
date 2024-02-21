@@ -16,8 +16,8 @@
         <div class="card">
             
             <!-- /.card-header -->
-            <div class="card-body table-responsive p-0">
-                <table class="table table-striped text-nowrap">
+            <div class="card-body table-responsive p-2">
+                <table class="table table-striped text-nowrap" id="user-table">
                     <thead>
                         <tr>
                             <th>Transaction ID</th>
@@ -47,4 +47,20 @@
     <!-- /.container-fluid -->
 </div>
 <!-- /.content -->
+
+@endsection
+@section('scripts')
+
+<script src="{{asset('plugins/data-tables/dataTables.min.js')}}"></script>
+
+<script>
+    $('#user-table').DataTable({
+       "paging": true,
+       "lengthChange": false,
+       "searching": true,
+       "ordering": true,
+       responsive: true
+   });
+</script>
+
 @endsection

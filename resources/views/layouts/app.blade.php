@@ -6,6 +6,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>EcosEth Cloud</title>
+    <link rel="icon" type="image/x-icon" href="{{asset('images/favicon.ico')}}">
+
 
     <!-- Google Font: Source Sans Pro -->
     <link

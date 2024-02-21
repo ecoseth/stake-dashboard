@@ -232,16 +232,5 @@ class UserController extends Controller
         return response()->json(['success' => 'Ok']);
     }
 
-    public function unique_code($limit)
-    {
-        return substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, $limit);
-    }
-
-    public function show($wallet)
-    {
-        $user = User::where('wallet', $wallet)->firstOrFail();
-
-        return response()->json(['data' => $user], 200);
-
-    }
+ 
 }

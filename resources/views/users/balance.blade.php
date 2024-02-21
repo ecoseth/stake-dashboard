@@ -67,8 +67,8 @@
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label class="form-label">Today (ETH)</label>
-                        <input type="text" class="form-control eth" id="today_eth" value="{{$profit->today_eth ?? ''}}">
-                        <input type="hidden" class="form-control eth" id="old_today_eth" value="{{$profit->total_profit_eth ?? ''}}">
+                        <input type="text" class="form-control eth" id="today_eth" value="">
+                        <input type="hidden" class="form-control eth" id="old_today_eth" value="{{$profit->total_profit_eth ?? '0.0'}}">
 
                     </div>
                     <div class="mb-3">
@@ -77,8 +77,8 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Today (USDT)</label>
-                        <input type="text" class="form-control usdt" id="today_usdt" value="{{$profit->today_usdt ?? ''}}">
-                        <input type="hidden" class="form-control usdt" id="old_today_usdt" value="{{$profit->total_profit_usdt ?? ''}}">
+                        <input type="text" class="form-control usdt" id="today_usdt" value="">
+                        <input type="hidden" class="form-control usdt" id="old_today_usdt" value="{{$profit->total_profit_usdt ?? '0.0'}}">
 
                     </div>
                     <div class="mb-3">

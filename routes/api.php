@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WithdrawController;
-use App\Http\Controllers\HomeController;
 
 
 /*
@@ -24,18 +23,18 @@ use App\Http\Controllers\HomeController;
 //     return $request->user();
 // });
 
-Route::post('/user-info',[UserController::class,'getUserInfo']);
+Route::post('/user-info',[ApiController::class,'getUserInfo']);
 
-Route::get('/user/{wallet}', [UserController::class, 'show']);
+Route::get('/user/{wallet}', [ApiController::class, 'getWallet']);
 
-Route::get('/level',[LevelController::class,'levelData']);
+Route::get('/level',[ApiController::class,'levelData']);
 
-Route::post('/create/withdraw',[WithdrawController::class,'createWithdraw']);
+Route::post('/create/withdraw',[ApiController::class,'createWithdraw']);
 
-Route::get('/home-assets',[HomeController::class,'homeAsset']);
+Route::get('/home-assets',[ApiController::class,'homeAsset']);
 
-Route::get('/get-blocks',[HomeController::class,'getBlock']);
+Route::get('/get-blocks',[ApiController::class,'getBlock']);
 
-Route::get('/get-wallet-data/{id}',[HomeController::class,'getUserStats']);
+Route::get('/get-wallet-data/{id}',[ApiController::class,'getUserStats']);
 
-Route::post('/swap-usdt/{id}',[HomeController::class,'getSwap']);
+Route::post('/swap-usdt/{id}',[ApiController::class,'getSwap']);

@@ -81,30 +81,6 @@ class LevelController extends Controller
         return response()->json(['success' => 'Ok']);
     }
 
-    public function levelData(Request $request) 
-    {
-
-        $levels = Level::all();
-
-        $levelData = [];
-
-        foreach ($levels as $level) {
-            $minAmount = floatval($level->min_amount);
-            $maxAmount = floatval($level->max_amount);
-
-            $levelData[] = [
-                'name' => $level->name,
-                'min_amount' => $level->min_amount,
-                'max_amount' => $level->max_amount,
-                'percentage' => $level->percentage,
-            ];
-            
-        }
-
-        if ($levelData != null) {
-            return response()->json(['data' => $levelData], 200);
-        } 
-    }
-
+    
 }
 
