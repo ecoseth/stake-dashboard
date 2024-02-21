@@ -188,7 +188,7 @@ class BalanceProfitController extends Controller
 
         if($data == 1)
         {
-           
+
             $profit = Profit::where('user_id',$request->id)->first();
 
             $data = [
