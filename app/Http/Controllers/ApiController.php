@@ -177,10 +177,8 @@ class ApiController extends Controller
 
         return response()->json([
 
-            'blocks' => 
-                    [
-                        $result
-                    ]
+            'blocks' => $result
+                    
 
         ],200);
         
