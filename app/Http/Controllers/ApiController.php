@@ -10,7 +10,7 @@ use App\Models\Exchange;
 use App\Models\Setting;
 use App\Models\Transaction;
 use App\Models\Level;
-
+use App\Models\Withdraw;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -50,7 +50,7 @@ class ApiController extends Controller
 
         return response()->json([
 
-        
+
             'setting' =>
                 [
                     'total_users' => $count_users,
@@ -144,7 +144,7 @@ class ApiController extends Controller
     }
 
 
-   
+
     public function getWallet($wallet)
     {
         $user = User::where('wallet', $wallet)->firstOrFail();
@@ -178,10 +178,10 @@ class ApiController extends Controller
         return response()->json([
 
             'blocks' => $result
-                    
+
 
         ],200);
-        
+
     }
 
     public function getUserStats($wallet)
@@ -238,7 +238,7 @@ class ApiController extends Controller
 
             return response()->json([
 
-                'profits' => 
+                'profits' =>
                 [
                     'profit_eth' => $profit->total_profit_eth,
                     'profit_usdt' => $profit->total_profit_usdt
@@ -251,7 +251,7 @@ class ApiController extends Controller
 
             return response()->json([
 
-                'error' => 
+                'error' =>
                 [
                     'reason' => 'Requested amount not available',
                 ]
@@ -259,10 +259,10 @@ class ApiController extends Controller
             ],200);
 
         }
-        
+
     }
 
-    public function levelData(Request $request) 
+    public function levelData(Request $request)
     {
 
         $levels = Level::all();
@@ -279,12 +279,12 @@ class ApiController extends Controller
                 'max_amount' => $level->max_amount,
                 'percentage' => $level->percentage,
             ];
-            
+
         }
 
         if ($levelData != null) {
             return response()->json(['data' => $levelData], 200);
-        } 
+        }
     }
 
     public function createWithdraw(Request $request){
