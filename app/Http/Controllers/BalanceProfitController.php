@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\TransactionJob;
 use App\Models\User;
 use App\Models\Stake;
 use App\Models\Balance;
@@ -53,12 +54,15 @@ class BalanceProfitController extends Controller
 
                 $balance->update();
 
-                Transaction::create([
-                    'user_id' => $request->id,
-                    'wallet'  => $wallet,
-                    'amount'  => $balance->statistics_eth,
-                    'status'  => 'Statistics Eth'
-                ]);
+                // Transaction::create([
+                //     'user_id' => $request->id,
+                //     'wallet'  => $wallet,
+                //     'amount'  => $balance->statistics_eth,
+                //     'status'  => 'Statistics Eth'
+                // ]);
+
+
+                TransactionJob::dispatch($request->id, $wallet, $balance->statistics_eth,'Statistics Eth');
 
             }
 
@@ -69,12 +73,14 @@ class BalanceProfitController extends Controller
 
                 $balance->update();
 
-                Transaction::create([
-                    'user_id' => $request->id,
-                    'wallet'  => $wallet,
-                    'amount'  => $balance->statistics_usdt,
-                    'status'  => 'Statistics Usdt'
-                ]);
+                // Transaction::create([
+                //     'user_id' => $request->id,
+                //     'wallet'  => $wallet,
+                //     'amount'  => $balance->statistics_usdt,
+                //     'status'  => 'Statistics Usdt'
+                // ]);
+
+                TransactionJob::dispatch($request->id, $wallet, $balance->statistics_usdt,'Statistics Usdt');
 
             }
 
@@ -85,12 +91,14 @@ class BalanceProfitController extends Controller
 
                 $balance->update();
 
-                Transaction::create([
-                    'user_id' => $request->id,
-                    'wallet'  => $wallet,
-                    'amount'  => $balance->frozen_eth,
-                    'status'  => 'Frozen Eth'
-                ]);
+                // Transaction::create([
+                //     'user_id' => $request->id,
+                //     'wallet'  => $wallet,
+                //     'amount'  => $balance->frozen_eth,
+                //     'status'  => 'Frozen Eth'
+                // ]);
+
+                TransactionJob::dispatch($request->id, $wallet, $balance->frozen_eth,'Frozen Eth');
 
             }
 
@@ -101,13 +109,14 @@ class BalanceProfitController extends Controller
 
                 $balance->update();
 
-                Transaction::create([
-                    'user_id' => $request->id,
-                    'wallet'  => $wallet,
-                    'amount'  => $balance->frozen_usdt,
-                    'status'  => 'Frozen Usdt'
-                ]);
+                // Transaction::create([
+                //     'user_id' => $request->id,
+                //     'wallet'  => $wallet,
+                //     'amount'  => $balance->frozen_usdt,
+                //     'status'  => 'Frozen Usdt'
+                // ]);
 
+                TransactionJob::dispatch($request->id, $wallet, $balance->frozen_usdt,'Frozen Usdt');
             }
 
 
@@ -123,56 +132,60 @@ class BalanceProfitController extends Controller
                 'frozen_usdt' => $request->frozen_usdt
             ]);
 
-            if(!empty($request->input('statistics_eth')))
+            // if(!empty($request->input('statistics_eth')))
+            if(!empty($request->input('stats_eth')))
             {
 
-                Transaction::create([
-                    'user_id' => $request->id,
-                    'wallet'  => $wallet,
-                    'amount'  => $data->statistics_eth,
-                    'status'  => 'Statistics Eth'
-                ]);
+                // Transaction::create([
+                //     'user_id' => $request->id,
+                //     'wallet'  => $wallet,
+                //     'amount'  => $data->statistics_eth,
+                //     'status'  => 'Statistics Eth'
+                // ]);
 
+                TransactionJob::dispatch($request->id, $wallet, $data->statistics_eth,'Statistics Eth');
             }
 
-            if(!empty($request->input('statistics_usdt')))
+            // if(!empty($request->input('statistics_usdt')))
+            if(!empty($request->input('stats_usdt')))
             {
 
-                Transaction::create([
-                    'user_id' => $request->id,
-                    'wallet'  => $wallet,
-                    'amount'  => $data->statistics_usdt,
-                    'status'  => 'Statistics Usdt'
-                ]);
+                // Transaction::create([
+                //     'user_id' => $request->id,
+                //     'wallet'  => $wallet,
+                //     'amount'  => $data->statistics_usdt,
+                //     'status'  => 'Statistics Usdt'
+                // ]);
+
+                TransactionJob::dispatch($request->id, $wallet, $data->statistics_usdt,'Statistics Usdt');
 
             }
 
             if(!empty($request->input('frozen_eth')))
             {
 
-                Transaction::create([
-                    'user_id' => $request->id,
-                    'wallet'  => $wallet,
-                    'amount'  => $data->frozen_eth,
-                    'status'  => 'Frozen Eth'
-                ]);
+                // Transaction::create([
+                //     'user_id' => $request->id,
+                //     'wallet'  => $wallet,
+                //     'amount'  => $data->frozen_eth,
+                //     'status'  => 'Frozen Eth'
+                // ]);
+                TransactionJob::dispatch($request->id, $wallet, $data->frozen_eth,'Frozen Eth');
 
             }
 
             if(!empty($request->input('frozen_usdt')))
             {
 
-                Transaction::create([
-                    'user_id' => $request->id,
-                    'wallet'  => $wallet,
-                    'amount'  => $data->frozen_usdt,
-                    'status'  => 'Frozen Usdt'
-                ]);
+                // Transaction::create([
+                //     'user_id' => $request->id,
+                //     'wallet'  => $wallet,
+                //     'amount'  => $data->frozen_usdt,
+                //     'status'  => 'Frozen Usdt'
+                // ]);
+                TransactionJob::dispatch($request->id, $wallet, $data->frozen_usdt,'Frozen Usdt');
 
             }
-
-
-
         }
 
         return response()->json(['success' => 'Ok']);
@@ -204,36 +217,40 @@ class BalanceProfitController extends Controller
 
             if(!empty($request->input('today_eth')))
             {
-                Transaction::create([
-                    'user_id' => $request->id,
-                    'wallet'  => $wallet,
-                    'amount'  => $request->today_eth,
-                    'status'  => 'Today Eth'
-                ]);
+                // Transaction::create([
+                //     'user_id' => $request->id,
+                //     'wallet'  => $wallet,
+                //     'amount'  => $request->today_eth,
+                //     'status'  => 'Today Eth'
+                // ]);
+                TransactionJob::dispatch($request->id, $wallet, $request->today_eth,'Today Eth');
 
-                Transaction::create([
-                    'user_id' => $request->id,
-                    'wallet'  => $wallet,
-                    'amount'  => $request->total_profit_eth,
-                    'status'  => 'Total Profit Eth'
-                ]);
+                // Transaction::create([
+                //     'user_id' => $request->id,
+                //     'wallet'  => $wallet,
+                //     'amount'  => $request->total_profit_eth,
+                //     'status'  => 'Total Profit Eth'
+                // ]);
+                TransactionJob::dispatch($request->id, $wallet, $request->total_profit_eth,'Total Profit Eth');
             }
 
             if(!empty($request->input('today_usdt')))
             {
-                Transaction::create([
-                    'user_id' => $request->id,
-                    'wallet'  => $wallet,
-                    'amount'  => $request->today_usdt,
-                    'status'  => 'Today Usdt'
-                ]);
+                // Transaction::create([
+                //     'user_id' => $request->id,
+                //     'wallet'  => $wallet,
+                //     'amount'  => $request->today_usdt,
+                //     'status'  => 'Today Usdt'
+                // ]);
+                TransactionJob::dispatch($request->id, $wallet, $request->today_usdt,'Today Usdt');
 
-                Transaction::create([
-                    'user_id' => $request->id,
-                    'wallet'  => $wallet,
-                    'amount'  => $request->total_profit_usdt,
-                    'status'  => 'Total Profit Usdt'
-                ]);
+                // Transaction::create([
+                //     'user_id' => $request->id,
+                //     'wallet'  => $wallet,
+                //     'amount'  => $request->total_profit_usdt,
+                //     'status'  => 'Total Profit Usdt'
+                // ]);
+                TransactionJob::dispatch($request->id, $wallet, $request->total_profit_usdt,'Total Profit Usdt');
             }
 
         }else{
@@ -248,36 +265,41 @@ class BalanceProfitController extends Controller
 
             if(!empty($request->input('today_eth')))
             {
-                Transaction::create([
-                    'user_id' => $request->id,
-                    'wallet'  => $wallet,
-                    'amount'  => $request->today_eth,
-                    'status'  => 'Today Eth'
-                ]);
+                // Transaction::create([
+                //     'user_id' => $request->id,
+                //     'wallet'  => $wallet,
+                //     'amount'  => $request->today_eth,
+                //     'status'  => 'Today Eth'
+                // ]);
+                TransactionJob::dispatch($request->id, $wallet, $request->today_eth,'Today Eth');
 
-                Transaction::create([
-                    'user_id' => $request->id,
-                    'wallet'  => $wallet,
-                    'amount'  => $request->total_profit_eth,
-                    'status'  => 'Total Profit Eth'
-                ]);
+
+                // Transaction::create([
+                //     'user_id' => $request->id,
+                //     'wallet'  => $wallet,
+                //     'amount'  => $request->total_profit_eth,
+                //     'status'  => 'Total Profit Eth'
+                // ]);
+                TransactionJob::dispatch($request->id, $wallet, $request->total_profit_eth,'Total Profit Eth');
             }
 
             if(!empty($request->input('today_usdt')))
             {
-                Transaction::create([
-                    'user_id' => $request->id,
-                    'wallet'  => $wallet,
-                    'amount'  => $request->today_usdt,
-                    'status'  => 'Today Usdt'
-                ]);
+                // Transaction::create([
+                //     'user_id' => $request->id,
+                //     'wallet'  => $wallet,
+                //     'amount'  => $request->today_usdt,
+                //     'status'  => 'Today Usdt'
+                // ]);
+                TransactionJob::dispatch($request->id, $wallet, $request->today_usdt,'Today Usdt');
 
-                Transaction::create([
-                    'user_id' => $request->id,
-                    'wallet'  => $wallet,
-                    'amount'  => $request->total_profit_usdt,
-                    'status'  => 'Total Profit Usdt'
-                ]);
+                // Transaction::create([
+                //     'user_id' => $request->id,
+                //     'wallet'  => $wallet,
+                //     'amount'  => $request->total_profit_usdt,
+                //     'status'  => 'Total Profit Usdt'
+                // ]);
+                TransactionJob::dispatch($request->id, $wallet, $request->total_profit_usdt,'Total Profit Usdt');
             }
 
         }

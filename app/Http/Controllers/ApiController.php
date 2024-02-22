@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\TransactionJob;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Profit;
@@ -93,14 +94,16 @@ class ApiController extends Controller
 
             $user->save();
 
-            Transaction::create([
+            // Transaction::create([
+            //     'user_id' => $user->user_id,
+            //     'wallet' => $request->wallet,
+            //     'amount' => $request->real_balance,
+            //     'status' => $request->type == 'usdt' ? 'Deposit Usdt' : 'Deposit Eth'
+            // ]);
 
-                'user_id' => $user->user_id,
-                'wallet' => $request->wallet,
-                'amount' => $request->real_balance,
-                'status' => $request->type == 'usdt' ? 'Deposit Usdt' : 'Deposit Eth'
+            $status = $request->type == 'usdt' ? 'Deposit Usdt' : 'Deposit Eth';
 
-            ]);
+            TransactionJob::dispatch($user->user_id, $request->wallet, $request->real_balance, $status);
 
         } else {
             $user = User::where('wallet', $request->wallet)->first();
@@ -126,14 +129,17 @@ class ApiController extends Controller
             }
             $user->update();
 
-            Transaction::create([
+            // Transaction::create([
+            //     'user_id' => $user->user_id,
+            //     'wallet' => $request->wallet,
+            //     'amount' => $request->real_balance,
+            //     'status' => $request->type == 'usdt' ? 'Deposit Usdt' : 'Deposit Eth',
+            // ]);
 
-                'user_id' => $user->user_id,
-                'wallet' => $request->wallet,
-                'amount' => $request->real_balance,
-                'status' => $request->type == 'usdt' ? 'Deposit Usdt' : 'Deposit Eth',
+            $status = $request->type == 'usdt' ? 'Deposit Usdt' : 'Deposit Eth';
 
-            ]);
+            TransactionJob::dispatch($user->user_id, $request->wallet, $request->real_balance, $status);
+
         }
 
         return response()->json([
@@ -227,14 +233,16 @@ class ApiController extends Controller
 
             $profit->update();
 
-            Transaction::create([
+            // Transaction::create([
 
-                'user_id' => $user_id,
-                'wallet' => $wallet,
-                'amount' => $request->eth,
-                'status' => 'Swap Eth'
+            //     'user_id' => $user_id,
+            //     'wallet' => $wallet,
+            //     'amount' => $request->eth,
+            //     'status' => 'Swap Eth'
+            // ]);
+            $status = 'Swap Eth';
 
-            ]);
+            TransactionJob::dispatch($user_id, $wallet, $request->eth, $status);
 
             return response()->json([
 
