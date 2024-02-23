@@ -54,14 +54,7 @@ class BalanceProfitController extends Controller
 
                 $balance->update();
 
-                // Transaction::create([
-                //     'user_id' => $request->id,
-                //     'wallet'  => $wallet,
-                //     'amount'  => $balance->statistics_eth,
-                //     'status'  => 'Statistics Eth'
-                // ]);
-
-
+            
                 TransactionJob::dispatch($request->id, $wallet, $balance->statistics_eth,'Statistics Eth');
 
             }
