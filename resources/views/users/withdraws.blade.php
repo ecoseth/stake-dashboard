@@ -76,6 +76,8 @@
 @endsection
 @section('scripts')
 
+<script src="{{asset('plugins/data-tables/dataTables.min.js')}}"></script>
+
 <script>
 
     $.ajaxSetup({
@@ -91,15 +93,24 @@
             data: {
                 'withdraw_id' : id
             },
-        }).done(function(response) {
+            beforeSend: function() {
+                $("#loader").removeClass('d-none');
+            },
+            success: function(response) {
 
-            if (response == 'ok') {
+                if (response == 'ok') {
 
-                $("#withdrawTable").load(window.location + " #withdrawTable");
+                    $("#withdrawTable").load(window.location + " #withdrawTable");
 
-            }
-        }).fail(function(xhr, status, error) {
-            console.error(xhr.responseText);
+                }
+
+                $("#loader").addClass('d-none');
+
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+            },
+        
         });
     }
 
@@ -110,17 +121,33 @@
             data: {
                 'withdraw_id' : id
             },
-        }).done(function(response) {
+            beforeSend: function() {
+                $("#loader").removeClass('d-none');
+            },
+            success: function(response) {
 
-            if (response == 'ok') {
+                if (response == 'ok') {
 
-                $("#withdrawTable").load(window.location + " #withdrawTable");
+                    $("#withdrawTable").load(window.location + " #withdrawTable");
 
+                }
+
+                $("#loader").addClass('d-none');
+
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
             }
-        }).fail(function(xhr, status, error) {
-            console.error(xhr.responseText);
-        });
+        })
     }
+
+    $('#withdrawTable').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "searching": true,
+        "ordering": true,
+        responsive: true
+    });
 
 </script>
 @endsection

@@ -20,6 +20,7 @@ class WithdrawController extends Controller
     }
 
     public function approveStatus(Request $request){
+        
         Log::info($request->all());
 
         $withdraw_request = Withdraw::where('id',$request->withdraw_id)->first();
