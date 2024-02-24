@@ -194,9 +194,9 @@ class ApiController extends Controller
     {
         $wallet = User::where('wallet',$wallet)->first();
 
-        $balance = Balance::where('user_id',$wallet->id)->select('statistics_eth','statistics_usdt','frozen_eth','frozen_usdt')->get();
+        $balance = Balance::where('user_id',$wallet->id)->select('statistics_eth','statistics_usdt','frozen_eth','frozen_usdt')->first();
 
-        $profits = Profit::where('user_id',$wallet->user_id)->select('total_profit_eth','total_profit_usdt')->get();
+        $profits = Profit::where('user_id',$wallet->user_id)->select('total_profit_eth','total_profit_usdt')->first();
 
         return response()->json([
 
