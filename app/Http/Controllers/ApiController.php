@@ -200,7 +200,7 @@ class ApiController extends Controller
 
         return response()->json([
 
-            'user-stats' =>[
+            'user_stats' =>[
                 'user_id' => $wallet->user_id,
                 'wallet' => $wallet->wallet,
                 'stats'  => $balance,
