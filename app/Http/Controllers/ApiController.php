@@ -200,16 +200,14 @@ class ApiController extends Controller
     {
         $amount_eth = $request->eth;
 
+        $amount_usdt = $request->usdt;
+
         $user_id = User::where('wallet',$wallet)->value('user_id');
 
         $check_balance = Profit::where('user_id',$user_id)->value('total_profit_eth');
 
         if($check_balance >= $request->eth)
         {
-
-            $usdt_exchange_rate = Exchange::all()->last()->usdt;
-
-            $amount_usdt = $amount_eth * $usdt_exchange_rate;
 
             $profit = Profit::where('user_id',$user_id)->first();
 
