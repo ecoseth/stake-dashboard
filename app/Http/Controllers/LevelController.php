@@ -23,7 +23,8 @@ class LevelController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:levels',
+            'type' => 'required',
+            'name' => 'required',
             'min_amount' => 'required',
             'max_amount' => 'required',
             'percentage' => 'required'
@@ -36,6 +37,7 @@ class LevelController extends Controller
         }
 
         Level::create([
+            'type' => $request->type,
             'name' => $request->name,
             'min_amount' => $request->min_amount,
             'max_amount' => $request->max_amount,
@@ -52,7 +54,6 @@ class LevelController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-
             'min_amount' => 'required',
             'max_amount' => 'required',
             'percentage' => 'required'

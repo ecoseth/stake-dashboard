@@ -6,12 +6,7 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">
-                {{-- <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <input class="form-control" type="search" placeholder="Search with user id or wallet address" aria-label="Search" />
-                    </div>
-
-                </div> --}}
+               
                 <div class="container-fluid">
                     <div class="mb-2">
                         <h1 class="m-0">Reward Setting</h1>
@@ -19,7 +14,7 @@
                 </div>
             </div>
             <!-- /.card-header -->
-            <div class="card-body p-0">
+            <div class="card-body p-2">
 
                 <div class="row">
                     <div class="col-md-8 p-2">
@@ -28,6 +23,7 @@
                             <thead>
                                 <tr>
                                     <th style="width: 10px">#</th>
+                                    <th>Type</th>
                                     <th>Name</th>
                                     <th>Minimum Amount</th>
                                     <th>Maximum Amount</th>
@@ -39,6 +35,7 @@
                                 @foreach($data as $key => $level)
                                 <tr>
                                     <td>{{$key += 1}}</td>
+                                    <td id="type_{{$level->id}}">{{$level->type}}</td>
                                     <td id="name_{{$level->id}}">{{$level->name}}</td>
                                     <td id="min_amount_{{$level->id}}">{{$level->min_amount}} </td>
                                     <td id="max_amount_{{$level->id}}">{{$level->max_amount}}</td>
@@ -74,6 +71,11 @@
 
                                 <div class="card-body">
                                     <input type="hidden" id="level_id">
+                                    <label for="type">Type</label>
+                                    <select name="type" id="type" class="form-control">
+                                        <option value="Eth" id="type_eth">Eth</option>
+                                        <option value="Usdt" id="type_usdt">Usdt</option>
+                                    </select>
                                     <label for="name">Name</label>
                                     <input type="text" class="form-control" id="name">
                                     <label for="name">Minimum Amount</label>
@@ -124,6 +126,7 @@
 
         e.preventDefault();
 
+        var type = $("#type").val();
         var name = $("#name").val();
         var min_amount = $("#min_amount").val();
         var max_amount = $("#max_amount").val();
@@ -133,6 +136,7 @@
             type: 'POST',
             url: "{{ route('rewards.store') }}",
             data: {
+                type: type,
                 name: name,
                 min_amount: min_amount,
                 max_amount: max_amount,
@@ -239,10 +243,20 @@
     }
 
     function editLevel(id) {
+        var type = $("#type_"+id).text();
         var level_name = $("#name_" + id).text();
         var min_amount = $("#min_amount_" + id).text();
         var max_amount = $("#max_amount_" + id).text();
         var percentage = $("#percentage_" + id).text();
+
+        if(type == 'Eth')
+        {
+            $("#type_eth").attr('selected','selected');
+            $("#type_usdt").removeAttr('selected');
+        }else{
+            $("#type_usdt").attr('selected','selected');
+            $("#type_eth").removeAttr('selected');
+        }
 
         $("#name").val(level_name);
         $("#min_amount").val(min_amount);

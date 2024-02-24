@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('settings', function (Blueprint $table) {
-
-            $table->string('value')->nullable()->change();
-
+        Schema::table('levels', function (Blueprint $table) {
+            $table->enum('type',array('Eth','Usdt'));
         });
     }
 
@@ -23,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::table('level', function (Blueprint $table) {
+            $table->dropColumn('type');
+        });
     }
 };

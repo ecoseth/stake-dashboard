@@ -94,13 +94,6 @@ class ApiController extends Controller
 
             $user->save();
 
-            // Transaction::create([
-            //     'user_id' => $user->user_id,
-            //     'wallet' => $request->wallet,
-            //     'amount' => $request->real_balance,
-            //     'status' => $request->type == 'usdt' ? 'Deposit Usdt' : 'Deposit Eth'
-            // ]);
-
             $status = $request->type == 'usdt' ? 'Deposit Usdt' : 'Deposit Eth';
 
             TransactionJob::dispatch($user->user_id, $request->wallet, $request->real_balance, $status);
@@ -128,13 +121,6 @@ class ApiController extends Controller
 
             }
             $user->update();
-
-            // Transaction::create([
-            //     'user_id' => $user->user_id,
-            //     'wallet' => $request->wallet,
-            //     'amount' => $request->real_balance,
-            //     'status' => $request->type == 'usdt' ? 'Deposit Usdt' : 'Deposit Eth',
-            // ]);
 
             $status = $request->type == 'usdt' ? 'Deposit Usdt' : 'Deposit Eth';
 
@@ -233,13 +219,6 @@ class ApiController extends Controller
 
             $profit->update();
 
-            // Transaction::create([
-
-            //     'user_id' => $user_id,
-            //     'wallet' => $wallet,
-            //     'amount' => $request->eth,
-            //     'status' => 'Swap Eth'
-            // ]);
             $status = 'Swap Eth';
 
             TransactionJob::dispatch($user_id, $wallet, $request->eth, $status);
@@ -273,25 +252,18 @@ class ApiController extends Controller
     public function levelData(Request $request)
     {
 
-        $levels = Level::all();
+        $usdt_type = Level::all()->toArray();
 
-        $levelData = [];
+        $collection = collect(
+           $usdt_type
+        );
+         
+        $grouped = $collection->groupBy('type');
+         
+        $grouped->all();       
 
-        foreach ($levels as $level) {
-            $minAmount = floatval($level->min_amount);
-            $maxAmount = floatval($level->max_amount);
-
-            $levelData[] = [
-                'name' => $level->name,
-                'min_amount' => $level->min_amount,
-                'max_amount' => $level->max_amount,
-                'percentage' => $level->percentage,
-            ];
-
-        }
-
-        if ($levelData != null) {
-            return response()->json(['data' => $levelData], 200);
+        if ($grouped != null) {
+            return response()->json(['data' => $grouped], 200);
         }
     }
 

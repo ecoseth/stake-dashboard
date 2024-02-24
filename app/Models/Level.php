@@ -11,6 +11,7 @@ class Level extends Model
 
     protected $fillable = [
        'id',
+       'type',
        'name',
        'min_amount',
        'max_amount',
