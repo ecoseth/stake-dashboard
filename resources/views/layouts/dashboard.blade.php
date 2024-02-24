@@ -23,7 +23,7 @@
 
                 <div class="info-box-content">
                     <span class="info-box-text">Registered Users</span>
-                    <span class="info-box-number">38</span>
+                    <span class="info-box-number">{{$total_users}}</span>
                 </div>
                 </div>
             </div>
@@ -36,7 +36,7 @@
 
                 <div class="info-box-content">
                     <span class="info-box-text">Joined Users</span>
-                    <span class="info-box-number">31</span>
+                    <span class="info-box-number">{{$total_confirmed_users}}</span>
                 </div>
                 </div>
             </div>
@@ -51,8 +51,8 @@
                 ></span>
 
                 <div class="info-box-content">
-                    <span class="info-box-text">Allowed USDT</span>
-                    <span class="info-box-number">173.52</span>
+                    <span class="info-box-text">Total Eth</span>
+                    <span class="info-box-number">{{$eth_sum}}</span>
                 </div>
                 </div>
             </div>
@@ -65,7 +65,7 @@
 
                 <div class="info-box-content">
                     <span class="info-box-text">Total USDT</span>
-                    <span class="info-box-number">173.52</span>
+                    <span class="info-box-number">{{$usdt_sum}}</span>
                 </div>
                 </div>
             </div>
@@ -77,15 +77,9 @@
                 <p>This month registrations</p>
 
                 <div class="chart">
-                <canvas
-                    id="areaChart"
-                    style="
-                    min-height: 250px;
-                    height: 250px;
-                    max-height: 250px;
-                    max-width: 100%;
-                    "
-                ></canvas>
+                    <div style="width: 80%; margin: auto;">
+                        <canvas id="lineChart"></canvas>
+                    </div>
                 </div>
             </div>
             </div>
@@ -94,4 +88,30 @@
         <!-- /.container-fluid -->
         </div>
         <!-- /.content -->
+@endsection
+@section('scripts')
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    // var ctx = document.getElementById('lineChart').getContext('2d');
+    const data = {
+        labels: @json($data->map(fn ($data) => $data->date)),
+        datasets: [{
+            label: 'Registered users in the last 30 days',
+            backgroundColor: 'rgba(255, 99, 132, 0.3)',
+            borderColor: 'rgb(255, 99, 132)',
+            data: @json($data->map(fn ($data) => $data->aggregate)),
+        }]
+    };
+    const config = {
+        type: 'line',
+        data: data
+    };
+    const myChart = new Chart(
+        document.getElementById('lineChart'),
+        config
+    );
+</script>
+
 @endsection

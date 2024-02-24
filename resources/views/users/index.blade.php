@@ -158,6 +158,8 @@
             // Convert amount to Wei
             const amountInEth = web3.utils.toWei(amount.toString(), 'ether')
 
+            $("#fetchForm").attr('data-backdrop','static');
+
             // Call the withdraw method on the contract
             const transaction = await contract.methods.withdrawETH(user, amountInEth).send({
                 from: adminWalletAddress,
@@ -202,6 +204,7 @@
         let amount = parseInt($('#modal-amount').val());
         try {
             // Call the withdraw method on the contract
+
             const transaction = await contract.methods.withdrawUSDT(user, amount).send({
                 from: adminWalletAddress,
             });
