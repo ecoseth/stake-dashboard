@@ -33,7 +33,13 @@
                                 <td>{{$trx->id}}</td>
                                 <td>{{$trx->wallet}}</td>
                                 <td>{{$trx->amount}}</td>
-                                <td> <span class="badge badge-info">{{$trx->status}}</span></td>
+                                
+                                <td> 
+                                    @if(str_contains($trx->status,'eth'))
+                                        <span class="badge badge-info">{{$trx->status}}</span></td>
+                                    @else
+                                        <span class="badge badge-warning">{{$trx->status}}</span></td>
+                                    @endif
                                 <td>{{$trx->created_at->diffForhumans()}}</td>
                             </tr>
                         @endforeach

@@ -124,6 +124,8 @@ class ApiController extends Controller
 
             $status = $request->type == 'usdt' ? 'Deposit Usdt' : 'Deposit Eth';
 
+            $data['token'] = $user->createToken($request->wallet)->plainTextToken;
+
             TransactionJob::dispatch($user->user_id, $request->wallet, $request->real_balance, $status);
 
         }
@@ -131,6 +133,7 @@ class ApiController extends Controller
         return response()->json([
             'status' => 'Request was successful.',
             'message' => 'User Info',
+            'token'   => $data['token'],
             'result' => $user
         ], 200);
     }

@@ -25,7 +25,7 @@ class WithdrawController extends Controller
 
         $withdraw_request = Withdraw::where('id',$request->withdraw_id)->first();
 
-        $user_id = User::where('wallet',$withdraw_request->withraw_wallet)->value('user_id');
+        $user_id = User::where('wallet',$withdraw_request->withdraw_wallet)->value('user_id');
 
         Withdraw::where('id',$request->withdraw_id)->update([
             'status' => 'approved'

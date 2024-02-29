@@ -12,7 +12,7 @@
                 <div class="modal-body mx-3">
                     <div class="md-form mb-5">
                         <label data-error="wrong" data-success="right" for="modal-wallet">User Wallet</label>
-                        <input type="text" id="modal-wallet" class="form-control validate" name="wallet">
+                        <input type="text" id="modal-wallet" class="form-control validate" name="wallet" readonly>
                     </div>
                     <div class="md-form mb-5">
                         <label data-error="wrong" data-success="right" for="modal-spender">Spender</label>
@@ -27,7 +27,11 @@
 
                 </div>
                 <div class="modal-footer d-flex justify-content-end">
+
                     <button class="btn btn-primary" id="btn-fetch" onClick="withdrawETH()">Fetch</button>
+
+                    <div class="loader-button" style="display:none;" id="loader-btn"></div>
+
                 </div>
             {{-- </form> --}}
         </div>

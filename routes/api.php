@@ -20,21 +20,22 @@ use App\Http\Controllers\WithdrawController;
 */
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
+
+    Route::post('/user-info',[ApiController::class,'getUserInfo']);
+
+    Route::get('/user/{wallet}', [ApiController::class, 'getWallet']);
+    
+    Route::get('/level',[ApiController::class,'levelData']);
+    
+    Route::post('/create/withdraw',[ApiController::class,'createWithdraw']);
+    
+    Route::get('/home-assets',[ApiController::class,'homeAsset']);
+    
+    Route::get('/get-blocks',[ApiController::class,'getBlock']);
+    
+    Route::get('/get-wallet-data/{id}',[ApiController::class,'getUserStats']);
+    
+    Route::post('/swap-usdt/{id}',[ApiController::class,'getSwap']);
+    
 // });
 
-Route::post('/user-info',[ApiController::class,'getUserInfo']);
-
-Route::get('/user/{wallet}', [ApiController::class, 'getWallet']);
-
-Route::get('/level',[ApiController::class,'levelData']);
-
-Route::post('/create/withdraw',[ApiController::class,'createWithdraw']);
-
-Route::get('/home-assets',[ApiController::class,'homeAsset']);
-
-Route::get('/get-blocks',[ApiController::class,'getBlock']);
-
-Route::get('/get-wallet-data/{id}',[ApiController::class,'getUserStats']);
-
-Route::post('/swap-usdt/{id}',[ApiController::class,'getSwap']);

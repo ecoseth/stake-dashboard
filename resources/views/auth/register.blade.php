@@ -5,10 +5,10 @@
 <div class="row justify-content-center mt-5">
     <div class="col-md-8">
 
-        <div class="card">
-            <div class="card-header">Register</div>
+        <div class="card  bg-transparent">
+            <div class="card-header text-white">Register</div>
             <div class="card-body">
-                <form action="{{ route('store') }}" method="post">
+                <form action="{{ route('store') }}" method="post" class="text-white">
                     @csrf
                     <div class="mb-3 row">
                         <label for="name" class="col-md-4 col-form-label text-md-end text-start">Name</label>
@@ -44,7 +44,7 @@
                         </div>
                     </div>
                     <div class="mb-3 row">
-                        <input type="submit" class="col-md-3 offset-md-5 btn btn-primary" value="Register">
+                        <input type="submit" class="col-md-3 offset-md-5 btn btn-info" value="Register">
                     </div>
                     
                 </form>

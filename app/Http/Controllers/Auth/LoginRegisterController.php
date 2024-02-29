@@ -64,6 +64,8 @@ class LoginRegisterController extends Controller
             'password' => 'required'
         ]);
 
+        $this->middleware('throttle:5,1')->only('login');
+
         if(Auth::attempt($credentials))
         {
             $request->session()->regenerate();  
