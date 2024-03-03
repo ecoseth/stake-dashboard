@@ -17,7 +17,7 @@
             <div class="card-header">
             </div>
             <!-- /.card-header -->
-            <div class="card-body table-responsive p-0">
+            <div class="card-body table-responsive p-2">
                 <table class="table text-nowrap" id="withdrawTable">
                     <thead>
                         <tr>

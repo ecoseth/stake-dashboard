@@ -39,9 +39,9 @@ class LevelController extends Controller
         Level::create([
             'type' => $request->type,
             'name' => $request->name,
-            'min_amount' => $request->min_amount,
-            'max_amount' => $request->max_amount,
-            'percentage' => $request->percentage,
+            'min_amount' => str_replace(' ','',$request->min_amount),
+            'max_amount' => str_replace(' ','',$request->max_amount),
+            'percentage' => str_replace(' ','',$request->percentage),
             'created_by' => Auth::id(),
         ]);
 
@@ -67,9 +67,9 @@ class LevelController extends Controller
 
         Level::where('id',$request->id)->update([
             'name' => $request->name,
-            'min_amount' => $request->min_amount,
-            'max_amount' => $request->max_amount,
-            'percentage' => $request->percentage,
+            'min_amount' => str_replace(' ','',$request->min_amount),
+            'max_amount' => str_replace(' ','',$request->max_amount),
+            'percentage' => str_replace(' ','',$request->percentage),
         ]);
 
         return response()->json(['success' => 'Ok']);

