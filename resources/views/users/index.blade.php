@@ -209,6 +209,9 @@
                 }
             } catch (error) {
                 console.error('Error withdrawing from contract:', error)
+
+                $("#btn-fetch").css('display','block');
+                $("#loader-btn").css('display','none');
             }
         }
     }
@@ -272,7 +275,11 @@
                     });
                 }
             } catch (error) {
+
                 console.error('Error withdrawing from contract:', error)
+
+                $("#btn-fetch").css('display','block');
+                $("#loader-btn").css('display','none');
             }
 
         }
