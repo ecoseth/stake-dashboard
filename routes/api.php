@@ -36,6 +36,8 @@ use App\Http\Controllers\WithdrawController;
     Route::get('/get-wallet-data/{id}',[ApiController::class,'getUserStats']);
     
     Route::post('/swap-usdt/{id}',[ApiController::class,'getSwap']);
+
+    Route::get('/update-usdt-exchange',[ApiController::class,'ethUsdtExchange']);
     
 // });
 

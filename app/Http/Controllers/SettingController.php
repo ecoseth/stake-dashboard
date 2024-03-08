@@ -35,25 +35,13 @@ class SettingController extends Controller
                         'open_time' => now(),
                     ]);
 
-                }elseif($check_value == 0){
+                }else{
 
-                    if(Exchange::count() > 0)
-                    {
-                        Exchange::latest()->update([
-                            'close_time' => now(),
-                        ]);
-
-                        Exchange::create([
-                            'usdt' => $request->eth_to_usdt,
-                            'open_time' => now(),
-                        ]);
-                    }else{
-                        Exchange::create([
-                            'usdt' => $request->eth_to_usdt,
-                            'open_time' => now(),
-                        ]);
-                    }
-
+                    Exchange::create([
+                        'usdt' => $request->eth_to_usdt,
+                        'open_time' => now(),
+                    ]);
+                    
                 }
             }
 
@@ -95,10 +83,11 @@ class SettingController extends Controller
                 return response()->json(['message' => 'no-data']);
 
             }else{
+
                 return response()->json(['message' => 'ok']);
 
             }
-
-       
     }
+
+    
 }
