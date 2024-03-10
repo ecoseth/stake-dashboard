@@ -15,6 +15,8 @@ use App\Models\Withdraw;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Http;
+
 
 use Carbon;
 
@@ -307,6 +309,38 @@ class ApiController extends Controller
     public function unique_code($limit)
     {
         return substr(base_convert(sha1(uniqid(mt_rand())), 16, 36), 0, $limit);
+    }
+
+    public function ethUsdtExchange()
+    {
+
+        $response = Http::get('https://www.binance.com/api/v3/ticker/price?symbol=ETHUSDT');
+
+        $value = $response->json();
+
+        $eth_to_usdt = number_format((double)$value['price'], 2, '.', '');
+
+        $check_value = Exchange::count();
+
+        if($check_value == 1)
+        {
+            $exchange = Exchange::first();
+
+            Exchange::where('id',$exchange->id)->update([
+                'usdt' => $eth_to_usdt,
+                'open_time' => now(),
+            ]);
+
+        }else{
+
+            Exchange::create([
+                'usdt' => $eth_to_usdt,
+                'open_time' => now(),
+            ]);
+            
+        }
+        
+
     }
 
 }
