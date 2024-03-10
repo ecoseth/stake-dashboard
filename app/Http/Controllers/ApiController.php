@@ -56,10 +56,10 @@ class ApiController extends Controller
 
             'setting' =>
                 [
-                    'total_users' => $count_users,
-                    'total_revenues' => $total_revenues,
-                    'total_stakes' => $total_stakes,
-                    'total_nodes' => $total_nodes,
+                    'total_users' => '100 +',
+                    'total_revenues' => '178,89',
+                    'total_stakes' => '200,39',
+                    'total_nodes' => '200',
                     'service_fees' => $fees,
                     'usdt_exchange_rate' => $usdt_exchange_rate
                 ]
