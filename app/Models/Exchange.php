@@ -9,7 +9,7 @@ class Exchange extends Model
 {
     use HasFactory;
 
-    protected $table = 'Exchange';
+    protected $table = 'exchange';
 
     protected $fillable = [
         'usdt',
