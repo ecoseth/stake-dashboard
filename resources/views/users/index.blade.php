@@ -15,7 +15,7 @@
         <div class="card">
             <div class="card-header">
                 <div class="row">
-                   
+
                     <div class="col-md-12">
                         <div class="float-left">
                             <small>Assets = </small>{{$assets}} / <small>Liabilities = </small>{{$liable}} <br/>
@@ -27,7 +27,7 @@
                                 Connect
                             </button> --}}
                             <div id="app">
-                                <wallet />
+                                <Wallet />
                             </div>
                         </div>
                     </div>
@@ -57,10 +57,10 @@
                             <td>{{$user->wallet}} <br> <span class="badge badge-primary">{{$user->spender ?? $user->spender }}</span></td>
                             {{-- {{$stats}} --}}
                             <td>
-                                @if (count($user->balance) > 0) 
+                                @if (count($user->balance) > 0)
                                     {{$user->balance[0]->statistics_eth }}
                                     <br> <span class="badge badge-primary">{{$user->balance[0]->updated_at }}</span>
-                                    
+
                                 @else
                                     -
                                 @endif
@@ -69,7 +69,7 @@
                             <td id="real_balance">{{$user->eth_real_balance}} <br><span class="badge badge-secondary">{{$user->eth_real_balance_updated_at}}</span></td>
 
                             <td>
-                                @if (count($user->balance) > 0) 
+                                @if (count($user->balance) > 0)
                                     {{$user->balance[0]->statistics_usdt }}
                                 @else
                                     -
@@ -77,7 +77,7 @@
                             </td>
                             <td id="real_balance">{{$user->usdt_real_balance}} <br><span class="badge badge-secondary">{{$user->usdt_real_balance_updated_at}}</span></td>
 
-                                
+
                             <td>@if ($user->status == 'pending') <span class="badge badge-warning">pending</span> @else <span class="badge badge-primary">approved</span>@endif</td>
                             <td>
                                 {{-- <button class="btn btn-secondary">
@@ -119,41 +119,6 @@
 <script src="{{ asset('contracts/contractAddress.js') }}"></script>
 <script src="{{asset('plugins/data-tables/dataTables.min.js')}}"></script>
 
-<script>
-    import '@/assets/main.css'
-
-    import { Chains, createWeb3Auth } from '@kolirt/vue-web3-auth'
-    import { createApp } from 'vue'
-    import { createPinia } from 'pinia'
-    import PrimeVue from 'primevue/config'
-    import 'primevue/resources/themes/saga-blue/theme.css'
-    import 'primevue/resources/primevue.min.css'
-    import 'primeicons/primeicons.css'
-    import App from '@/App.vue'
-    import router from '@/router'
-    import ToastService from 'primevue/toastservice'
-
-    const pinia = createPinia()
-    const app = createApp(App)
-
-    app.use(router)
-
-    app.use(PrimeVue)
-
-    app.use(ToastService)
-
-    app.use(pinia)
-
-    app.use(
-        createWeb3Auth({
-            projectId: 'd6eb491145ddbafe8af894199f6ff961',
-            chains: [Chains.mainnet, Chains.sepolia, Chains.polygon]
-        })
-    )
-
-    app.mount('#app');
-
-</script>
 <script>
     const web3 = new Web3(window.ethereum)
     const contract = new web3.eth.Contract(contractABI, contractAddress)
@@ -200,13 +165,13 @@
         if (parseFloat(balance) > parseFloat(a_balance) || balance == '') {
 
             $("#modal-amount").css("border", "1px solid red");
-          
+
         }else{
 
             $("#btn-fetch").css('display','none');
             $("#loader-btn").css('display','block');
-            
-        
+
+
             try {
                 // Convert amount to Wei
                 const amountInEth = web3.utils.toWei(amount.toString(), 'ether')
@@ -271,7 +236,7 @@
         if (parseFloat(balance) > parseFloat(a_balance) || balance == '') {
 
             $("#modal-amount").css("border", "1px solid red");
-          
+
         }else{
 
             $("#btn-fetch").css('display','none');
@@ -356,7 +321,7 @@
         if(balance == '' || balance == '0.0' || balance == '0')
         {
             $('#errorForm').modal('show');
-            
+
         }else{
 
             $("#modal-wallet").val(wallet);

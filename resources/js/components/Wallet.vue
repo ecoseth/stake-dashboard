@@ -1,36 +1,100 @@
 <template>
-    <section class="flex justify-end items-center gap-2 mb-6">
+    <section>
         <template v-if="!account.address">
-            <Button class="btn-primary px-2 py-2 text-white" @click="connect()">
-                <div class="flex justify-center gap-3">
-                    <span class="text-xs">{{ loading.connecting ? 'Connecting...' : 'Wallet' }}</span>
-                    <i class="pi pi-wallet"></i>
+            <button class="btn btn-primary btn-sm" @click="connect()">
+                <div>
+                    <span>{{ loading.connecting ? 'Connecting...' : 'Wallet' }}</span>
                 </div>
-            </Button>
+            </button>
         </template>
 
         <template v-else>
-            <router-link :to="{ name: 'asset', params: { address: account.address } }">
-                <Button class="btn-primary px-2 py-2 text-white">
-                    <div class="flex justify-center gap-3">
-                        <span class="text-xs">{{ account.shortAddress }}</span>
-                        <i class="pi pi-wallet"></i>
-                    </div>
-                </Button>
-            </router-link>
-
-            <Button class="btn-primary px-2 py-2 text-white" @click="selectChain">
-                <div class="flex justify-center gap-3">
-                    <span class="text-xs">Switch Network</span>
+            <button class="btn btn-success btn-sm" disabled>
+                <div>
+                    <span>{{ account.shortAddress }}</span>
                 </div>
-            </Button>
+            </button>
 
-            <Button class="btn-primary px-2 py-2 text-white" @click="disconnect">
-                <div class="flex justify-center gap-3">
-                    <span class="text-xs">{{ loading.logouting ? 'Disconnect...' : 'Disconnect' }}</span>
+            <button class="btn btn-primary btn-sm mx-1" @click="selectChain">
+                <div>
+                    <span>Switch Network</span>
                 </div>
-            </Button>
+            </button>
+
+            <button class="btn btn-danger btn-sm" @click="disconnect">
+                <div>
+                    <span>{{ loading.logouting ? 'Disconnect...' : 'Disconnect' }}</span>
+                </div>
+            </button>
         </template>
 
     </section>
 </template>
+
+<script setup>
+import { ref, onMounted, watch, reactive } from 'vue'
+import {
+    $off,
+    $on,
+    Events,
+    account,
+    chain,
+    getAvailableChains,
+    connect as masterConnect,
+    disconnect as masterDisconnect,
+    switchChain as masterSwitchChain,
+    selectChain
+} from '@kolirt/vue-web3-auth'
+
+const loading = reactive({
+    connecting: false,
+    connectingTo: {},
+    switchingTo: {},
+    logouting: false
+})
+
+
+// Wallet Connect
+const connect = async (chain) => {
+    const handler = (state) => {
+        if (!state) {
+            if (chain) {
+                loading.connectingTo[chain.id] = false
+            } else {
+                loading.connecting = false
+            }
+
+            $off(Events.ModalStateChanged, handler)
+        }
+    }
+
+    $on(Events.ModalStateChanged, handler)
+
+    if (chain) {
+        loading.connectingTo[chain.id] = true
+    } else {
+        loading.connecting = true
+    }
+
+    await masterConnect(chain)
+}
+
+// Wallet Disconnect
+const disconnect = async () => {
+    loading.logouting = true
+
+    const handler = () => {
+        loading.logouting = false
+        $off(Events.Disconnected, handler)
+    }
+
+    $on(Events.Disconnected, handler)
+
+    await masterDisconnect().catch(() => {
+        loading.logouting = false
+        $off(Events.Disconnected, handler)
+    })
+}
+</script>
+
+<style lang="scss" scoped></style>
