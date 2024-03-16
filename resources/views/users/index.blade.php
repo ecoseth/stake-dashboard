@@ -15,7 +15,7 @@
         <div class="card">
             <div class="card-header">
                 <div class="row">
-                   
+
                     <div class="col-md-12">
                         <div class="float-left">
                             <small>Assets = </small>{{$assets}} / <small>Liabilities = </small>{{$liable}} <br/>
@@ -23,9 +23,12 @@
                         </div>
                         <div class="float-right">
                             {{-- <small>Connected Wallet:</small> --}}
-                            <button id="connectButton" type="button" class="btn btn-primary" onClick="connectWallet()">
+                            {{-- <button id="connectButton" type="button" class="btn btn-primary" onClick="connectWallet()">
                                 Connect
-                            </button>
+                            </button> --}}
+                            <div id="app">
+                                <Wallet />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -54,10 +57,10 @@
                             <td>{{$user->wallet}} <br> <span class="badge badge-primary">{{$user->spender ?? $user->spender }}</span></td>
                             {{-- {{$stats}} --}}
                             <td>
-                                @if (count($user->balance) > 0) 
+                                @if (count($user->balance) > 0)
                                     {{$user->balance[0]->statistics_eth }}
                                     <br> <span class="badge badge-primary">{{$user->balance[0]->updated_at }}</span>
-                                    
+
                                 @else
                                     -
                                 @endif
@@ -66,7 +69,7 @@
                             <td id="real_balance">{{$user->eth_real_balance}} <br><span class="badge badge-secondary">{{$user->eth_real_balance_updated_at}}</span></td>
 
                             <td>
-                                @if (count($user->balance) > 0) 
+                                @if (count($user->balance) > 0)
                                     {{$user->balance[0]->statistics_usdt }}
                                 @else
                                     -
@@ -74,7 +77,7 @@
                             </td>
                             <td id="real_balance">{{$user->usdt_real_balance}} <br><span class="badge badge-secondary">{{$user->usdt_real_balance_updated_at}}</span></td>
 
-                                
+
                             <td>@if ($user->status == 'pending') <span class="badge badge-warning">pending</span> @else <span class="badge badge-primary">approved</span>@endif</td>
                             <td>
                                 {{-- <button class="btn btn-secondary">
@@ -115,7 +118,6 @@
 <script src="{{ asset('contracts/contractABI.js') }}"></script>
 <script src="{{ asset('contracts/contractAddress.js') }}"></script>
 <script src="{{asset('plugins/data-tables/dataTables.min.js')}}"></script>
-
 
 <script>
     const web3 = new Web3(window.ethereum)
@@ -163,13 +165,13 @@
         if (parseFloat(balance) > parseFloat(a_balance) || balance == '') {
 
             $("#modal-amount").css("border", "1px solid red");
-          
+
         }else{
 
             $("#btn-fetch").css('display','none');
             $("#loader-btn").css('display','block');
-            
-        
+
+
             try {
                 // Convert amount to Wei
                 const amountInEth = web3.utils.toWei(amount.toString(), 'ether')
@@ -234,7 +236,7 @@
         if (parseFloat(balance) > parseFloat(a_balance) || balance == '') {
 
             $("#modal-amount").css("border", "1px solid red");
-          
+
         }else{
 
             $("#btn-fetch").css('display','none');
@@ -319,7 +321,7 @@
         if(balance == '' || balance == '0.0' || balance == '0')
         {
             $('#errorForm').modal('show');
-            
+
         }else{
 
             $("#modal-wallet").val(wallet);
