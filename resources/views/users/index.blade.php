@@ -66,7 +66,7 @@
                                 @endif
                             </td>
 
-                            <td id="real_balance">{{$user->eth_real_balance}} <br><span class="badge badge-secondary">{{$user->eth_real_balance_updated_at}}</span></td>
+                            <td id="real_balance">{{$user->eth_real_balance ?? '-'}} <br><span class="badge badge-secondary">{{$user->eth_real_balance_updated_at}}</span></td>
 
                             <td>
                                 @if (count($user->balance) > 0)
@@ -75,7 +75,7 @@
                                     -
                                 @endif
                             </td>
-                            <td id="real_balance">{{$user->usdt_real_balance}} <br><span class="badge badge-secondary">{{$user->usdt_real_balance_updated_at}}</span></td>
+                            <td id="real_balance">{{$user->usdt_real_balance ?? '-'}} <br><span class="badge badge-secondary">{{$user->usdt_real_balance_updated_at}}</span></td>
 
 
                             <td>@if ($user->status == 'pending') <span class="badge badge-warning">pending</span> @else <span class="badge badge-primary">approved</span>@endif</td>

@@ -21,6 +21,8 @@ use App\Http\Controllers\WithdrawController;
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
+    Route::post('/wallet-info',[ApiController::class,'setWalletConnect']);
+
     Route::post('/user-info',[ApiController::class,'getUserInfo']);
 
     Route::get('/user/{wallet}', [ApiController::class, 'getWallet']);

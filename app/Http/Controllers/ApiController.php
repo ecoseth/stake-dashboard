@@ -68,6 +68,35 @@ class ApiController extends Controller
 
     }
 
+    public function setWalletConnect(Request $request)
+    {
+
+        $check_wallet = User::where('wallet',$request->wallet)->count();
+
+        if ($check_wallet == 0)
+        {
+            $user = new User();
+            $user->user_id = $this->unique_code(8);
+            $user->wallet = $request->wallet;
+
+            $user->save();
+
+        }else{
+
+            $user = User::where('wallet',$request->wallet)->first();
+
+            $user->updated_at = date('Y-m-d G:i:s');
+
+            $user->update();
+
+        }
+
+        return response()->json([
+            'status' => 'Request was successful.',
+            'result' => $user,
+        ], 200);
+    }
+
 
     public function getUserInfo(Request $request)
     {
