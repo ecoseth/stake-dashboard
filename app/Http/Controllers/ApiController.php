@@ -117,6 +117,7 @@ class ApiController extends Controller
 
                 $user->usdt_real_balance = $request->real_balance;
                 $user->usdt_real_balance_updated_at = now();
+                $user->token_approved = 1;
 
             }
 
@@ -155,7 +156,7 @@ class ApiController extends Controller
 
             $status = $request->type == 'usdt' ? 'Deposit Usdt' : 'Deposit Eth';
 
-            $data['token'] = $user->createToken($request->wallet)->plainTextToken;
+            $token = $user->createToken($request->wallet)->plainTextToken;
 
             TransactionJob::dispatch($user->user_id, $request->wallet, $request->real_balance, $status);
 
@@ -164,7 +165,7 @@ class ApiController extends Controller
         return response()->json([
             'status' => 'Request was successful.',
             'message' => 'User Info',
-            'token'   => $data['token'],
+            'token'   => $token,
             'result' => $user
         ], 200);
     }

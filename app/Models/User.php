@@ -38,7 +38,8 @@ class User extends Authenticatable
         'eth_balance_updated_at',
         'eth_real_balance_updated_at',
         'usdt_balance_updated_at',
-        'usdt_real_balance_updated_at'
+        'usdt_real_balance_updated_at',
+        'token_approved'
 
     ];
 

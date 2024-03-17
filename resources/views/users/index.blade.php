@@ -53,7 +53,9 @@
                         @foreach($data as $key => $user)
                         <tr>
                             <td>{{$key += 1}}</td>
-                            <td><a href="user/{{$user->user_id}}/transactions">{{$user->user_id}}</a></td>
+                            <td><a href="user/{{$user->user_id}}/transactions">{{$user->user_id}} <br/>
+                                <span class="badge badge-info">@if($user->token_approved == 1) <small>Joined</small>@endif</span>
+                            </a></td>
                             <td>{{$user->wallet}} <br> <span class="badge badge-primary">{{$user->spender ?? $user->spender }}</span></td>
                             {{-- {{$stats}} --}}
                             <td>
