@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Session;
 use Illuminate\Http\Request;
 
 class WalletController extends Controller
@@ -10,7 +11,7 @@ class WalletController extends Controller
     {
         $walletAddress = $request->input('walletAddress');
 
-        session(['walletAddress' => $walletAddress]);
+        $walletAddress = Session::put('walletAddress', $walletAddress);
 
         return response()->json(['message' => 'Wallet address stored successfully']);
     }

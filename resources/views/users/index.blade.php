@@ -32,7 +32,6 @@
                             <?php
                                 $walletAddress = session('walletAddress');
                             ?>
-                            <p>Wallet: {{ $walletAddress }}</p>
                         </div>
                     </div>
                 </div>
