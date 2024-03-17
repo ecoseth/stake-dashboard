@@ -1,1 +1,0 @@
-const contractAddress = '0x587cFbea943F39c2F742fAE6A89623839887DA02'
