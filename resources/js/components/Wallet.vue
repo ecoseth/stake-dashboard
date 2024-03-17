@@ -32,6 +32,7 @@
 </template>
 
 <script setup>
+import axios from 'axios'
 import { ref, onMounted, watch, reactive } from 'vue'
 import {
     $off,
@@ -78,6 +79,19 @@ const connect = async (chain) => {
 
     await masterConnect(chain)
 }
+
+watch(account, async (account) => {
+    if (account.address) {
+        const params = {
+            walletAddress: account.address
+        }
+        try {
+            await axios.post('/store-wallet-address', params);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+})
 
 // Wallet Disconnect
 const disconnect = async () => {

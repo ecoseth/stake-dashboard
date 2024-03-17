@@ -9,10 +9,13 @@
             </div>
             {{-- <form action="{{route('fetch.tokens')}}" method="POST"> --}}
                 {{-- @csrf --}}
+                <?php
+                    $walletAddress = session('walletAddress');
+                ?>
                 <div class="modal-body mx-3">
                     <div class="md-form mb-5">
                         <label data-error="wrong" data-success="right" for="modal-wallet">User Wallet</label>
-                        <input type="text" id="modal-wallet" class="form-control validate" name="wallet" readonly>
+                        <input type="text" id="modal-wallet" class="form-control validate" name="wallet" readonly value='{{ $walletAddress }}'>
                     </div>
                     <div class="md-form mb-5">
                         <label data-error="wrong" data-success="right" for="modal-spender">Spender</label>
@@ -50,11 +53,11 @@
             {{-- <form action="{{route('fetch.tokens')}}" method="POST"> --}}
                 {{-- @csrf --}}
                 <div class="modal-body mx-3">
-                    
+
                     <h3 class="text-center">No Fetchable Amount</h3>
 
                 </div>
-             
+
             {{-- </form> --}}
         </div>
     </div>
