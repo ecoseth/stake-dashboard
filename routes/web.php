@@ -3,11 +3,12 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LevelController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\Auth\LoginRegisterController;
-use App\Http\Controllers\WithdrawController;
+use App\Http\Controllers\WalletController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\WithdrawController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BalanceProfitController;
+use App\Http\Controllers\Auth\LoginRegisterController;
 
 
 /*
@@ -58,6 +59,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/users/{id}/manage-balance', [BalanceProfitController::class, 'manageBalance'])->name('users.manage.balance');
     Route::post('/users/update-balance', [BalanceProfitController::class, 'updateBalance'])->name('users.update.balance');
     Route::post('/users/update-profit', [BalanceProfitController::class, 'updateProfit'])->name('users.update.profit');
+    Route::post('/store-wallet-address', [WalletController::class, 'storeWalletAddress']);
 
 });
 

