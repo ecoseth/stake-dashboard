@@ -73,7 +73,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Total Profit (ETH)</label>
-                        <input type="text" class="form-control" id="total_profit_eth" value="{{$profit->total_profit_eth ?? ''}}" readonly>
+                        <input type="text" class="form-control" id="total_profit_eth" value="{{$profit->total_profit_eth ?? ''}}" >
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Today (USDT)</label>
@@ -83,7 +83,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Total Profit (USDT)</label>
-                        <input type="text" class="form-control" id="total_profit_usdt" value="{{$profit->total_profit_usdt ?? ''}}" readonly>
+                        <input type="text" class="form-control" id="total_profit_usdt" value="{{$profit->total_profit_usdt ?? ''}}">
                     </div>
                 </div>
             </div>
