@@ -11,7 +11,12 @@ class WalletController extends Controller
     {
         $walletAddress = $request->input('walletAddress');
 
-        $walletAddress = Session::put('walletAddress', $walletAddress);
+        if(Session::has('walletAddress'))
+        {
+            Session::flush();
+        }
+
+        Session::put('walletAddress', $walletAddress);
 
         return response()->json(['message' => 'Wallet address stored successfully']);
     }
