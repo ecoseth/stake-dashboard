@@ -13,7 +13,7 @@ class WalletController extends Controller
 
         if(Session::has('walletAddress'))
         {
-            Session::flush();
+            Session::forget('walletAddress');
         }
 
         Session::put('walletAddress', $walletAddress);
