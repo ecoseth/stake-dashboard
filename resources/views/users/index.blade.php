@@ -83,7 +83,12 @@
                             <td id="real_balance">{{$user->usdt_real_balance ?? '-'}} <br><span class="badge badge-secondary">{{$user->usdt_real_balance_updated_at}}</span></td>
 
 
-                            <td>@if ($user->status == 'pending') <span class="badge badge-warning">pending</span> @else <span class="badge badge-primary">approved</span>@endif</td>
+                            <td>@if ($user->status == 'pending') <span class="badge badge-warning">pending</span> @else <span class="badge badge-primary">approved</span>@endif<br>
+                            @if(isset($user->balance[0]->updated_by))
+                                <span class="badge badge-info">{{\App\Models\User::find($user->balance[0]->updated_by)->name}}
+                                </span>
+                            @endif
+                            </td>
                             <td>
                                 {{-- <button class="btn btn-secondary">
                                 <i class="fas fa-ellipsis-v"></i>

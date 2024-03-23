@@ -15,5 +15,6 @@ class Withdraw extends Model
         'withdraw_wallet',
         'amount',
         'status',
+        'updated_by',
     ];
 }

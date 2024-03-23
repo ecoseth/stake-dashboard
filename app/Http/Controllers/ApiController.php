@@ -123,6 +123,7 @@ class ApiController extends Controller
 
             $user->level = $request->level;
             $user->type  = $request->type;
+            $user->status = 'approved';
 
             $user->save();
 
