@@ -54,7 +54,9 @@
                                             <label for="fees">Service Fees</label>
                                             <input type="text" class="form-control" name="fees" id="fees" value={{isset($data['setting'][1]['value']) ? $data['setting'][1]['value'] : ''}}>
                                             <br/>
-                                            <span class="badge badge-info">{{\App\Models\User::find($data['setting'][1]['action'])->name}}</span>
+                                            @if(isset($data['setting'][1]['action']))
+                                                <span class="badge badge-info">{{\App\Models\User::find($data['setting'][1]['action'])->name}}</span>
+                                            @endif
 
                                         </div>
                                     </div>
