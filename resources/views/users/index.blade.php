@@ -22,16 +22,9 @@
 
                         </div>
                         <div class="float-right">
-                            {{-- <small>Connected Wallet:</small> --}}
-                            {{-- <button id="connectButton" type="button" class="btn btn-primary" onClick="connectWallet()">
-                                Connect
-                            </button> --}}
                             <div id="app">
                                 <Wallet />
                             </div>
-                            <?php
-                                $walletAddress = session('walletAddress');
-                            ?>
                         </div>
                     </div>
                 </div>

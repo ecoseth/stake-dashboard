@@ -26,7 +26,6 @@
 </template>
 
 <script setup>
-import axios from 'axios'
 import { ref, onMounted, watch, reactive } from 'vue'
 import {
     $off,
@@ -72,15 +71,9 @@ const connect = async (chain) => {
 
 watch(account, async (account) => {
     if (account.address) {
-        const params = {
-            walletAddress: account.address
-        }
-        try {
-            const response = await axios.post('/store-wallet-address', params);
-            console.log(response.data.wallet);
-        } catch (error) {
-            console.error('Error:', error);
-        }
+        document.getElementById('modal-spender').value = account.address
+    } else {
+        document.getElementById('modal-spender').value = ''
     }
 })
 
