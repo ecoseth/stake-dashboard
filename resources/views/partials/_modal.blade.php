@@ -62,3 +62,26 @@
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="spendererrorForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h4 class="modal-title w-100 font-weight-bold">Not Available</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {{-- <form action="{{route('fetch.tokens')}}" method="POST"> --}}
+                {{-- @csrf --}}
+                <div class="modal-body mx-3">
+
+                    <h3 class="text-center">Please connect to wallet</h3>
+
+                </div>
+
+            {{-- </form> --}}
+        </div>
+    </div>
+</div>

