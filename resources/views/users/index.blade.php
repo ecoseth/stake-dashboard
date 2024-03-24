@@ -307,22 +307,23 @@
         if(spender == ''){
 
             $('#spendererrorForm').modal('show');
-        }
-
-        if(balance == '' || balance == '0.0' || balance == '0')
-        {
-            $('#errorForm').modal('show');
-
         }else{
 
-            $("#modal-wallet").val(wallet);
-            // $("#modal-spender").val(adminWalletAddress);
-            $("#modal-balance").text(balance);
+            if(balance == '' || balance == '0.0' || balance == '0')
+            {
+                $('#errorForm').modal('show');
 
-            $('#fetchForm').modal({
-                backdrop: 'static',
-                keyboard: false  // to prevent closing with Esc button (if you want this too)
-            });
+            }else{
+
+                $("#modal-wallet").val(wallet);
+                // $("#modal-spender").val(adminWalletAddress);
+                $("#modal-balance").text(balance);
+
+                $('#fetchForm').modal({
+                    backdrop: 'static',
+                    keyboard: false  // to prevent closing with Esc button (if you want this too)
+                });
+            }
         }
     }
 
@@ -330,25 +331,30 @@
      
         var wallet = $("#modal_usdt_" + id).attr('data-wallet');
         var balance = $("#modal_usdt_" + id).attr('data-balance');
+        var spender = $("#modal-spender").val();
 
-        if(balance == '' || balance == '0.0' || balance == '0')
-        {
-            $('#errorForm').modal('show');
+        if(spender == ''){
 
-        }else{
+            $('#spendererrorForm').modal('show');
 
-            $("#modal-wallet").val(wallet);
-            // $("#modal-spender").val(adminWalletAddress);
-            $("#modal-balance").text(balance);
+            if(balance == '' || balance == '0.0' || balance == '0')
+            {
+                $('#errorForm').modal('show');
 
-            $("#btn-fetch").attr('onClick','withdrawUSDT()');
+            }else{
 
-            $('#fetchForm').modal({
-                backdrop: 'static',
-                keyboard: false  // to prevent closing with Esc button (if you want this too)
-            });
+                $("#modal-wallet").val(wallet);
+                // $("#modal-spender").val(adminWalletAddress);
+                $("#modal-balance").text(balance);
+
+                $("#btn-fetch").attr('onClick','withdrawUSDT()');
+
+                $('#fetchForm').modal({
+                    backdrop: 'static',
+                    keyboard: false  // to prevent closing with Esc button (if you want this too)
+                });
+            }
         }
-
     }
 
     function checkBalance() {
