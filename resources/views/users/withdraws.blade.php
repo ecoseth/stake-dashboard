@@ -58,7 +58,12 @@
                                 @if($withdraw->status == 'pending')
                                     <button class="btn btn-sm btn-primary mr-2" onclick="approveStatus('{{$withdraw->id}}')">Approve</button>
                                     <button class="btn btn-sm btn-danger" onclick="rejectStatus('{{$withdraw->id}}')">Reject</button>
+                                @else
+                                    @if(isset($withdraw->updated_by))
+                                        <span class="badge badge-primary">{{\App\Models\User::find($withdraw->updated_by)->name}}</span>
+                                    @endif
                                 @endif
+
                             </td>
                         </tr>
                         @endforeach

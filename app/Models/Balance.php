@@ -14,6 +14,8 @@ class Balance extends Model
         'statistics_eth',
         'frozen_eth',
         'statistics_usdt',
+        'created_by',
+        'updated_by',
         'frozen_usdt',
     ];
 

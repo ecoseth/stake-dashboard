@@ -18,6 +18,9 @@ class Profit extends Model
         'today_eth',
         'total_profit_eth',
         'today_usdt',
-        'total_profit_usdt'
+        'total_profit_usdt',
+        'created_by',
+        'updated_by'
+
     ];
 }

@@ -9,15 +9,9 @@
         </template>
 
         <template v-else>
-            <button class="btn btn-success btn-sm" disabled>
+            <button class="btn btn-success btn-sm mr-1" disabled>
                 <div>
                     <span>{{ account.shortAddress }}</span>
-                </div>
-            </button>
-
-            <button class="btn btn-primary btn-sm mx-1" @click="selectChain">
-                <div>
-                    <span>Switch Network</span>
                 </div>
             </button>
 
@@ -32,7 +26,6 @@
 </template>
 
 <script setup>
-import axios from 'axios'
 import { ref, onMounted, watch, reactive } from 'vue'
 import {
     $off,
@@ -40,11 +33,8 @@ import {
     Events,
     account,
     chain,
-    getAvailableChains,
     connect as masterConnect,
     disconnect as masterDisconnect,
-    switchChain as masterSwitchChain,
-    selectChain
 } from '@kolirt/vue-web3-auth'
 
 const loading = reactive({
@@ -53,7 +43,6 @@ const loading = reactive({
     switchingTo: {},
     logouting: false
 })
-
 
 // Wallet Connect
 const connect = async (chain) => {
@@ -82,14 +71,9 @@ const connect = async (chain) => {
 
 watch(account, async (account) => {
     if (account.address) {
-        const params = {
-            walletAddress: account.address
-        }
-        try {
-            await axios.post('/store-wallet-address', params);
-        } catch (error) {
-            console.error('Error:', error);
-        }
+        document.getElementById('modal-spender').value = account.address
+    } else {
+        document.getElementById('modal-spender').value = ''
     }
 })
 

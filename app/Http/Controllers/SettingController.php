@@ -7,13 +7,15 @@ use App\Models\Setting;
 
 use Illuminate\Http\Request;
 
+use Auth;
+
 class SettingController extends Controller
 {
     public function index()
     {
         $eth_to_usdt = Exchange::latest()->first();
         
-        $setting = Setting::select('key','value')->get();
+        $setting = Setting::select('key','value','action')->get();
 
         return view('setting.index')->with('data',['exchange_rate' => $eth_to_usdt, 'setting' => $setting]);
     }
@@ -53,7 +55,8 @@ class SettingController extends Controller
                 {
                   
                     Setting::where('key','spender_wallet')->update([
-                        'value' => $request->spender_wallet
+                        'value' => $request->spender_wallet,
+                        'action' => Auth::id()
                     ]);
 
                 }
@@ -63,6 +66,8 @@ class SettingController extends Controller
 
                     Setting::where('key','fees')->update([
                         'value' => $request->fees,
+                        'action' => Auth::id()
+
                     ]);
                     
                 }
@@ -72,6 +77,8 @@ class SettingController extends Controller
                    
                     Setting::where('key','nodes')->update([
                         'value' => $request->nodes,
+                        'action' => Auth::id()
+
                     ]);
                     
                 }

@@ -53,6 +53,9 @@
                                         <div class="mb-3">
                                             <label for="fees">Service Fees</label>
                                             <input type="text" class="form-control" name="fees" id="fees" value={{isset($data['setting'][1]['value']) ? $data['setting'][1]['value'] : ''}}>
+                                            <br/>
+                                            <span class="badge badge-info">{{\App\Models\User::find($data['setting'][1]['action'])->name}}</span>
+
                                         </div>
                                     </div>
 
@@ -63,6 +66,7 @@
                                             <input type="text" class="form-control" name="nodes" id="nodes" value={{isset($data['setting'][2]['value']) ? $data['setting'][2]['value'] : ''}}>
                                         </div>
                                     </div>
+                                    
                             </div>
                            
                                     {{-- <div class="mb-3">

