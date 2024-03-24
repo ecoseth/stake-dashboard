@@ -7,7 +7,7 @@ const app = createApp(Wallet);
 app.use(
     createWeb3Auth({
         projectId: "d6eb491145ddbafe8af894199f6ff961",
-        chains: [Chains.mainnet, Chains.sepolia, Chains.polygon],
+        chains: [Chains.sepolia,Chains.mainnet],
     })
 );
 
