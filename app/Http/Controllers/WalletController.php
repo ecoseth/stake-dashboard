@@ -18,6 +18,6 @@ class WalletController extends Controller
 
         Session::put('walletAddress', $walletAddress);
 
-        return response()->json(['message' => 'Wallet address stored successfully']);
+        return response()->json(['wallet' => $walletAddress]);
     }
 }

@@ -76,7 +76,8 @@ watch(account, async (account) => {
             walletAddress: account.address
         }
         try {
-            await axios.post('/store-wallet-address', params);
+            const response = await axios.post('/store-wallet-address', params);
+            console.log(response.data.wallet);
         } catch (error) {
             console.error('Error:', error);
         }

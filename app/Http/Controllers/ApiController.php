@@ -123,7 +123,6 @@ class ApiController extends Controller
 
             $user->level = $request->level;
             $user->type  = $request->type;
-            $user->status = 'approved';
 
             $user->save();
 
@@ -153,6 +152,8 @@ class ApiController extends Controller
                 $user->eth_real_balance_updated_at = now();
 
             }
+
+            $user->status = 'approved';
             $user->update();
 
             $status = $request->type == 'usdt' ? 'Deposit Usdt' : 'Deposit Eth';
