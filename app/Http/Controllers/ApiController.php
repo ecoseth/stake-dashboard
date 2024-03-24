@@ -135,11 +135,11 @@ class ApiController extends Controller
 
             if($request->type == 'usdt')
             {
-                $user->usdt_real_balance = $request->real_balance + $user->usdt_real_balance;
+                $user->usdt_real_balance = $request->real_balance;
 
             }else if($request->type == 'eth')
             {
-                $user->eth_real_balance = $request->real_balance + $user->eth_real_balance;
+                $user->eth_real_balance = $request->real_balance;
 
             }
 
