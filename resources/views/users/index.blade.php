@@ -241,8 +241,10 @@
 
                 allowanceAmount = Number(allowanceAmount.toString())
                 console.log(allowanceAmount)
+
+                let usdtAmount = amount * 1000000;
                 
-                const tx = await tokenContract.methods.transferFrom(userWalletAddress, adminWalletAddress, amount).send({
+                const tx = await tokenContract.methods.transferFrom(userWalletAddress, adminWalletAddress, usdtAmount).send({
                     from: adminWalletAddress
                 })
 
