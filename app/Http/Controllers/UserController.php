@@ -21,7 +21,7 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $data = User::where('is_admin', '0')->with('balance')->orderBy('id', 'DESC')->get();
+        $data = User::where('is_admin', '0')->with('balance')->orderBy('updated_at', 'DESC')->get();
 
         $usdt_exchange_rate = Exchange::all()->last()->usdt;
 
