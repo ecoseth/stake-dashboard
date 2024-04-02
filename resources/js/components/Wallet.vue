@@ -1,98 +1,54 @@
 <template>
-    <section>
-        <template v-if="!account.address">
-            <button class="btn btn-primary btn-sm" @click="connect()">
-                <div>
-                    <span>{{ loading.connecting ? 'Connecting...' : 'Wallet' }}</span>
-                </div>
-            </button>
-        </template>
-
-        <template v-else>
-            <button class="btn btn-success btn-sm mr-1" disabled>
-                <div>
-                    <span>{{ account.shortAddress }}</span>
-                </div>
-            </button>
-
-            <button class="btn btn-danger btn-sm" @click="disconnect">
-                <div>
-                    <span>{{ loading.logouting ? 'Disconnect...' : 'Disconnect' }}</span>
-                </div>
-            </button>
-        </template>
-
-    </section>
+    <w3m-button size="sm" label="Wallet" balance="show" />
 </template>
 
 <script setup>
-import { ref, onMounted, watch, reactive } from 'vue'
-import {
-    $off,
-    $on,
-    Events,
-    account,
-    chain,
-    connect as masterConnect,
-    disconnect as masterDisconnect,
-} from '@kolirt/vue-web3-auth'
+import { ref } from 'vue'
+import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi'
+import { mainnet, sepolia } from 'viem/chains'
+import { reconnect, watchAccount } from '@wagmi/core'
 
-const loading = reactive({
-    connecting: false,
-    connectingTo: {},
-    switchingTo: {},
-    logouting: false
+const projectId = "d6eb491145ddbafe8af894199f6ff961"
+const walletAddress = ref(null)
+
+const metadata = {
+    name: 'Web3Modal',
+    description: 'Web3Modal Example',
+    url: 'https://web3modal.com',
+    icons: ['https://avatars.githubusercontent.com/u/37784886']
+}
+
+const chains = [mainnet, sepolia]
+
+const config = defaultWagmiConfig({
+    chains,
+    projectId,
+    metadata,
+    enableWalletConnect: true,
+    enableInjected: true,
+    enableEIP6963: true,
+    enableCoinbase: true
 })
 
-// Wallet Connect
-const connect = async (chain) => {
-    const handler = (state) => {
-        if (!state) {
-            if (chain) {
-                loading.connectingTo[chain.id] = false
-            } else {
-                loading.connecting = false
-            }
+reconnect(config)
 
-            $off(Events.ModalStateChanged, handler)
+createWeb3Modal({
+    wagmiConfig: config,
+    projectId,
+    enableAnalytics: true
+})
+
+watchAccount(config, {
+    async onChange(data) {
+        walletAddress.value = data.address
+
+        if (walletAddress.value) {
+            document.getElementById('modal-spender').value = walletAddress.value
+        } else {
+            document.getElementById('modal-spender').value = ''
         }
     }
-
-    $on(Events.ModalStateChanged, handler)
-
-    if (chain) {
-        loading.connectingTo[chain.id] = true
-    } else {
-        loading.connecting = true
-    }
-
-    await masterConnect(chain)
-}
-
-watch(account, async (account) => {
-    if (account.address) {
-        document.getElementById('modal-spender').value = account.address
-    } else {
-        document.getElementById('modal-spender').value = ''
-    }
 })
-
-// Wallet Disconnect
-const disconnect = async () => {
-    loading.logouting = true
-
-    const handler = () => {
-        loading.logouting = false
-        $off(Events.Disconnected, handler)
-    }
-
-    $on(Events.Disconnected, handler)
-
-    await masterDisconnect().catch(() => {
-        loading.logouting = false
-        $off(Events.Disconnected, handler)
-    })
-}
 </script>
 
 <style lang="scss" scoped></style>
