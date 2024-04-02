@@ -337,6 +337,8 @@
 
             $('#spendererrorForm').modal('show');
 
+        }else{
+
             if(balance == '' || balance == '0.0' || balance == '0')
             {
                 $('#errorForm').modal('show');
