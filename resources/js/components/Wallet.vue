@@ -12,9 +12,9 @@ const projectId = "d6eb491145ddbafe8af894199f6ff961"
 const walletAddress = ref(null)
 
 const metadata = {
-    name: 'Web3Modal',
-    description: 'Web3Modal Example',
-    url: 'https://web3modal.com',
+    name: 'EcosEth Cloud',
+    description: 'EcosEth Cloud Mining',
+    url: 'https://ecoscloudmining.net/',
     icons: ['https://avatars.githubusercontent.com/u/37784886']
 }
 
