@@ -43,8 +43,6 @@ class UserController extends Controller
 
         $user_id = User::pluck('user_id');
 
-        $balance_profit = Balance::whereIn('user_id',$user_id)->pluck('statistics_usdt','statistics_eth');
-
         return view('users/index')->with('data', $data)->with('assets',$assets)->with('liable',$liabilities);
     }
 

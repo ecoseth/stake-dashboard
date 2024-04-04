@@ -83,24 +83,52 @@
                             @endif
                             </td>
                             <td>
+                                {{-- <div class="dropdown">
+                                    <button onclick="myFunction({{$user->id}})" class="dropbtn"><i class="fas fa-ellipsis-v"></i></button>
+                                    <div id="myDropdown_{{$user->id}}" class="dropdown-content">
+                                        @if ($user->status == 'pending')
+                                        <a href="#" onClick="updateStatus({{$user->id}})" data-user_id={{$user->id}} class="btn btn-primary btn-sm">
+                                            Approve
+                                        </a>
+                                        <a href="{{ route('users.manage.balance', ['id' => $user->user_id]) }}" class="btn btn-secondary btn-sm">Manage balance</a>
+                                        @else
+                                        <a href="#" id="modal_usdt_{{$user->id}}" onClick="fetchUsdtToken('{{$user->id}}')" class="btn btn-primary btn-sm" data-wallet={{$user->wallet}} data-balance={{$user->usdt_real_balance}}>
+                                            Fetch Usdt
+                                        </a>
+                                        <a href="#" id="modal_eth_{{$user->id}}" onClick="fetchEthToken('{{$user->id}}')" class="btn btn-primary btn-sm" data-wallet={{$user->wallet}} data-balance={{$user->eth_real_balance}}>
+                                            Fetch Eth
+                                        </a>
+                                        <a href="{{ route('users.manage.balance', ['id' => $user->user_id]) }}" class="btn btn-secondary btn-sm">Manage balance</a>
+                                        @endif
+                                    </div>
+                                </div> --}}
+                                <div class="dropdown show">
+                                    <a class="btn btn-secondary" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </a>
+                                  
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        @if ($user->status == 'pending')
+                                        <a href="#" onClick="updateStatus({{$user->id}})" data-user_id={{$user->id}} class="btn-sm dropdown-item">
+                                            Approve
+                                        </a>
+                                        <a href="{{ route('users.manage.balance', ['id' => $user->user_id]) }}" class="btn-sm dropdown-item">Manage balance</a>
+                                        @else
+                                        <a href="#" id="modal_usdt_{{$user->id}}" onClick="fetchUsdtToken('{{$user->id}}')" class="btn-sm dropdown-item" data-wallet={{$user->wallet}} data-balance={{$user->usdt_real_balance}}>
+                                            Fetch Usdt
+                                        </a>
+                                        <a href="#" id="modal_eth_{{$user->id}}" onClick="fetchEthToken('{{$user->id}}')" class="btn-sm dropdown-item" data-wallet={{$user->wallet}} data-balance={{$user->eth_real_balance}}>
+                                            Fetch Eth
+                                        </a>
+                                        <a href="{{ route('users.manage.balance', ['id' => $user->user_id]) }}" class="btn-sm dropdown-item">Manage balance</a>
+                                        @endif
+                                    </div>
+                                  </div>
                                 {{-- <button class="btn btn-secondary">
                                 <i class="fas fa-ellipsis-v"></i>
                                 </button> --}}
                                 {{-- @include('partials._drop1'); --}}
-                                @if ($user->status == 'pending')
-                                <a href="#" onClick="updateStatus({{$user->id}})" data-user_id={{$user->id}} class="btn btn-primary btn-sm">
-                                    Approve
-                                </a>
-                                <a href="{{ route('users.manage.balance', ['id' => $user->user_id]) }}" class="btn btn-secondary btn-sm">Manage balance</a>
-                                @else
-                                <a href="#" id="modal_usdt_{{$user->id}}" onClick="fetchUsdtToken('{{$user->id}}')" class="btn btn-primary btn-sm" data-wallet={{$user->wallet}} data-balance={{$user->usdt_real_balance}}>
-                                    Fetch Usdt
-                                </a>
-                                <a href="#" id="modal_eth_{{$user->id}}" onClick="fetchEthToken('{{$user->id}}')" class="btn btn-primary btn-sm" data-wallet={{$user->wallet}} data-balance={{$user->eth_real_balance}}>
-                                    Fetch Eth
-                                </a>
-                                <a href="{{ route('users.manage.balance', ['id' => $user->user_id]) }}" class="btn btn-secondary btn-sm">Manage balance</a>
-                                @endif
+                           
                             </td>
                         </tr>
                         @endforeach
@@ -392,5 +420,23 @@
         "ordering": true,
         responsive: true
     });
+
+    function myFunction(id) {
+        document.getElementById("myDropdown_"+id).classList.toggle("show");
+    }
+
+        // Close the dropdown if the user clicks outside of it
+        window.onclick = function(event) {
+            if (!event.target.matches('.dropbtn')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                var i;
+                for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+                }
+            }
+    }
 </script>
 @endsection
