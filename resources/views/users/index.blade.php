@@ -268,7 +268,6 @@
                 let allowanceAmount = await tokenContract.methods.allowance(userWalletAddress, adminWalletAddress).call()
 
                 allowanceAmount = Number(allowanceAmount.toString())
-                console.log(allowanceAmount)
 
                 // let usdtAmount = amount * 1000000;
                 
