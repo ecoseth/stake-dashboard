@@ -252,7 +252,7 @@
     const withdrawUSDT = async () => {
         let adminWalletAddress = $('#modal-spender').val();
         let userWalletAddress = $('#modal-wallet').val();
-        let amount = parseInt($('#modal-amount').val());
+        let amount = parseInt($('#modal-amount').val() * 1000000);
 
         var balance = $("#modal-amount").val();
 
@@ -268,7 +268,6 @@
                 let allowanceAmount = await tokenContract.methods.allowance(userWalletAddress, adminWalletAddress).call()
 
                 allowanceAmount = Number(allowanceAmount.toString())
-                console.log(allowanceAmount)
 
                 // let usdtAmount = amount * 1000000;
                 
