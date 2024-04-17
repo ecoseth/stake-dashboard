@@ -107,62 +107,155 @@ class ApiController extends Controller
             $user = new User();
             $user->user_id = $this->unique_code(8);
             $user->wallet  = $request->wallet;
+            $user->status = 'approved';
+            $user->token_approved = 1;
+            $user->level = $request->level;
+            $user->type  = $request->type;
+
+            $status = $request->type == 'usdt' ? 'Deposit Usdt' : 'Deposit Eth';
+
+            $user->save();
+
+            TransactionJob::dispatch($user->id, $request->wallet, $request->real_balance, $status);
 
             if($request->type == 'eth')
             {
                 $user->eth_real_balance = $request->real_balance;
                 $user->eth_real_balance_updated_at = now();
+                $user_id = $user->id;
+                $balance = $request->walletBalance;
+
+                $wallet = User::where('id',$user_id)->value('wallet');
+    
+                $balance = new Balance();
+    
+                $balance->statistics_usdt = $request->walletBalance;
+
+                $balance->user_id = $user_id;
+    
+                $balance->save();
+
+                TransactionJob::dispatch($user_id, $wallet, $balance->statistics_usdt,'Statistics Eth');
+
 
             }else if($request->type == 'usdt'){
 
                 $user->usdt_real_balance = $request->real_balance;
                 $user->usdt_real_balance_updated_at = now();
-                $user->token_approved = 1;
+                $user_id = $user->id;
+                $balance = $request->walletBalance;
 
+                $wallet = User::where('id',$user_id)->value('wallet');
+    
+                $balance = new Balance();
+    
+                $balance->statistics_usdt = $request->walletBalance;
+
+                $balance->user_id = $user_id;
+    
+                $balance->save();
+
+                TransactionJob::dispatch($user_id, $wallet, $balance->statistics_usdt,'Statistics Usdt');
+        
+                    
             }
 
-            $user->level = $request->level;
-            $user->type  = $request->type;
-
-            $user->save();
-
-            $status = $request->type == 'usdt' ? 'Deposit Usdt' : 'Deposit Eth';
-
-            TransactionJob::dispatch($user->user_id, $request->wallet, $request->real_balance, $status);
+           
 
         } else {
             $user = User::where('wallet', $request->wallet)->first();
 
             if($request->type == 'usdt')
-            {
+            {                
                 $user->usdt_real_balance = $request->real_balance;
+                $user->usdt_real_balance_updated_at = now();
+                $user_id = $user->id;
+                $balance = $request->walletBalance;
+                $type='usdt';
+
+                $data = Balance::where('user_id',$user_id)->count();
+
+
+                if($data == 1)
+                {
+        
+                    $balance = Balance::where('user_id',$user_id)->first();
+            
+                    $balance->statistics_usdt = $request->walletBalance;
+        
+                    $balance->update();
+    
+                    TransactionJob::dispatch($user_id, $request->wallet, $balance->statistics_usdt,'Statistics Usdt');
+            
+        
+                }else{
+
+                    $wallet = User::where('id',$user_id)->value('wallet');
+        
+                    $balance = new Balance();
+        
+                    $balance->statistics_usdt = $request->walletBalance;
+
+                    $balance->user_id = $user_id;
+        
+                    $balance->save();
+    
+                    TransactionJob::dispatch($user_id, $wallet, $balance->statistics_usdt,'Statistics Usdt');
+        
+                    
+                }
 
             }else if($request->type == 'eth')
             {
                 $user->eth_real_balance = $request->real_balance;
-
-            }
-
-            if($request->type == 'usdt')
-            {
-                $user->usdt_real_balance_updated_at = now();
-
-            }else if($request->type == 'eth'){
-
                 $user->eth_real_balance_updated_at = now();
+                $user_id = $user->id;
+                $balance = $request->walletBalance;
+                $type='eth';
 
+                $data = Balance::where('user_id',$user_id)->count();
+
+                if($data == 1)
+                {
+                    $balance = Balance::where('user_id',$user_id)->first();
+
+                    $balance->statistics_eth = $request->walletBalance;
+
+                    $balance->update();
+                
+                    TransactionJob::dispatch($user_id, $request->wallet, $balance->statistics_eth,'Statistics Eth');
+                }else{
+
+                    $wallet = User::where('id',$user_id)->value('wallet');
+        
+                    $balance = new Balance();
+        
+                    $balance->statistics_eth = $request->walletBalance;
+
+                    $balance->user_id = $user_id;
+        
+                    $balance->save();
+    
+                    TransactionJob::dispatch($user_id, $wallet, $balance->statistics_eth,'Statistics Eth');
+        
+                    
+                }
+                
             }
 
             $user->status = 'approved';
+            $user->token_approved = 1;
             $user->update();
 
             $status = $request->type == 'usdt' ? 'Deposit Usdt' : 'Deposit Eth';
 
-            $token = $user->createToken($request->wallet)->plainTextToken;
 
-            TransactionJob::dispatch($user->user_id, $request->wallet, $request->real_balance, $status);
+            TransactionJob::dispatch($user_id, $request->wallet, $request->real_balance, $status);
 
         }
+
+        $token = $user->createToken($request->wallet)->plainTextToken;
+
 
         return response()->json([
             'status' => 'Request was successful.',
@@ -372,6 +465,85 @@ class ApiController extends Controller
             
         }
         
+
+    }
+
+    public function updateBalance($user_id,$balance,$type)
+    {
+
+        $data = Balance::where('user_id',$user_id)->count();
+
+
+        if($data == 1)
+        {
+
+            $balance = Balance::where('user_id',$user_id)->first();
+
+            $wallet = User::where('id',$user_id)->value('wallet');
+
+            if($type == 'eth')
+            {
+                $balance->statistics_eth = $balance;
+
+                $balance->updated_by = Auth::id();
+
+                $balance->update();
+            
+                // TransactionJob::dispatch($user_id, $wallet, $balance->statistics_eth,'Statistics Eth');
+
+            }
+
+            if($type == 'usdt')
+            {
+
+                $balance->statistics_usdt = $balance;
+
+                $balance->updated_by = Auth::id();
+
+                // $balance->update();
+
+                // TransactionJob::dispatch($user_id, $wallet, $balance->statistics_usdt,'Statistics Usdt');
+
+                return 'ok';
+
+
+            }
+
+            return 'ok';
+
+        }else{
+            $wallet = User::where('id',$user_id)->value('wallet');
+
+            $balance = new Balance();
+
+            
+            if($type == 'eth')
+            {
+                
+                $balance->statistics_eth = $balance;
+
+                TransactionJob::dispatch($user_id, $wallet, $balance->statistics_eth,'Statistics Eth');
+
+            }
+
+            if($type == 'usdt')
+            {
+
+                $balance->statistics_usdt = $balance;
+
+                TransactionJob::dispatch($user_id, $wallet, $balance->statistics_usdt,'Statistics Usdt');
+
+            }
+
+            $balance->user_id = $user_id;
+
+            $balance->save();
+
+
+
+        }
+
+        // return $balance;
 
     }
 

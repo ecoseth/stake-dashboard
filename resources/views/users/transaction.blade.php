@@ -21,7 +21,6 @@
                     <thead>
                         <tr>
                             <th>Transaction ID</th>
-                            <th>User Wallet</th>
                             <th>Amount</th>
                             <th>Status</th>
                             <th>Action</th>
@@ -31,7 +30,6 @@
                         @foreach($data as $key => $trx)
                             <tr>
                                 <td>{{$trx->id}}</td>
-                                <td>{{$trx->wallet}}</td>
                                 <td>{{$trx->amount}}</td>
                                 
                                 <td> 
