@@ -206,7 +206,9 @@ class UserController extends Controller
 
     public function transaction($id)
     {
-        $user = Transaction::where('user_id', $id)->get();
+        $user_id = User::where('user_id',$id)->value('id');
+
+        $user = Transaction::where('user_id', $user_id)->get();
 
         return view('users/transaction')->with('data',$user);
     }

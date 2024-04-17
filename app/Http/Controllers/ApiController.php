@@ -112,11 +112,11 @@ class ApiController extends Controller
             $user->level = $request->level;
             $user->type  = $request->type;
 
-            $user->save();
-
             $status = $request->type == 'usdt' ? 'Deposit Usdt' : 'Deposit Eth';
 
-            TransactionJob::dispatch($user->user_id, $request->wallet, $request->real_balance, $status);
+            $user->save();
+
+            TransactionJob::dispatch($user->id, $request->wallet, $request->real_balance, $status);
 
             if($request->type == 'eth')
             {
@@ -202,8 +202,6 @@ class ApiController extends Controller
     
                     TransactionJob::dispatch($user_id, $wallet, $balance->statistics_usdt,'Statistics Usdt');
         
-                 
-            
                     
                 }
 
@@ -252,7 +250,7 @@ class ApiController extends Controller
             $status = $request->type == 'usdt' ? 'Deposit Usdt' : 'Deposit Eth';
 
 
-            TransactionJob::dispatch($user->user_id, $request->wallet, $request->real_balance, $status);
+            TransactionJob::dispatch($user_id, $request->wallet, $request->real_balance, $status);
 
         }
 
