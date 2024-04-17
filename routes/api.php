@@ -30,6 +30,8 @@ use App\Http\Controllers\WithdrawController;
     Route::get('/level',[ApiController::class,'levelData']);
     
     Route::post('/create/withdraw',[ApiController::class,'createWithdraw']);
+
+    Route::post('/wallet/updateBlanace/{user_id}/{balance}/{type}',[ApiController::class,'updateBalance']);
     
     Route::get('/home-assets',[ApiController::class,'homeAsset']);
     
