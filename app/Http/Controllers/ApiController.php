@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Http;
 
 
-use Carbon;
+use Carbon\Carbon;
 
 
 class ApiController extends Controller
@@ -420,6 +420,10 @@ class ApiController extends Controller
             ];
 
             Withdraw::create($data);
+
+            TransactionJob::dispatch($request->user_id, $request->withdraw_wallet, $request->amount,'Request Withdraw');
+
+            User::where('user_id',$request->user_id)->update(['updated_at' => Carbon::now()]);
 
             return response()->json(['message' => 'Withdraw data added successfully']);
 

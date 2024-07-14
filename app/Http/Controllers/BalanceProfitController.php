@@ -38,7 +38,6 @@ class BalanceProfitController extends Controller
 
     public function updateBalance(Request $request)
     {
-
         $user_id = User::where('user_id',$request->id)->value('id');
 
         $data = Balance::where('user_id',$user_id)->count();

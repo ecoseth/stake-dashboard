@@ -53,6 +53,11 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Balance');
     }
 
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

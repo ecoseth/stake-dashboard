@@ -40,6 +40,7 @@
                             <th>Balance (USDT)</th>
                             <th>Real Balance (USDT)</th>
                             <th>Status</th>
+                            <th>Last Updated</th>
                             <th style="width: 40px">Actions</th>
                         </tr>
                     </thead>
@@ -80,6 +81,7 @@
                                 </span>
                             @endif
                             </td>
+                            <td><span class="text-secondary">{{$user->updated_at->diffForhumans() }}</span></td>
                             <td>
                                 {{-- <div class="dropdown">
                                     <button onclick="myFunction({{$user->id}})" class="dropbtn"><i class="fas fa-ellipsis-v"></i></button>
