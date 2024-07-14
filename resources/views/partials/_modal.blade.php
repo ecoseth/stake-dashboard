@@ -19,7 +19,7 @@
                     </div>
                     <div class="md-form mb-5">
                         <label data-error="wrong" data-success="right" for="modal-spender">Spender</label>
-                        <input type="text" id="modal-spender" class="form-control validate" name="spender" readonly required>
+                        <input type="text" id="modal-spender" class="form-control validate" name="spender" required>
                     </div>
 
                     <div class="md-form mb-4">
