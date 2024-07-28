@@ -58,6 +58,11 @@ class User extends Authenticatable
         return $this->hasMany(Transaction::class);
     }
 
+    public function products()
+    {
+        return $this->hasMany('App\Models\Content');
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

@@ -48,6 +48,13 @@
           </li>
 
           <li class="nav-item">
+            <a href="{{route('post.index')}}" class="nav-link {{request()->route()->getName() == 'post.index' ? 'active' : ''}}">
+              <i class="nav-icon fas fa-plus-circle"></i>
+              <p>Helper Setting</p>
+            </a>
+          </li>
+
+          <li class="nav-item">
             <a href="{{route('rewards.index')}}" class="nav-link {{request()->route()->getName() == 'rewards.index' ? 'active' : ''}}">
               <i class="nav-icon fas fa-plus-circle"></i>
               <p>Reward Setting</p>
