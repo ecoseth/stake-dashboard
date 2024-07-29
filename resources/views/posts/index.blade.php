@@ -29,12 +29,12 @@
 </div>
 <div class="form-group">
 <label for="">Title</label>
-<input type="text" name="title"  value="{{ old('title') }}" class="form-control" placeholder="Title Post">
+<input type="text" name="title"  value="{{ old('title') }}" class="form-control" placeholder="Title">
 <span class="text-danger error-text title_error"  style="font-size: 13px"></span>
 </div>
 </div>
 <div class="form-group">
-<label for="">Post Content</label>
+<label for="">Content</label>
 <textarea name="content" value="{{ old('content') }}" class="form-control" placeholder="Content" rows="10"></textarea>
 <span class="text-danger error-text content_error"  style="font-size: 13px"></span>
 </div>
