@@ -62,7 +62,7 @@
 </div>
 <!-- /.content -->
 @endsection
-@section('scripts')
+@push('scripts')
 <script>
     $.ajaxSetup({
         headers: {
@@ -127,4 +127,4 @@
         });
     }
 </script>
-@endsection
+@endpush

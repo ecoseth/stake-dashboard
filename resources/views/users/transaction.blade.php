@@ -53,7 +53,7 @@
 <!-- /.content -->
 
 @endsection
-@section('scripts')
+@push('scripts')
 
 <script src="{{asset('plugins/data-tables/dataTables.min.js')}}"></script>
 
@@ -67,4 +67,4 @@
    });
 </script>
 
-@endsection
+@endpush

@@ -105,7 +105,7 @@
 </div>
 <!-- /.content -->
 @endsection
-@section('scripts')
+@push('scripts')
 
 <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"> </script>
 <script src="{{ asset('contracts/contractABI.js') }}"></script>
@@ -189,4 +189,4 @@
 
     });
 </script>
-@endsection
+@endpush
