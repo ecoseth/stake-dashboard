@@ -39,6 +39,7 @@ function showPosts(){
 }
 $('#openModal').click(function() {
     let url = $(this).data('action');
+    $('trix-editor[input=content]').val('');
     $('#exampleModal').modal('show');
     $('#formData').trigger("reset");
     $('#formData').attr('action',url);
@@ -88,70 +89,7 @@ $('#openModal').click(function() {
     })
     })
        
-    $("button#editModal").click(function(event) {
-
-        let dataAction = $(this).data('action');
-        $('#formData').attr('action',dataAction);
-    
-    
-        let id = $(this).data('id');
-    
-        $.ajax({
-                type: 'GET',
-                url : baseUrl+`/post/${id}/edit`,
-                dataType: "json",
-                success: function(res) {
-                $('input[name=title]').val(res.post.title);
-                $('input[name=page]').val(res.post.page);
-                $('textarea[name=content]').val(res.post.content);
-                $('#exampleModal').modal('show');
-                    console.log(res);
-            },
-            error:function(error) {
-                console.log(error)
-            }
-        })
-    
-    });
-    
-    $('button#btn-delete').click(function(e) {
-        e.preventDefault();
-        let dataDelete = $(this).data('id');
-        // console.log(dataDelete);
-        Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this! ",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-        if (result.isConfirmed) {
-        $.ajax({
-        type:'DELETE',
-        dataType: 'JSON',
-        url: baseUrl+`/post/${dataDelete}/delete`,
-        data:{
-        '_token':$('meta[name="csrf-token"]').attr('content'),
-        },
-        success:function(response){
-        Swal.fire(
-        'Deleted!',
-        'Your file has been deleted.',
-        'success'
-        )
-        $('#posts-table').DataTable().ajax.reload();
-
-    },
-        error:function(err){
-        console.log(err);
-        }
-        });
-        }
-        })
-        });
-
+  
     $(document).ready(function(){
 
             $.ajaxSetup({
@@ -162,6 +100,10 @@ $('#openModal').click(function() {
 
             var table = $('#posts-table').DataTable({
                 processing: true,
+                createdRow: function(row, data) {
+                                    let id = data[0]; // amend 'data[0]' here to be the correct column for your dataset
+                                    $(row).prop('id', id).data('id', id); 
+                            },
                 serverSide: true,
                 ajax: "/post",
                 columns: [{
@@ -180,6 +122,11 @@ $('#openModal').click(function() {
                         data: 'author',
                         name: 'author'
                     },
+                    {
+                        data: 'order',
+                        name: 'order'
+                    },
+                   
                    
                     {
                         data: 'action',
@@ -189,6 +136,112 @@ $('#openModal').click(function() {
                     },
                 ]
             });
+
+            $( "#posts-table" ).sortable({
+                items: "tr",
+                cursor: 'move',
+                opacity: 0.6,
+                update: function() {
+                sendOrderToServer();
+                }
+                });
+                function sendOrderToServer() {
+                
+                var order = [];
+                var token = $('meta[name="csrf-token"]').attr('content');
+                $('[id="editModal"]').each(function(index,element) {
+                order.push({
+                id: $(this).attr('data-id'),
+                position: index+1
+                });
+                });
+                console.log(order)
+                $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/sortabledatatable",
+                data: {
+                order: order,
+                _token: token
+                },
+                success: function(response) {
+                if (response.message == "success") {
+                $('#posts-table').DataTable().ajax.reload();
+
+                } else {
+                console.log(response)
+                }
+                }
+                });
+                }
+
+                    $('#posts-table').on('click', '#editModal', function() {
+
+                    let dataAction = $(this).data('action');
+                    $('input[name=title]').val('');
+                    $('input[name=page]').val('');
+                    $('trix-editor[input=content]').val('');
+                    $('#formData').attr('action',dataAction);
+                
+                
+                    let id = $(this).data('id');        
+                
+                    $.ajax({
+                            type: 'GET',
+                            url : baseUrl+`/post/${id}/edit`,
+                            dataType: "json",
+                            success: function(res) {
+                            $('input[name=title]').val(res.post.title);
+                            $('input[name=page]').val(res.post.page);
+                            $('trix-editor[input=content]').val(res.post.content);
+                            $('#exampleModal').modal('show');
+                                console.log(res);
+                        },
+                        error:function(error) {
+                            console.log(error)
+                        }
+                    })
+                
+                });
+                
+                $('#posts-table').on('click', '#btn-delete', function(e) {
+                    e.preventDefault();
+                    let dataDelete = $(this).data('id');
+                    // console.log(dataDelete);
+                    Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this! ",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                    $.ajax({
+                    type:'DELETE',
+                    dataType: 'JSON',
+                    url: baseUrl+`/post/${dataDelete}/delete`,
+                    data:{
+                    '_token':$('meta[name="csrf-token"]').attr('content'),
+                    },
+                    success:function(response){
+                    Swal.fire(
+                    'Deleted!',
+                    'Your file has been deleted.',
+                    'success'
+                    )
+                    $('#posts-table').DataTable().ajax.reload();
+            
+                },
+                    error:function(err){
+                    console.log(err);
+                    }
+                    });
+                    }
+                    })
+                    });
+            
     
     })
     

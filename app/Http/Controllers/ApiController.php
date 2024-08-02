@@ -9,6 +9,7 @@ use App\Models\Profit;
 use App\Models\Balance;
 use App\Models\Exchange;
 use App\Models\Setting;
+use App\Models\Content;
 use App\Models\Transaction;
 use App\Models\Level;
 use App\Models\Withdraw;
@@ -67,6 +68,24 @@ class ApiController extends Controller
         ],200);
 
     }
+
+    public function getContent()                     
+    {                                                
+                                                     
+        $content = Content::all();                   
+                                                     
+        $collection = collect(                       
+           $content                                  
+        );                                           
+                                                     
+        $grouped = $collection->groupBy('page');     
+                                                     
+        if ($grouped != null) {                      
+            return response()->json($grouped, 200);  
+        }                                            
+                                                     
+    }                                                
+                                                     
 
     public function setWalletConnect(Request $request)
     {

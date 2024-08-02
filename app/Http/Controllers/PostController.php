@@ -13,7 +13,7 @@ class PostController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Content::with('user')->get();
+            $data = Content::with('user')->orderBy('sort','ASC')->get();
             return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('page', function($row){
@@ -22,81 +22,19 @@ class PostController extends Controller
             ->addColumn('title', function($row){
                 return $row->title;
              })
-             ->addColumn('content', function($row){
-                return Str::words(strip_tags($row->content), 11, '...');
-             })
-             ->addColumn('author', function($row){
-                return $row->user->name;
-             })
+            ->addColumn('content', function($row){
+            return Str::words(strip_tags($row->content), 6, '...');
+            })
+            ->addColumn('author', function($row){
+            return $row->user->name;
+            })
+            ->addColumn('order', function($row){
+            return $row->sort;
+            })
             ->addColumn('action', function($row){
-                $btn = '<button id="editModal" data-action='.route('post.update',$row->uuid).' data-id='.$row->uuid.' class="btn btn-warning btn-sm">Edit</button>
-                <script type="text/javascript">
-                    $("button#editModal").click(function(event) {
+                $btn = '<button id="editModal" data-action='.route('post.update',$row->uuid).' data-id='.$row->uuid.' class="btn btn-warning btn-sm">Edit</button> ';
 
-                        let dataAction = $(this).data("action");
-                        $("#formData").attr("action",dataAction);
-                    
-                    
-                        let id = $(this).data("id");
-                    
-                        $.ajax({
-                                type: "GET",
-                                url : "'.route('post.edit',$row->uuid).'",
-                                dataType: "json",
-                                success: function(res) {
-                                $("input[name=title]").val(res.post.title);
-                                $("input[name=page]").val(res.post.page);
-                                $("textarea[name=content]").val(res.post.content);
-                                $("#exampleModal").modal("show");
-                            },
-                            error:function(error) {
-                                console.log(error)
-                            }
-                        })
-                    
-                    });
-                </script>';
-
-                $btn = $btn.'<button id="btn-delete" data-id='.$row->uuid.' class="btn btn-danger btn-sm">Delete</button>
-                <script type="text/javascript">
-                    $("button#btn-delete").click(function(e) {
-                        e.preventDefault();
-                        let dataDelete = $(this).data("id");
-                        // console.log(dataDelete);
-                        Swal.fire({
-                        title: "Are you sure?",
-                        text: "You cannot revert this! ",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#3085d6",
-                        cancelButtonColor: "#d33",
-                        confirmButtonText: "Yes, delete it!"
-                        }).then((result) => {
-                        if (result.isConfirmed) {
-                        $.ajax({
-                        type:"DELETE",
-                        dataType: "JSON",
-                        url: baseUrl+`/post/${dataDelete}/delete`,
-                        data:{
-                        "_token":$("meta[name=csrf-token]").attr("content"),
-                        },
-                        success:function(response){
-                        Swal.fire(
-                        "Deleted!",
-                        "Your file has been deleted.",
-                        "success"
-                        )
-                        $("#posts-table").DataTable().ajax.reload();
-
-                    },
-                        error:function(err){
-                        console.log(err);
-                        }
-                        });
-                        }
-                        })
-                        });
-                </script>';
+                $btn = $btn.'<button id="btn-delete" data-id='.$row->uuid.' class="btn btn-danger btn-sm">Delete</button>';
 
                 return $btn;
             })
@@ -135,7 +73,7 @@ class PostController extends Controller
             $sort_value = 1;
 
         }else{
-            $sort_value = Content::orderBy('created_at','desc')->first();
+            $sort_value = Content::orderBy('sort','desc')->first();
 
             $sort_value = $sort_value->sort + 1;
         }
@@ -189,14 +127,18 @@ class PostController extends Controller
         }
 
 
-        $post = Content::where('uuid',$id)->first();
         $data = $request->all();
+
+        // return $request->title.','.$id;
+
         Content::where('uuid',$id)->update([
             'title' => $request->title,
-            'content' => $request->content,
+            'content' => request('content'),
             'page' => $request->page,
             'author' => Auth::id(),
         ]);
+
+        $post = Content::where('uuid',$id)->first();
 
         return response()->json([
             'success' => true,

@@ -34,6 +34,8 @@ use App\Http\Controllers\WithdrawController;
     Route::post('/wallet/updateBlanace/{user_id}/{balance}/{type}',[ApiController::class,'updateBalance']);
     
     Route::get('/home-assets',[ApiController::class,'homeAsset']);
+
+    Route::get('/contents',[ApiController::class,'getContent']);
     
     Route::get('/get-blocks',[ApiController::class,'getBlock']);
     

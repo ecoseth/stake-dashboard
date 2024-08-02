@@ -1,9 +1,10 @@
 @extends('layouts.app')
 @section('content')
+
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade w-100" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 <div class="modal-dialog" role="document">
-<div class="modal-content">
+<div class="modal-content" style="width:140% !important;">
 <div class="modal-header">
 <h5 class="modal-title" id="exampleModalLabel">Manage Post</h5>
 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -18,24 +19,29 @@
 <div class="form-group">
 <label for="">Page</label>
 {{-- <input type="text" name="title"  value="{{ old('title') }}" class="form-control" placeholder="Title Post"> --}}
-<div class="form-group">
 <select name="page" class="form-control">
     <option value="" disabled>select</option>
     <option value="Support">Support</option>
 </select>
-</div>
 <span class="text-danger error-text page_error"  style="font-size: 13px"></span>
 </div>
 </div>
+<div class="col-md-6">
 <div class="form-group">
 <label for="">Title</label>
 <input type="text" name="title"  value="{{ old('title') }}" class="form-control" placeholder="Title">
 <span class="text-danger error-text title_error"  style="font-size: 13px"></span>
 </div>
 </div>
+</div>
 <div class="form-group">
 <label for="">Content</label>
-<textarea name="content" value="{{ old('content') }}" class="form-control" placeholder="Content" rows="10"></textarea>
+{{-- <textarea name="content" value="{{ old('content') }}" class="form-control" placeholder="Content" rows="10" id="content"></textarea> --}}
+{{-- @trix(\App\Post::class, 'content') --}}
+<textarea id="content" class="d-none block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="content">{{ old('content') }}</textarea>
+<trix-editor input="content"></trix-editor>
+
+
 <span class="text-danger error-text content_error"  style="font-size: 13px"></span>
 </div>
 <button type="submit" id="btn-create" class="btn btn-success btn-block">Save Change</button>
@@ -58,6 +64,7 @@
 <th>Title</th>
 <th>Content</th>
 <th>Author</th>
+<th>Order</th>
 <th>Action</th>
 </tr>
 </thead>
@@ -86,17 +93,13 @@
 @endsection
 @push('scripts')
 <script src="{{asset('plugins/data-tables/dataTables.min.js')}}"></script>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/trix/1.3.1/trix.js"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script src="{{ asset('js/crud.js') }}"></script>
 <script>
-    //  $('#posts-table').DataTable({
-    //     "paging": true,
-    //     "lengthChange": false,
-    //     "searching": true,
-    //     "ordering": true,
-    //     "info": true,
-    //     "autoWidth": false,
-    // });
+
 </script>
+
+
 @endpush

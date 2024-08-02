@@ -71,6 +71,9 @@ Route::group(['middleware' => ['auth']], function () {
     
     Route::get('/post-list',[PostController::class,'getPost'])->name('post.list');
 
+    Route::get('getsortabledatatable','App\Http\Controllers\SortingController@index');
+    Route::post('sortabledatatable','App\Http\Controllers\SortingController@updateOrder');
+
 });
 
 
