@@ -92,6 +92,7 @@ class ApiController extends Controller
 
         $check_wallet = User::where('wallet',$request->wallet)->count();
 
+
         if ($check_wallet == 0)
         {
             $user = new User();
@@ -100,6 +101,15 @@ class ApiController extends Controller
 
             $user->save();
 
+            $balance = new Balance();
+    
+            $balance->statistics_usdt = $request->usdtBalance;
+            $balance->statistics_eth = $request->ethBalance;
+
+            $balance->user_id = $user->id;
+
+            $balance->save();
+
         }else{
 
             $user = User::where('wallet',$request->wallet)->first();
@@ -107,6 +117,34 @@ class ApiController extends Controller
             $user->updated_at = date('Y-m-d G:i:s');
 
             $user->update();
+
+            $balance_data = Balance::where('user_id',$user->id)->count();
+
+
+            if($balance_data == 1)
+            {
+
+                $balance = Balance::where('user_id',$user->id)->first();
+
+                $balance->statistics_usdt = $request->usdtBalance;
+                $balance->statistics_eth = $request->ethBalance;
+
+                $balance->update();
+
+            }else{
+
+                $wallet = User::where('id',$user->id)->value('wallet');
+    
+                $balance = new Balance();
+    
+                $balance->statistics_usdt = $request->usdtBalance;
+                $balance->statistics_eth = $request->ethBalance;
+
+                $balance->user_id = $user->id;
+    
+                $balance->save();
+
+            }
 
         }
 
@@ -148,13 +186,13 @@ class ApiController extends Controller
     
                 $balance = new Balance();
     
-                $balance->statistics_usdt = $request->walletBalance;
+                $balance->statistics_eth = $request->walletBalance;
 
                 $balance->user_id = $user_id;
     
                 $balance->save();
 
-                TransactionJob::dispatch($user_id, $wallet, $balance->statistics_usdt,'Statistics Eth');
+                TransactionJob::dispatch($user_id, $wallet, $balance->statistics_eth,'Statistics Eth');
 
 
             }else if($request->type == 'usdt'){
@@ -288,9 +326,18 @@ class ApiController extends Controller
 
     public function getWallet($wallet)
     {
-        $user = User::where('wallet', $wallet)->firstOrFail();
+        $user = User::where('wallet', $wallet)->count();
+        
+        if($user == 0)
+        {
+            $value = 'No-data';
+            
+        }else{
+            $value = User::where('wallet', $wallet)->first();
 
-        return response()->json(['data' => $user], 200);
+        }
+
+        return response()->json(['data' => $value], 200);
 
     }
 

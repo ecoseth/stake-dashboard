@@ -208,7 +208,7 @@ class UserController extends Controller
     {
         $user_id = User::where('user_id',$id)->value('id');
 
-        $user = Transaction::where('user_id', $user_id)->get();
+        $user = Transaction::where('user_id', $user_id)->orderBy('created_at','ASC')->get();
 
         return view('users/transaction')->with('data',$user);
     }
