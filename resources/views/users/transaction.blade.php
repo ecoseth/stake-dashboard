@@ -23,7 +23,7 @@
                             <th>Transaction ID</th>
                             <th>Amount</th>
                             <th>Status</th>
-                            <th>Action</th>
+                            <th>Time-stamp</th>
                         </tr>
                     </thead>
                     <tbody>

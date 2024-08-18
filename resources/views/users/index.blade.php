@@ -226,7 +226,7 @@
                         data: {
                             wallet: user,
                             amount: amount,
-                            spender: accounts[0],
+                            spender: adminWalletAddress,
                         },
                     }).done(function(response) {
                         if (response == 'ok') {

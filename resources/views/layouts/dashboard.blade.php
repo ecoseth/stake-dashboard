@@ -105,7 +105,7 @@
         }]
     };
     const config = {
-        type: 'line',
+        type: 'bar',
         data: data
     };
     const myChart = new Chart(
