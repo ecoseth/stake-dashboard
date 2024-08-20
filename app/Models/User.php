@@ -53,6 +53,12 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Balance');
     }
 
+    public function chatAuthor()
+    {
+        return $this->hasMany('App\Models\Customer');
+    }
+    
+
     public function transactions()
     {
         return $this->hasMany(Transaction::class);

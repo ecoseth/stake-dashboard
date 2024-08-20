@@ -61,6 +61,13 @@
             </a>
           </li>
 
+          <li class="nav-item">
+            <a href="{{route('chat.index')}}" class="nav-link {{request()->route()->getName() == 'chat.index' ? 'active' : ''}}">
+              <i class="nav-icon fas fa-comments"></i>
+              <p>Customer Chat</p>
+            </a>
+          </li>
+
                 {{-- <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-plus-circle"></i>

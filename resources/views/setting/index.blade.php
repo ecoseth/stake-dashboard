@@ -16,8 +16,7 @@
                     <div class="card-header">
                         <h3 class="card-title">Setting</h3><small><i class="fa fa-check-circle text-green" id="settings_icon_success" aria-hidden="true" style="display: none;"></i></small>
                         <div class="card-tools">
-                            <!-- Buttons, labels, and many other things can be placed here! -->
-                            <!-- Here is a label for example -->
+                            <i class="nav-icon fas fa-cogs"></i>
                         </div>
                         <!-- /.card-tools -->
                     </div>

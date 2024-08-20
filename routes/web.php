@@ -9,6 +9,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BalanceProfitController;
 use App\Http\Controllers\Auth\LoginRegisterController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\ChatController;
+
 
 
 
@@ -48,6 +50,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('/edit-password/{id}', [UserController::class, 'updatePassword'])->name('password.update');
 
     Route::resource('/rewards', LevelController::class);
+
+    Route::resource('/chat',ChatController::class);
 
     Route::get('user/{id}/transactions',[UserController::class, 'transaction'])->name('user.transactions');
 
