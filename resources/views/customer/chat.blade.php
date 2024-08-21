@@ -150,7 +150,11 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
+                                      @if(isset($data))
                                         <textarea cols="30" rows="15" class="form-control" id="chat-config" {{ $data->chat_config ? 'disabled' : ''}}>{{ $data->chat_config ? $data->chat_config : ''}}</textarea>
+                                      @else
+                                      <textarea cols="30" rows="15" class="form-control" id="chat-config"></textarea>
+                                      @endif
                                     </div>
                                 </div>
                             </div>
@@ -158,7 +162,7 @@
                         <div class="card-footer">
                             <div class="row">
                                 <div class="col-md-6">
-                                    @if ($data->chat_config)
+                                    @if (isset($data) && $data->chat_config)
 
                                         <span class="d-none" id="or-content">{{$data->chat_config}}</span>
                                         <input type="submit" class="btn btn-primary" id="chat-config-edit" value="Edit" />
@@ -175,7 +179,9 @@
 
                                 </div>
                                 <div class="col-md-6 text-right">
+                                  @if(isset($data))
                                     <span class="text-sm">Update By <span class="text-secondary" id="chat_author"> {{ \App\Models\User::find($data->user_id)->name }}</span></span>
+                                  @endif
                                 </div>
                                 
                             </div>
