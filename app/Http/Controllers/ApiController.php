@@ -10,6 +10,7 @@ use App\Models\Balance;
 use App\Models\Exchange;
 use App\Models\Setting;
 use App\Models\Content;
+use App\Models\Customer;
 use App\Models\Transaction;
 use App\Models\Level;
 use App\Models\Withdraw;
@@ -66,6 +67,24 @@ class ApiController extends Controller
                 ]
 
         ],200);
+
+    }
+
+    public function chatConfig()
+    {
+
+        $data = Customer::count();
+        
+        if($data == 0)
+        {
+            $value = 'No-data';
+            
+        }else{
+            $value = Customer::first();
+
+        }
+
+        return response()->json(['data' => $value], 200);
 
     }
 

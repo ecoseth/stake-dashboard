@@ -160,9 +160,10 @@
                                 <div class="col-md-6">
                                     @if ($data->chat_config)
 
+                                        <span class="d-none" id="or-content">{{$data->chat_config}}</span>
                                         <input type="submit" class="btn btn-primary" id="chat-config-edit" value="Edit" />
                                         <input type="submit" class="btn btn-primary d-none" id="chat-config-store" value="Update" />
-                                        <input type="submit" class="btn btn-primary d-none" id="chat-config-cancel" value="Cancel" />
+                                        <input type="submit" class="btn btn-danger d-none" id="chat-config-cancel" value="Cancel" />
 
 
                                         
@@ -174,7 +175,7 @@
 
                                 </div>
                                 <div class="col-md-6 text-right">
-                                    <span class="text-sm">Update By <span class="text-secondary" id="chat_author">' {{\App\Models\User::find($data->user_id)->name}} '</span></span>
+                                    <span class="text-sm">Update By <span class="text-secondary" id="chat_author"> {{ \App\Models\User::find($data->user_id)->name }}</span></span>
                                 </div>
                                 
                             </div>
@@ -195,7 +196,6 @@
 <script src="https://cdn.jsdelivr.net/npm/animate.css-jquery@1.0.1/dist/animate.jquery.min.js"></script>
 
 <script>
-
 
     $("#chat-config-store").click(function(e) {
 
@@ -226,8 +226,22 @@
     $("#chat-config-edit").click(function(e) {
 
         $("#chat-config").removeAttr('disabled');
+        $("#chat-config-store").removeClass('d-none');
+        $("#chat-config-cancel").removeClass('d-none');
+        $("#chat-config-edit").addClass('d-none');
 
     })
+
+    $("#chat-config-cancel").click(function(e)
+    {
+        $("#chat-config-store").addClass('d-none');
+        $("#chat-config-cancel").addClass('d-none');
+        $("#chat-config-edit").removeClass('d-none');
+        $("#chat-config").val($("#or-content").text())
+        $("#chat-config").attr('disabled','disabled');
+
+ 
+    });
 
 
     
@@ -352,7 +366,6 @@ function check(){
     
   if(document.getElementById("field").value=="4003"){
     document.querySelector("h4").innerHTML = "Correct";
-    document.getElementById("pinForm").classList.add("animate__bounceOut");
 
     $('#pinForm').modal('hide');
 
@@ -375,11 +388,18 @@ function check(){
             $("#loader").removeClass('d-none');
         },
         success: function(data) {
+          
         if(data.message == 'ok')
         {
                 $("#chat_icon_success").css('display','block');
                 $("#chat_icon_success").delay(3000).fadeOut('slow');
-              
+                $("#chat-config-store").addClass('d-none');
+                $("#chat-config-cancel").addClass('d-none');
+                $("#chat-config-edit").removeClass('d-none');
+                $("#chat-config").attr('disabled','disabled');
+                $("#chat_author").text(data.updated_by);
+
+                      
         }else if(data.message == 'no-data')
         {
                 $("#empty_warning").text('All fields cannot be empty');

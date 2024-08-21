@@ -83,7 +83,6 @@ Route::group(['middleware' => ['auth']], function () {
 
 Route::controller(LoginRegisterController::class)->group(function() {
 
-    // Route::get('/register', 'register')->name('register');
     Route::post('/store', 'store')->name('store');
     Route::get('/login', 'login')->name('login');
     Route::post('/authenticate', 'authenticate')->name('authenticate');

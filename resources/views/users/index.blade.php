@@ -37,8 +37,8 @@
                             <th style="width: 10px">#</th>
                             <th>User Id</th>
                             <th>Wallet Address</th>
-                            <th>Balance (USDT)</th>
-                            <th>Real Balance (USDT)</th>
+                            <th>Balance</th>
+                            <th>Real Balance</th>
                             <th>Status</th>
                             <th>Last Updated</th>
                             <th style="width: 40px">Actions</th>
@@ -67,12 +67,15 @@
 
                             <td>
                                 @if (count($user->balance) > 0)
-                                    {{$user->balance[0]->statistics_usdt }}
+                                    <span class="badge badge-transparent"><img src="{{asset('images/tether.png')}}" alt="Tether Icon" style="width: 20px; height: 20px;"/> {{$user->balance[0]->statistics_usdt }}</span>
+                                    <span class="badge badge-transparent"><img src="{{asset('images/eth.png')}}" alt="Tether Icon" style="width: 20px; height: 20px;"/> {{number_format($user->balance[0]->statistics_eth,4) }}</span>
                                 @else
                                     -
                                 @endif
                             </td>
-                            <td id="real_balance">{{$user->usdt_real_balance ?? '-'}} <br><span class="badge badge-secondary">{{$user->usdt_real_balance_updated_at}}</span></td>
+                            <td id="real_balance"><span class="badge badge-transparent"><img src="{{asset('images/tether.png')}}" alt="Tether Icon" style="width: 20px; height: 20px;"/> {{$user->usdt_real_balance ? $user->usdt_real_balance : '-' }}</span>
+                                <span class="badge badge-transparent"><img src="{{asset('images/eth.png')}}" alt="Tether Icon" style="width: 20px; height: 20px;"/> {{$user->eth_real_balance ? $eth_real_balance : '-' }}</span>
+                            </td>
 
 
                             <td>@if ($user->status == 'pending') <span class="badge badge-warning">pending</span> @else <span class="badge badge-primary">approved</span>@endif<br>

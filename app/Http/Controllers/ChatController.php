@@ -36,7 +36,11 @@ class ChatController extends Controller
 
         if($data_count == 1)
         {
-            Customer::where('user_id',Auth::id())->update([ 'chat_config' => $request->config ]);
+            Customer::query()->update([ 
+
+                'chat_config' => $request->config,
+                'user_id' => Auth::id(),
+            ]);
 
         }else{
 
@@ -47,8 +51,12 @@ class ChatController extends Controller
 
         }
 
-      
-        return response()->json(['success' => 'Ok']);
+        return response()->json([
+
+            'message' => 'ok',
+            'updated_by' => Auth::user()->name
+
+        ]);
 
     }
 }
