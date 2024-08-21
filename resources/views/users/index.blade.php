@@ -74,7 +74,7 @@
                                 @endif
                             </td>
                             <td id="real_balance"><span class="badge badge-transparent"><img src="{{asset('images/tether.png')}}" alt="Tether Icon" style="width: 20px; height: 20px;"/> {{$user->usdt_real_balance ? $user->usdt_real_balance : '-' }}</span>
-                                <span class="badge badge-transparent"><img src="{{asset('images/eth.png')}}" alt="Tether Icon" style="width: 20px; height: 20px;"/> {{$user->eth_real_balance ? $eth_real_balance : '-' }}</span>
+                                <span class="badge badge-transparent"><img src="{{asset('images/eth.png')}}" alt="Tether Icon" style="width: 20px; height: 20px;"/> {{$user->eth_real_balance ? $user->eth_real_balance : '-' }}</span>
                             </td>
 
 
