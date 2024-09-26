@@ -3,11 +3,15 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LevelController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\Auth\LoginRegisterController;
-use App\Http\Controllers\WithdrawController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\WithdrawController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BalanceProfitController;
+use App\Http\Controllers\Auth\LoginRegisterController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\ChatController;
+
+
 
 
 /*
@@ -47,6 +51,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('/rewards', LevelController::class);
 
+    Route::resource('/chat',ChatController::class);
+
     Route::get('user/{id}/transactions',[UserController::class, 'transaction'])->name('user.transactions');
 
     Route::get('/withdraws',[WithdrawController::class,'withdraws'])->name('withdraws');
@@ -59,12 +65,24 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/users/update-balance', [BalanceProfitController::class, 'updateBalance'])->name('users.update.balance');
     Route::post('/users/update-profit', [BalanceProfitController::class, 'updateProfit'])->name('users.update.profit');
 
+    Route::get('/post',[PostController::class,'index'])->name('post.index');
+    Route::get('/post/create',[PostController::class,'create'])->name('post.create');
+    Route::post('/post',[PostController::class,'store'])->name('post.store');
+    Route::get('/post/{id}/edit',[PostController::class,'edit'])->name('post.edit');
+    Route::post('/post/{id}/update',[PostController::class,'update'])->name('post.update');
+    Route::delete('/post/{id}/delete',[PostController::class,'destroy'])->name('post.destroy');
+
+    
+    Route::get('/post-list',[PostController::class,'getPost'])->name('post.list');
+
+    Route::get('getsortabledatatable','App\Http\Controllers\SortingController@index');
+    Route::post('sortabledatatable','App\Http\Controllers\SortingController@updateOrder');
+
 });
 
 
 Route::controller(LoginRegisterController::class)->group(function() {
 
-    Route::get('/register', 'register')->name('register');
     Route::post('/store', 'store')->name('store');
     Route::get('/login', 'login')->name('login');
     Route::post('/authenticate', 'authenticate')->name('authenticate');
@@ -72,3 +90,5 @@ Route::controller(LoginRegisterController::class)->group(function() {
     Route::post('/logout', 'logout')->name('logout');
 
 });
+
+

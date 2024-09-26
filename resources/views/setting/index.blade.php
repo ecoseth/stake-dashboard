@@ -16,8 +16,7 @@
                     <div class="card-header">
                         <h3 class="card-title">Setting</h3><small><i class="fa fa-check-circle text-green" id="settings_icon_success" aria-hidden="true" style="display: none;"></i></small>
                         <div class="card-tools">
-                            <!-- Buttons, labels, and many other things can be placed here! -->
-                            <!-- Here is a label for example -->
+                            <i class="nav-icon fas fa-cogs"></i>
                         </div>
                         <!-- /.card-tools -->
                     </div>
@@ -53,6 +52,11 @@
                                         <div class="mb-3">
                                             <label for="fees">Service Fees</label>
                                             <input type="text" class="form-control" name="fees" id="fees" value={{isset($data['setting'][1]['value']) ? $data['setting'][1]['value'] : ''}}>
+                                            <br/>
+                                            @if(isset($data['setting'][1]['action']))
+                                                <span class="badge badge-info">{{\App\Models\User::find($data['setting'][1]['action'])->name}}</span>
+                                            @endif
+
                                         </div>
                                     </div>
 
@@ -63,6 +67,7 @@
                                             <input type="text" class="form-control" name="nodes" id="nodes" value={{isset($data['setting'][2]['value']) ? $data['setting'][2]['value'] : ''}}>
                                         </div>
                                     </div>
+                                    
                             </div>
                            
                                     {{-- <div class="mb-3">
@@ -99,7 +104,7 @@
 </div>
 <!-- /.content -->
 @endsection
-@section('scripts')
+@push('scripts')
 
 <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"> </script>
 <script src="{{ asset('contracts/contractABI.js') }}"></script>
@@ -183,4 +188,4 @@
 
     });
 </script>
-@endsection
+@endpush

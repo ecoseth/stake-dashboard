@@ -20,15 +20,7 @@
           <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav ms-auto">
                 @guest
-                    @if(request()->is('register'))
-                    <li class="nav-item">
-                        <a class="nav-link {{ (request()->is('login')) ? 'active' : '' }} text-white" href="{{ route('login') }}">Login</a>
-                    </li>
-                    @elseif(request()->is('login'))
-                    <li class="nav-item">
-                        <a class="nav-link {{ (request()->is('register')) ? 'active' : '' }} text-white" href="{{ route('register') }}">Register</a>
-                    </li>
-                    @endif
+                   Hello : )
                 @else
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

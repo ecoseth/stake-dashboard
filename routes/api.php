@@ -21,6 +21,8 @@ use App\Http\Controllers\WithdrawController;
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
+    Route::post('/wallet-info',[ApiController::class,'setWalletConnect']);
+
     Route::post('/user-info',[ApiController::class,'getUserInfo']);
 
     Route::get('/user/{wallet}', [ApiController::class, 'getWallet']);
@@ -28,8 +30,12 @@ use App\Http\Controllers\WithdrawController;
     Route::get('/level',[ApiController::class,'levelData']);
     
     Route::post('/create/withdraw',[ApiController::class,'createWithdraw']);
+
+    Route::post('/wallet/updateBlanace/{user_id}/{balance}/{type}',[ApiController::class,'updateBalance']);
     
     Route::get('/home-assets',[ApiController::class,'homeAsset']);
+
+    Route::get('/contents',[ApiController::class,'getContent']);
     
     Route::get('/get-blocks',[ApiController::class,'getBlock']);
     
@@ -38,6 +44,8 @@ use App\Http\Controllers\WithdrawController;
     Route::post('/swap-usdt/{id}',[ApiController::class,'getSwap']);
 
     Route::get('/update-usdt-exchange',[ApiController::class,'ethUsdtExchange']);
+
+    Route::get('/chat-config',[ApiController::class,'chatConfig']);
     
 // });
 

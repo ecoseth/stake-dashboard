@@ -21,17 +21,15 @@
                     <thead>
                         <tr>
                             <th>Transaction ID</th>
-                            <th>User Wallet</th>
                             <th>Amount</th>
                             <th>Status</th>
-                            <th>Action</th>
+                            <th>Time-stamp</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($data as $key => $trx)
                             <tr>
                                 <td>{{$trx->id}}</td>
-                                <td>{{$trx->wallet}}</td>
                                 <td>{{$trx->amount}}</td>
                                 
                                 <td> 
@@ -55,7 +53,7 @@
 <!-- /.content -->
 
 @endsection
-@section('scripts')
+@push('scripts')
 
 <script src="{{asset('plugins/data-tables/dataTables.min.js')}}"></script>
 
@@ -69,4 +67,4 @@
    });
 </script>
 
-@endsection
+@endpush

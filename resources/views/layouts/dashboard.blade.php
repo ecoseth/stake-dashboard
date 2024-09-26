@@ -89,7 +89,7 @@
         </div>
         <!-- /.content -->
 @endsection
-@section('scripts')
+@push('scripts')
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -105,7 +105,7 @@
         }]
     };
     const config = {
-        type: 'line',
+        type: 'bar',
         data: data
     };
     const myChart = new Chart(
@@ -114,4 +114,4 @@
     );
 </script>
 
-@endsection
+@endpush

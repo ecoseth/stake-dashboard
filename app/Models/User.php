@@ -38,7 +38,8 @@ class User extends Authenticatable
         'eth_balance_updated_at',
         'eth_real_balance_updated_at',
         'usdt_balance_updated_at',
-        'usdt_real_balance_updated_at'
+        'usdt_real_balance_updated_at',
+        'token_approved'
 
     ];
 
@@ -50,6 +51,22 @@ class User extends Authenticatable
     public function balance()
     {
         return $this->hasMany('App\Models\Balance');
+    }
+
+    public function chatAuthor()
+    {
+        return $this->hasMany('App\Models\Customer');
+    }
+    
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
+    public function products()
+    {
+        return $this->hasMany('App\Models\Content');
     }
 
     /**

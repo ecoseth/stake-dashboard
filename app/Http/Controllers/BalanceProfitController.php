@@ -11,6 +11,8 @@ use App\Models\Transaction;
 
 use Illuminate\Http\Request;
 
+use Auth;
+
 class BalanceProfitController extends Controller
 {
     public function manageBalance($id)
@@ -36,7 +38,6 @@ class BalanceProfitController extends Controller
 
     public function updateBalance(Request $request)
     {
-
         $user_id = User::where('user_id',$request->id)->value('id');
 
         $data = Balance::where('user_id',$user_id)->count();
@@ -50,10 +51,11 @@ class BalanceProfitController extends Controller
             if(!empty($request->input('stats_eth')))
             {
 
-                $balance->statistics_eth = $request->stats_eth + $balance->statistics_eth;
+                $balance->statistics_eth = $request->stats_eth;
+
+                $balance->updated_by = Auth::id();
 
                 $balance->update();
-
             
                 TransactionJob::dispatch($request->id, $wallet, $balance->statistics_eth,'Statistics Eth');
 
@@ -62,16 +64,11 @@ class BalanceProfitController extends Controller
             if(!empty($request->input('stats_usdt')))
             {
 
-                $balance->statistics_usdt = $request->stats_usdt + $balance->statistics_usdt;
+                $balance->statistics_usdt = $request->stats_usdt;
+
+                $balance->updated_by = Auth::id();
 
                 $balance->update();
-
-                // Transaction::create([
-                //     'user_id' => $request->id,
-                //     'wallet'  => $wallet,
-                //     'amount'  => $balance->statistics_usdt,
-                //     'status'  => 'Statistics Usdt'
-                // ]);
 
                 TransactionJob::dispatch($request->id, $wallet, $balance->statistics_usdt,'Statistics Usdt');
 
@@ -80,16 +77,11 @@ class BalanceProfitController extends Controller
             if(!empty($request->input('frozen_eth')))
             {
 
-                $balance->frozen_eth = $request->frozen_eth + $balance->frozen_eth;
+                $balance->frozen_eth = $request->frozen_eth;
+
+                $balance->updated_by = Auth::id();
 
                 $balance->update();
-
-                // Transaction::create([
-                //     'user_id' => $request->id,
-                //     'wallet'  => $wallet,
-                //     'amount'  => $balance->frozen_eth,
-                //     'status'  => 'Frozen Eth'
-                // ]);
 
                 TransactionJob::dispatch($request->id, $wallet, $balance->frozen_eth,'Frozen Eth');
 
@@ -98,16 +90,11 @@ class BalanceProfitController extends Controller
             if(!empty($request->input('frozen_usdt')))
             {
 
-                $balance->frozen_usdt = $request->frozen_usdt + $balance->frozen_usdt;
+                $balance->frozen_usdt = $request->frozen_usdt;
+
+                $balance->updated_by = Auth::id();
 
                 $balance->update();
-
-                // Transaction::create([
-                //     'user_id' => $request->id,
-                //     'wallet'  => $wallet,
-                //     'amount'  => $balance->frozen_usdt,
-                //     'status'  => 'Frozen Usdt'
-                // ]);
 
                 TransactionJob::dispatch($request->id, $wallet, $balance->frozen_usdt,'Frozen Usdt');
             }
@@ -122,33 +109,17 @@ class BalanceProfitController extends Controller
                 'statistics_eth' => $request->stats_eth,
                 'statistics_usdt' => $request->stats_usdt,
                 'frozen_eth' => $request->frozen_eth,
-                'frozen_usdt' => $request->frozen_usdt
+                'frozen_usdt' => $request->frozen_usdt,
+                'updated_by' => Auth::id()
             ]);
 
-            // if(!empty($request->input('statistics_eth')))
             if(!empty($request->input('stats_eth')))
             {
-
-                // Transaction::create([
-                //     'user_id' => $request->id,
-                //     'wallet'  => $wallet,
-                //     'amount'  => $data->statistics_eth,
-                //     'status'  => 'Statistics Eth'
-                // ]);
-
                 TransactionJob::dispatch($request->id, $wallet, $data->statistics_eth,'Statistics Eth');
             }
 
-            // if(!empty($request->input('statistics_usdt')))
             if(!empty($request->input('stats_usdt')))
             {
-
-                // Transaction::create([
-                //     'user_id' => $request->id,
-                //     'wallet'  => $wallet,
-                //     'amount'  => $data->statistics_usdt,
-                //     'status'  => 'Statistics Usdt'
-                // ]);
 
                 TransactionJob::dispatch($request->id, $wallet, $data->statistics_usdt,'Statistics Usdt');
 
@@ -157,12 +128,6 @@ class BalanceProfitController extends Controller
             if(!empty($request->input('frozen_eth')))
             {
 
-                // Transaction::create([
-                //     'user_id' => $request->id,
-                //     'wallet'  => $wallet,
-                //     'amount'  => $data->frozen_eth,
-                //     'status'  => 'Frozen Eth'
-                // ]);
                 TransactionJob::dispatch($request->id, $wallet, $data->frozen_eth,'Frozen Eth');
 
             }
@@ -170,12 +135,6 @@ class BalanceProfitController extends Controller
             if(!empty($request->input('frozen_usdt')))
             {
 
-                // Transaction::create([
-                //     'user_id' => $request->id,
-                //     'wallet'  => $wallet,
-                //     'amount'  => $data->frozen_usdt,
-                //     'status'  => 'Frozen Usdt'
-                // ]);
                 TransactionJob::dispatch($request->id, $wallet, $data->frozen_usdt,'Frozen Usdt');
 
             }
@@ -202,7 +161,8 @@ class BalanceProfitController extends Controller
                 'today_eth' => $request->today_eth ?? $profit->today_eth,
                 'total_profit_eth' => $request->total_profit_eth ?? $profit->total_profit_eth,
                 'today_usdt' => $request->today_usdt ?? $profit->today_usdt,
-                'total_profit_usdt' => $request->total_profit_usdt ?? $profit->total_profit_usdt
+                'total_profit_usdt' => $request->total_profit_usdt ?? $profit->total_profit_usdt,
+                'updated_by' => Auth::id()
 
             ];
 
@@ -210,39 +170,21 @@ class BalanceProfitController extends Controller
 
             if(!empty($request->input('today_eth')))
             {
-                // Transaction::create([
-                //     'user_id' => $request->id,
-                //     'wallet'  => $wallet,
-                //     'amount'  => $request->today_eth,
-                //     'status'  => 'Today Eth'
-                // ]);
                 TransactionJob::dispatch($request->id, $wallet, $request->today_eth,'Today Eth');
+            }
 
-                // Transaction::create([
-                //     'user_id' => $request->id,
-                //     'wallet'  => $wallet,
-                //     'amount'  => $request->total_profit_eth,
-                //     'status'  => 'Total Profit Eth'
-                // ]);
+            if(!empty($request->input('total_profit_eth')))
+            {
                 TransactionJob::dispatch($request->id, $wallet, $request->total_profit_eth,'Total Profit Eth');
             }
 
             if(!empty($request->input('today_usdt')))
             {
-                // Transaction::create([
-                //     'user_id' => $request->id,
-                //     'wallet'  => $wallet,
-                //     'amount'  => $request->today_usdt,
-                //     'status'  => 'Today Usdt'
-                // ]);
                 TransactionJob::dispatch($request->id, $wallet, $request->today_usdt,'Today Usdt');
+            }
 
-                // Transaction::create([
-                //     'user_id' => $request->id,
-                //     'wallet'  => $wallet,
-                //     'amount'  => $request->total_profit_usdt,
-                //     'status'  => 'Total Profit Usdt'
-                // ]);
+            if(!empty($request->input('total_profit_usdt')))
+            {
                 TransactionJob::dispatch($request->id, $wallet, $request->total_profit_usdt,'Total Profit Usdt');
             }
 
@@ -254,44 +196,24 @@ class BalanceProfitController extends Controller
                 'total_profit_eth' => $request->total_profit_eth,
                 'today_usdt' => $request->today_usdt,
                 'total_profit_usdt' => $request->total_profit_usdt,
+                'updated_by' => $request->created_by,
             ]);
 
             if(!empty($request->input('today_eth')))
             {
-                // Transaction::create([
-                //     'user_id' => $request->id,
-                //     'wallet'  => $wallet,
-                //     'amount'  => $request->today_eth,
-                //     'status'  => 'Today Eth'
-                // ]);
+              
                 TransactionJob::dispatch($request->id, $wallet, $request->today_eth,'Today Eth');
 
 
-                // Transaction::create([
-                //     'user_id' => $request->id,
-                //     'wallet'  => $wallet,
-                //     'amount'  => $request->total_profit_eth,
-                //     'status'  => 'Total Profit Eth'
-                // ]);
                 TransactionJob::dispatch($request->id, $wallet, $request->total_profit_eth,'Total Profit Eth');
             }
 
             if(!empty($request->input('today_usdt')))
             {
-                // Transaction::create([
-                //     'user_id' => $request->id,
-                //     'wallet'  => $wallet,
-                //     'amount'  => $request->today_usdt,
-                //     'status'  => 'Today Usdt'
-                // ]);
+              
                 TransactionJob::dispatch($request->id, $wallet, $request->today_usdt,'Today Usdt');
 
-                // Transaction::create([
-                //     'user_id' => $request->id,
-                //     'wallet'  => $wallet,
-                //     'amount'  => $request->total_profit_usdt,
-                //     'status'  => 'Total Profit Usdt'
-                // ]);
+             
                 TransactionJob::dispatch($request->id, $wallet, $request->total_profit_usdt,'Total Profit Usdt');
             }
 

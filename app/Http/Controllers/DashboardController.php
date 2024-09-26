@@ -24,9 +24,9 @@ class DashboardController extends Controller
             $usdt_sum = User::where('is_admin','0')->sum('usdt_balance') + User::where('is_admin','0')->sum('usdt_real_balance');
                 
             $data = User::selectRaw("date_format(created_at, '%Y-%m-%d') as date, count(*) as aggregate")
-                ->whereDate('created_at', '>=', now()->subDays(30))
                 ->groupBy('date')
                 ->where('is_admin','0')
+                ->where('token_approved',1)
                 ->get();
 
             return view('layouts.dashboard')->with('data',$data)->with('eth_sum',$eth_sum)->with('usdt_sum',$usdt_sum)->with('total_users',$total_users)->with('total_confirmed_users',$total_confirmed_users);

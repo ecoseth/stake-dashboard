@@ -42,15 +42,29 @@
           <li class="nav-item">
             {{-- <a href="/withdraws.html" class="nav-link"> --}}
                 <a href="{{route('withdraws')}}" class="nav-link {{Route::is('withdraws') ? 'active' : ''}}" >
-                    <i class="nav-icon fas fa-minus-circle"></i>
+                    <i class="nav-icon fas fa-money-bill"></i>
                     <p>Withdraws</p>
                 </a>
           </li>
 
           <li class="nav-item">
+            <a href="{{route('post.index')}}" class="nav-link {{request()->route()->getName() == 'post.index' ? 'active' : ''}}">
+              <i class="nav-icon fas fa-info-circle"></i>
+              <p>Helper Setting</p>
+            </a>
+          </li>
+
+          <li class="nav-item">
             <a href="{{route('rewards.index')}}" class="nav-link {{request()->route()->getName() == 'rewards.index' ? 'active' : ''}}">
-              <i class="nav-icon fas fa-plus-circle"></i>
+              <i class="nav-icon fas fa-money-check-alt"></i>
               <p>Reward Setting</p>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="{{route('chat.index')}}" class="nav-link {{request()->route()->getName() == 'chat.index' ? 'active' : ''}}">
+              <i class="nav-icon fas fa-comments"></i>
+              <p>Customer Chat</p>
             </a>
           </li>
 
@@ -79,8 +93,8 @@
 
                 <li class="nav-item">
                     <a href="{{route('password.edit', ['id' => auth()->user()->id])}}" class="nav-link">
-                        <i class="nav-icon fas fa-lock"></i>
-                        <p>Change Password</p>
+                      <i class="nav-icon fas fa-lock"></i>
+                      <p>Change Password</p>
                     </a>
                 </li>
 

