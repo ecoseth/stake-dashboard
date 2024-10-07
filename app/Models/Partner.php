@@ -5,15 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Exchange extends Model
+class Partner extends Model
 {
     use HasFactory;
 
-    protected $table = 'exchange';
-
     protected $fillable = [
-        'usdt',
-        'open_time',
-        'close_time',
+
+        'name',
+        'logo',
+        
     ];
 }

@@ -62,6 +62,13 @@
           </li>
 
           <li class="nav-item">
+            <a href="{{route('partners.list')}}" class="nav-link {{request()->route()->getName() == 'rewards.index' ? 'active' : ''}}">
+              <i class="nav-icon fas fa-handshake"></i>
+              <p>Business Partners</p>
+            </a>
+          </li>
+
+          <li class="nav-item">
             <a href="{{route('chat.index')}}" class="nav-link {{request()->route()->getName() == 'chat.index' ? 'active' : ''}}">
               <i class="nav-icon fas fa-comments"></i>
               <p>Customer Chat</p>

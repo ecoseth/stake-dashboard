@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 use App\Models\Content;
+use App\Models\Partner;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -17,10 +18,10 @@ class PostController extends Controller
             return Datatables::of($data)
             ->addIndexColumn()
             ->addColumn('page', function($row){
-                return $row->page;
+                return $row->page == 'About' ? 'About-us' : $row->page;
              })
             ->addColumn('title', function($row){
-                return $row->title;
+                return $row->title == 'About' ? '-' : $row->title;
              })
             ->addColumn('content', function($row){
             return Str::words(strip_tags($row->content), 6, '...');
@@ -49,7 +50,6 @@ class PostController extends Controller
     {
      
         $posts = Content::all();
-        return $posts;
         return response()->json([
             'success' => true,
             'posts' => $posts
@@ -114,6 +114,7 @@ class PostController extends Controller
             'post' => $post
         ]);
     }
+
     public function update(Request $request,$id)
     {
         $validator = Validator::make($request->all(),[
@@ -127,10 +128,6 @@ class PostController extends Controller
         }
 
 
-        $data = $request->all();
-
-        // return $request->title.','.$id;
-
         Content::where('uuid',$id)->update([
             'title' => $request->title,
             'content' => request('content'),
@@ -138,22 +135,92 @@ class PostController extends Controller
             'author' => Auth::id(),
         ]);
 
-        $post = Content::where('uuid',$id)->first();
-
         return response()->json([
             'success' => true,
             'message' => 'Success Updated post',
         ]);
     }
+
     public function destroy($id)
     {
-    $post = Content::where('uuid',$id)->first();
-    if($post){
-        Content::where('uuid',$id)->delete();
-        return response()->json([
-        'success' => true,
-        'message' => 'Success Deleted post',
+        $post = Content::where('uuid',$id)->first();
+        if($post){
+            Content::where('uuid',$id)->delete();
+            return response()->json([
+            'success' => true,
+            'message' => 'Success Deleted post',
+            ]);
+        }
+    }
+
+    public function partnerList(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = Partner::orderBy('created_at','DESC')->get();
+            return Datatables::of($data)
+            ->addIndexColumn()
+            ->addColumn('name', function($row){
+                return  $row->name;
+            })
+            ->addColumn('logo', function($row){
+                return '<img src="'.asset('images/'.$row->logo).'" border="0" width="40" class="img-rounded" align="center"/>';
+            })
+            ->addColumn('action', function($row){
+                $btn = '<button id="editModal" data-action='.route('post.update',$row->id).' data-id='.$row->id.' class="btn btn-warning btn-sm">Edit</button> ';
+
+                return $btn;
+            })
+            ->rawColumns(['name','logo','action'])
+            ->make(true);
+        }
+
+        return view('posts.partners');
+
+    }
+
+    public function partnerEdit($id)
+    {
+        $data = Partner::where('id',$id)->first();
+            return response()->json([
+            'success' => true,
+            'post' => $data
         ]);
     }
-}
+
+    public function updatePartnerList(Request $request)
+    {
+
+        $validator = Validator::make($request->all(),[
+            'name' => 'required|string|max:255',
+            'logo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // validates images
+        ]);
+    
+
+        if($validator->fails()){
+            return response()->json($validator->errors(),400);
+        }
+
+        $data = $request->all();
+
+        // return $request->title.','.$id;
+
+        if ($request->hasFile('logo')) {
+            $imagePath = $request->file('logo')->store('images', 'public');
+        }
+
+        Partner::where('id',$request->id)->update([
+
+            'name' => $request->name,
+            'logo' => $request->file('logo'),
+
+        ]);
+
+        return response()->json([
+
+            'success' => true,
+            'message' => 'Updated Successfully',
+
+        ]);
+
+    }
 }

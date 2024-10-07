@@ -74,6 +74,10 @@ Route::group(['middleware' => ['auth']], function () {
 
     
     Route::get('/post-list',[PostController::class,'getPost'])->name('post.list');
+    Route::get('/partners',[PostController::class,'partnerList'])->name('partners.list');
+    Route::get('/partners/{id}/edit',[PostController::class,'partnerEdit'])->name('partner.edit');
+    Route::post('/partners/update',[PostController::class,'updatePartnerList'])->name('partners.update');
+
 
     Route::get('getsortabledatatable','App\Http\Controllers\SortingController@index');
     Route::post('sortabledatatable','App\Http\Controllers\SortingController@updateOrder');
@@ -85,6 +89,7 @@ Route::controller(LoginRegisterController::class)->group(function() {
 
     Route::post('/store', 'store')->name('store');
     Route::get('/login', 'login')->name('login');
+    Route::get('/register', 'register')->name('register');
     Route::post('/authenticate', 'authenticate')->name('authenticate');
     Route::get('/dashboard', 'dashboard')->name('dashboard');
     Route::post('/logout', 'logout')->name('logout');

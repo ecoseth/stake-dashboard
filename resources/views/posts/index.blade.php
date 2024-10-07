@@ -1,5 +1,34 @@
 @extends('layouts.app')
 @section('content')
+<style>
+        .ck-editor__editable_inline {
+            background-color: #2c2f36 !important;
+            color: #fff;
+            min-height: 200px; /* Increase height */
+            padding: 15px;
+            border: 1px solid #444;
+            border-radius: 5px;
+        }
+
+        /* CKEditor toolbar dark mode styling */
+        .ck-toolbar {
+            background-color: grey !important;
+            border: 1px solid #444;
+        }
+
+        /* CKEditor button dark mode styling */
+        .ck-toolbar button {
+            color: #fff;
+        }
+
+        /* Toolbar dropdown styling */
+        .ck-toolbar__items .ck-dropdown__panel {
+            background-color: #1e2024;
+        }
+
+      
+
+</style>
 
 <!-- Modal -->
 <div class="modal fade w-100" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -8,41 +37,38 @@
 <div class="modal-header">
 <h5 class="modal-title" id="exampleModalLabel">Manage Post</h5>
 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-<span aria-hidden="true">&times;</span>
+<span aria-hidden="true" id="close-modal-btn">&times;</span>
 </button>
 </div>
 <div class="modal-body">
-<form   method="post" id="formData">
+<form method="post" id="formData">
 @csrf
 <div class="row">
 <div class="col-md-6">
 <div class="form-group">
 <label for="">Page</label>
 {{-- <input type="text" name="title"  value="{{ old('title') }}" class="form-control" placeholder="Title Post"> --}}
-<select name="page" class="form-control">
+<select name="page" class="form-control" id="page">
     <option value="" disabled>select</option>
     <option value="Support">Support</option>
+    <option value="About">About Us</option>
+
 </select>
 <span class="text-danger error-text page_error"  style="font-size: 13px"></span>
 </div>
 </div>
 <div class="col-md-6">
 <div class="form-group">
-<label for="">Title</label>
-<input type="text" name="title"  value="{{ old('title') }}" class="form-control" placeholder="Title">
-<span class="text-danger error-text title_error"  style="font-size: 13px"></span>
-</div>
-</div>
+        <label for="" id="title">Title</label>
+        <input type="text" name="title"  value="{{ old('title') }}" class="form-control" placeholder="Title" id="title">
+        <span class="text-danger error-text title_error"  style="font-size: 13px"></span>
+    </div>
+    </div>
 </div>
 <div class="form-group">
-<label for="">Content</label>
-{{-- <textarea name="content" value="{{ old('content') }}" class="form-control" placeholder="Content" rows="10" id="content"></textarea> --}}
-{{-- @trix(\App\Post::class, 'content') --}}
-<textarea id="content" class="d-none block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="content">{{ old('content') }}</textarea>
-<trix-editor input="content"></trix-editor>
+    <div id="content"></div>
 
-
-<span class="text-danger error-text content_error"  style="font-size: 13px"></span>
+    <span class="text-danger error-text content_error"  style="font-size: 13px"></span>
 </div>
 <button type="submit" id="btn-create" class="btn btn-success btn-block">Save Change</button>
 </form>
@@ -96,10 +122,20 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/trix/1.3.1/trix.js"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-<script src="{{ asset('js/crud.js') }}"></script>
-<script>
+<script src="https://cdn.ckeditor.com/ckeditor5/39.0.0/classic/ckeditor.js"></script>
 
+<script>
+    ClassicEditor
+    .create(document.querySelector('#content'))
+    .then(editor => {
+        editorInstance = editor;
+    })
+    .catch(error => {
+        console.error(error);
+    });
 </script>
+
+<script src="{{ asset('js/crud.js') }}"></script>
 
 
 @endpush
