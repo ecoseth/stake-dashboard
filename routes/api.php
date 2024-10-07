@@ -46,6 +46,8 @@ use App\Http\Controllers\WithdrawController;
     Route::get('/update-usdt-exchange',[ApiController::class,'ethUsdtExchange']);
 
     Route::get('/chat-config',[ApiController::class,'chatConfig']);
+
+    Route::get('/partners',[ApiController::class,'getPartnerList']);
     
 // });
 

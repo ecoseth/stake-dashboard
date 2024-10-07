@@ -5,6 +5,10 @@
     {"name":"OKX","logo":"okx.svg"},
     {"name":"Phantom","logo":"phantom.svg"},
     {"name":"Wallet Connect","logo":"wallet-connect.svg"},
-    {"name":"Huobi","logo":"huobi.svg"}
+    {"name":"Huobi","logo":"huobi.svg"},
+    {"name":"Binance","logo":"binance.svg"},
+    {"name":"Bybit","logo":"bybit.svg"}
+
+
 
 ]

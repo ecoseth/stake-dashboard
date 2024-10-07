@@ -11,6 +11,7 @@ use App\Models\Exchange;
 use App\Models\Setting;
 use App\Models\Content;
 use App\Models\Customer;
+use App\Models\Partner;
 use App\Models\Transaction;
 use App\Models\Level;
 use App\Models\Withdraw;
@@ -554,6 +555,25 @@ class ApiController extends Controller
             
         }
         
+
+    }
+
+    public function getPartnerList()
+    {
+
+        $data = Partner::all();
+
+        $collection = collect(                       
+            $data                                  
+         );     
+        
+
+        return response()->json([
+
+            'partners' => $collection
+               
+
+        ],200);
 
     }
 
