@@ -62,7 +62,7 @@
           </li>
 
           <li class="nav-item">
-            <a href="{{route('partners.list')}}" class="nav-link {{request()->route()->getName() == 'rewards.index' ? 'active' : ''}}">
+            <a href="{{route('partners.list')}}" class="nav-link {{request()->route()->getName() == 'partners.list' ? 'active' : ''}}">
               <i class="nav-icon fas fa-handshake"></i>
               <p>Business Partners</p>
             </a>

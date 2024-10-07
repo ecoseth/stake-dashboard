@@ -48,12 +48,16 @@
 <div class="form-group">
 <label for="">Page</label>
 {{-- <input type="text" name="title"  value="{{ old('title') }}" class="form-control" placeholder="Title Post"> --}}
+<input type="hidden" name="" id="abt_content_value" value="{{$auContent}}">
+
 <select name="page" class="form-control" id="page">
     <option value="" disabled>select</option>
     <option value="Support">Support</option>
     <option value="About">About Us</option>
 
 </select>
+
+
 <span class="text-danger error-text page_error"  style="font-size: 13px"></span>
 </div>
 </div>

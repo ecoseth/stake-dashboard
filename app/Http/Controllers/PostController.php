@@ -13,6 +13,8 @@ class PostController extends Controller
 {
     public function index(Request $request)
     {
+        $checkAUcontent = Content::where('page','About')->count();
+
         if ($request->ajax()) {
             $data = Content::with('user')->orderBy('sort','ASC')->get();
             return Datatables::of($data)
@@ -35,7 +37,11 @@ class PostController extends Controller
             ->addColumn('action', function($row){
                 $btn = '<button id="editModal" data-action='.route('post.update',$row->uuid).' data-id='.$row->uuid.' class="btn btn-warning btn-sm">Edit</button> ';
 
-                $btn = $btn.'<button id="btn-delete" data-id='.$row->uuid.' class="btn btn-danger btn-sm">Delete</button>';
+                if($row->page != 'About'){
+
+                    $btn = $btn.'<button id="btn-delete" data-id='.$row->uuid.' class="btn btn-danger btn-sm">Delete</button>';
+                
+                }
 
                 return $btn;
             })
@@ -43,7 +49,7 @@ class PostController extends Controller
             ->make(true);
         }
 
-        return view('posts.index');
+        return view('posts.index')->with('auContent',$checkAUcontent);
     }
 
     public function getPost(Request $request)

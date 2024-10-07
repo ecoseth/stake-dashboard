@@ -10,6 +10,20 @@ $('#openModal').click(function() {
     $('[id=title]').css('display','block');
     $('#formData').trigger("reset");
     $('#formData').attr('action',url);
+
+    if ($('#abt_content_value').val() == 1)
+    {
+        $("#page option[value='About']").remove();
+    }
+
+    if ($("#page option[value='Support']").length === 0) {
+
+        $("#page").append(`
+            <option value="Support" selected>Support</option>
+        `);
+
+    }
+
     })
     // $("#posts-table").ajax.reload();
     // Event for created and updated posts
@@ -207,7 +221,36 @@ $('#openModal').click(function() {
                     success: function(res) {
                     if(res.post.page == 'About')
                     {
+
+                        if ($("#page option[value='About']").length === 0) {
+                            // Append the option if it doesn't exist
+
+                            $("#page").append(`
+                                <option value="About" selected>About us</option>
+                            `);
+                        }
+
+                        $("#page option[value='Support']").remove();
                         $('[id=title]').css('display','none');
+
+                    }else if(res.post.page == 'Support'){
+
+                        $('[id=title]').css('display','block');
+
+                        if ($('#abt_content_value').val() == 1)
+                        {
+                            $("#page option[value='About']").remove();
+                        }
+
+                        if ($("#page option[value='Support']").length === 0) {
+
+                            $("#page").append(`
+                                <option value="Support" selected>Support</option>
+                            `);
+
+                        }
+
+
                     }
                     $('.error-text').text(' ');
                     $('#page').val(res.post.page);                
