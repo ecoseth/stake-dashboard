@@ -163,7 +163,7 @@ class PostController extends Controller
                 return  $row->name;
             })
             ->addColumn('logo', function($row){
-                return '<img src="'.asset('images/'.$row->logo).'" border="0" width="40" class="img-rounded" align="center"/>';
+                return '<img src="'.asset('storage/images/'.$row->logo).'" border="0" width="40" class="img-rounded" align="center"/>';
             })
             ->addColumn('action', function($row){
                 $btn = '<button id="editModal" data-action='.route('post.update',$row->id).' data-id='.$row->id.' class="btn btn-warning btn-sm">Edit</button> ';
@@ -192,7 +192,7 @@ class PostController extends Controller
 
         $validator = Validator::make($request->all(),[
             'name' => 'required|string|max:255',
-            'logo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // validates images
+            'logo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048', // validates images
         ]);
     
 
@@ -202,18 +202,24 @@ class PostController extends Controller
 
         $data = $request->all();
 
-        // return $request->title.','.$id;
-
         if ($request->hasFile('logo')) {
-            $imagePath = $request->file('logo')->store('images', 'public');
+            
+            $image = $request->file('logo');
+
+            $filename = $image->getClientOriginalName();
+
+            $imagePath = $image->storeAs('images',$filename,'public');
+
+            // return $imagePath;
+            
         }
 
-        Partner::where('id',$request->id)->update([
+        $partner = Partner::where('id',$request->id)->first();
 
-            'name' => $request->name,
-            'logo' => $request->file('logo'),
+        $partner->name = $request->name ?? $partner->name;
+        $partner->logo = $request->file('logo') ? $filename : $partner->logo;
 
-        ]);
+        $partner->update();
 
         return response()->json([
 

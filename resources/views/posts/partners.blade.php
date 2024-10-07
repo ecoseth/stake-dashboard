@@ -28,15 +28,17 @@
     </button>
     </div>
     <div class="modal-body">
-    <form method="post" id="formData">
+    <form method="post" id="formData" enctype="multipart/form-data">
     @csrf
     <div class="row">
         <div class="col-md-6">
         <div class="form-group">
         {{-- <input type="text" name="title"  value="{{ old('title') }}" class="form-control" placeholder="Title Post"> --}}
         <label for="name" id="name">Name</label>
-        <input type="text" name="title"  value="{{ old('title') }}" class="form-control" placeholder="Title" id="name">
-        <span class="text-danger error-text page_error"  style="font-size: 13px"></span>
+        <input type="text" name="name"  value="{{ old('title') }}" class="form-control" placeholder="Title" id="name">
+        <input type="hidden" name="id"  class="form-control">
+
+        <span class="text-danger error-text name_error"  style="font-size: 13px"></span>
         </div>
         </div>
         <div class="col-md-6">
@@ -52,8 +54,10 @@
                     <label for="file-input">
                         <img id="preview" src="https://via.placeholder.com/150" alt="Placeholder Image" />
                     </label>
-                    <input id="file-input" type="file" accept="image/*" onchange="previewImage(event)" />
+                    <input id="file-input" type="file" name="logo" accept="image/*" onchange="previewImage(event)" />
                 </div>
+                <span class="text-danger error-text logo_error"  style="font-size: 13px"></span>
+
             </div>
         
         </div>
@@ -153,7 +157,7 @@
                 $('#formData').trigger("reset");
                 $('#exampleModal').modal('hide');
                 
-                $("#posts-table").DataTable().ajax.reload();
+                $("#partners-table").DataTable().ajax.reload();
 
 
                 Swal.fire(
@@ -175,9 +179,6 @@
         $('#partners-table').on('click', '#editModal', function() {
 
             let dataAction = $(this).data('action');
-            $('input[name=title]').val('');
-            $('input[name=page]').val('');
-            $('#content').val(' ');
             $('#formData').attr('action',dataAction);
 
             let id = $(this).data('id');   
@@ -187,8 +188,11 @@
                 url : baseUrl+`/partners/${id}/edit`,
                 dataType: "json",
                 success: function(res) {
-                $('input[name=title]').val(res.post.name);
-                $('#preview').attr('src','http://localhost:8000/images/'+ res.post.logo);
+                $('.error-text').text(' ');
+
+                $('input[name=name]').val(res.post.name);
+                $('input[name=id]').val(res.post.id);
+                $('#preview').attr('src','http://localhost:8000/storage/images/'+ res.post.logo);
                 
                 $('#exampleModal').modal('show');
                     console.log(res);
